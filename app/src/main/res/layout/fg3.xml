@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ghostwhite"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/title_rout"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/teal">
+
+        <TextView
+            android:id="@+id/title_center_text_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="发  现"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <com.example.dm.myapplication.customviews.ReboundScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="186dp"
+                android:background="@drawable/find_imv" />
+
+            <com.example.dm.myapplication.customviews.ninegridview.NineGridView
+                android:id="@+id/find_nine_gridview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:horizontalSpacing="0dp"
+                android:listSelector="@null"
+                android:numColumns="3"
+                android:scrollbars="none"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="0dp" />
+        </LinearLayout>
+    </com.example.dm.myapplication.customviews.ReboundScrollView>
+</LinearLayout>

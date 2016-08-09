@@ -1,0 +1,72 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/title_rout_include"
+        layout="@layout/title_layout" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_bar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/title_rout_include"/>
+
+    <LinearLayout
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_alignTop="@+id/bottom_bar"
+        android:background="@color/darkgrey"
+        android:orientation="vertical"/>
+
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/teal"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="100dp"
+            android:layout_height="36dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1.0"
+            android:gravity="center_vertical|center_horizontal"
+            android:padding="8dp"
+            android:text="状态栏"
+            android:textColor="@color/white"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="100dp"
+            android:layout_height="36dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1.0"
+            android:padding="8dp"
+            android:text="检    测"
+            android:background="@color/teal"
+            android:textColor="@color/white"
+            android:textSize="15sp"/>
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="100dp"
+            android:layout_height="36dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1.0"
+            android:background="@color/teal"
+            android:textColor="@color/white"
+            android:padding="8dp"
+            android:text="选取照片"
+            android:textSize="15sp"/>
+    </LinearLayout>
+
+</RelativeLayout>

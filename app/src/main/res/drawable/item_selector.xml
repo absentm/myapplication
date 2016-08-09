@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--按下时-->
+    <item android:state_pressed="true">
+        <shape>
+            <!--teal50-->
+            <solid android:color="#e0f2f1" />
+            <stroke android:width="0.01dp" android:color="#e3e3e3" />
+        </shape>
+    </item>
+
+    <!--获取焦点时-->
+    <item android:state_focused="true">
+        <shape>
+            <!--teal50-->
+            <solid android:color="#e0f2f1" />
+            <stroke android:width="0.01dp" android:color="#e3e3e3" />
+
+        </shape>
+    </item>
+
+    <!--正常状态时-->
+    <item>
+        <shape>
+            <solid android:color="#ffffff" />
+            <stroke android:width="0.01dp" android:color="#e3e3e3" />
+        </shape>
+    </item>
+
+</selector>

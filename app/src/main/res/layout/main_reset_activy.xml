@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/reset_passwd_include"
+        layout="@layout/title_layout" />
+
+
+    <RelativeLayout
+        android:id="@+id/reset_rout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reset_passwd_include"
+        android:layout_marginTop="24dp">
+
+        <EditText
+            android:id="@+id/reset_email_et"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@null"
+            android:hint="请输入登录邮箱"
+            android:singleLine="true"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/reset_email_warn_imv"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignEnd="@+id/reset_email_et"
+            android:layout_alignRight="@+id/reset_email_et"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/ic_warning_amber_18dp"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/reset_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_below="@+id/reset_rout"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/darkgrey"
+        android:orientation="horizontal" />
+
+    <TextView
+        android:id="@+id/reset_hint_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reset_line"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="点击重置后, 请登录邮箱查收重置密码邮件"
+        android:textColor="@color/darkgrey"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/reset_passwd_btn"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@+id/reset_hint_tv"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="36dp"
+        android:background="@color/teal"
+        android:text="重  置"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+</RelativeLayout>
