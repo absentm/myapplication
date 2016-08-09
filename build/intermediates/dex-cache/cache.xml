@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/dm/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.4.0/5b72bf48563ea8410e650de14aa33ff69a3e8c35/okio-1.4.0.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="5b72bf48563ea8410e650de14aa33ff69a3e8c35">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/okio-1.4.0_3d44da5309dd57c43f63db674bbae6fb8ec6addb.jar" />
+    </item>
+    <item
+        jar="/home/dm/dev_env/android/android-sdk-linux/extras/android/m2repository/com/android/support/support-annotations/23.3.0/support-annotations-23.3.0.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="db7791d75a07fef9844d06236c1c59ba7bf6997c">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/support-annotations-23.3.0_3b987d38bfd7781cb59460de14ca23ab5bff2312.jar" />
+    </item>
+    <item
+        jar="/home/dm/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp/2.4.0/40340c0748190fe897baf7bffbc1b282734294e5/okhttp-2.4.0.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="40340c0748190fe897baf7bffbc1b282734294e5">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/okhttp-2.4.0_53c3ffee8f2b23d6da735fa5bdf34310f2ea2f1a.jar" />
+    </item>
+    <item
+        jar="/home/dm/.gradle/caches/modules-2/files-2.1/cn.bmob.android/bmob-sms/1.0.1/df9db564e2842696a68deca39b0186aebf3dc07c/bmob-sms-1.0.1.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="df9db564e2842696a68deca39b0186aebf3dc07c">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/bmob-sms-1.0.1_622157bb8a9497af35da2aaa6635485eba783f5a.jar" />
+    </item>
+    <item
+        jar="/home/dm/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.4/695b63d702f505b9b916e02272e3b6381bade7f/gson-2.4.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="0695b63d702f505b9b916e02272e3b6381bade7f">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/gson-2.4_18c13fd807407c6f17e2364a7a42381a798dbe1d.jar" />
+    </item>
+    <item
+        jar="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-23.1.1_278fd275f5f1a14a774d97e4ed55bb1f177e49ea.jar" />
+    </item>
+    <item
+        jar="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/exploded-aar/com.github.chrisbanes/PhotoView/1.2.6/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="e39dd45427d2ba136c82ed1946f80dd3dff16695">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/com.github.chrisbanes-PhotoView-1.2.6_36ba3abdafc8cfc2e26608f7dbac6ef20c21daa0.jar" />
+    </item>
+    <item
+        jar="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="09c5e804bc67fc0580360043dff067df574a60d4">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-23.1.1_517cd7b560cff7982c3b95cd563bb2d2151baf33.jar" />
+    </item>
+    <item
+        jar="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="0fa526944069ca6b2812408d2a7a5e3b34f4ef89">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_82440bde3de82d4c713e7c2b12e6cea197f6a7c7.jar" />
+    </item>
+    <item
+        jar="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/jars/libs/internal_impl-23.3.0.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="4da5a4d697d32497c6f85567a5112e62fdfd0676">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/internal_impl-23.3.0_ba42e4a4b7779ae57e0675fb49c58cf11afd202b.jar" />
+    </item>
+    <item
+        jar="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="8a034dd16c0dfd75fe86c52c2cd581592acc684a">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.3.0_7f22b76baf7e921b82561a4a7c5cf60e015617f4.jar" />
+    </item>
+    <item
+        jar="/home/dm/workspace/gitspace/myapplication/app/libs/AMap_Location_V2.4.1_20160414.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="c2a48661c11bfafb2dea576904958420c2ad9e06">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/AMap_Location_V2.4.1_20160414_266091c160f34f0e73872384274eeef1e0dcd027.jar" />
+    </item>
+    <item
+        jar="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/exploded-aar/com.android.support/design/23.1.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="379471b2bd17d9737c050345c08e8c7d16589784">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/com.android.support-design-23.1.1_9f4b64cbe90e654b512d785075a065625d21cbdd.jar" />
+    </item>
+    <item
+        jar="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="5d0bafc734977bcb5c57c27257042e3781edadbe">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/instant-run_d78c642a3ba4373977c28b8d7e450f568b1ef17c.jar" />
+    </item>
+    <item
+        jar="/home/dm/.gradle/caches/modules-2/files-2.1/com.nostra13.universalimageloader/universal-image-loader/1.9.5/442dbfb517b9ab5cb5c6da7ebf8cc28ec5bd0375/universal-image-loader-1.9.5.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="442dbfb517b9ab5cb5c6da7ebf8cc28ec5bd0375">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/universal-image-loader-1.9.5_3c9ebeb8d938d44e3f7f8bba35f6a907dd220ad4.jar" />
+    </item>
+    <item
+        jar="/home/dm/.gradle/caches/modules-2/files-2.1/cn.bmob.android/bmob-sdk/3.4.5/44e559d18fd5a4826b0a4c0354308213e4f658a2/bmob-sdk-3.4.5.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="44e559d18fd5a4826b0a4c0354308213e4f658a2">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/bmob-sdk-3.4.5_1f7b940bf6a59ef66227e394a62ad0a53f254c29.jar" />
+    </item>
+    <item
+        jar="/home/dm/workspace/gitspace/myapplication/app/libs/faceppsdk.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="d3384595c699a5be231ad099b07b96741806750a">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/faceppsdk_5e3ca30e1028f14218004e5cda7e3185827ead3a.jar" />
+    </item>
+    <item
+        jar="/home/dm/.gradle/caches/modules-2/files-2.1/cn.bmob.android/bmob-push/0.6/db21ec99c2c7bf91c67bf80f5c5c49a92dd0562e/bmob-push-0.6.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="db21ec99c2c7bf91c67bf80f5c5c49a92dd0562e">
+        <dex dex="/home/dm/workspace/gitspace/myapplication/app/build/intermediates/pre-dexed/debug/bmob-push-0.6_00c9b839b3c3604da24c2e52868ddbdcd5922a6a.jar" />
+    </item>
+
+</items>
