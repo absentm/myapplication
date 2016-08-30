@@ -16,6 +16,7 @@ import com.example.dm.myapplication.beans.AppUser;
 import com.example.dm.myapplication.beans.Feedback;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
 /**
@@ -105,7 +106,7 @@ public class MeFeedbackAty extends Activity implements View.OnClickListener {
     }
 
     private void uploadFeedbackDatas(String feedbackStr) {
-        AppUser appUser = BmobUser.getCurrentUser(MeFeedbackAty.this, AppUser.class);
+        AppUser appUser = BmobUser.getCurrentUser(AppUser.class);
         Feedback feedback = new Feedback();
 
         if (appUser != null) {
@@ -113,18 +114,17 @@ public class MeFeedbackAty extends Activity implements View.OnClickListener {
             feedback.setFeebackUserName(appUser.getUsername());
             feedback.setFeedbackUserEmail(appUser.getEmail());
             feedback.setFeedbackContent(feedbackStr);
-            feedback.save(MeFeedbackAty.this, new SaveListener() {
+            feedback.save(new SaveListener<String>() {
                 @Override
-                public void onSuccess() {
-                    Toast.makeText(MeFeedbackAty.this, "数据上传成功, 感谢你的建议!",
-                            Toast.LENGTH_SHORT).show();
-                    MeFeedbackAty.this.finish();
-                }
-
-                @Override
-                public void onFailure(int i, String s) {
-                    Toast.makeText(MeFeedbackAty.this, "上传数据失败, 请稍后再试!",
-                            Toast.LENGTH_SHORT).show();
+                public void done(String s, BmobException e) {
+                    if (e == null) {
+                        Toast.makeText(MeFeedbackAty.this, "数据上传成功, 感谢你的建议!",
+                                Toast.LENGTH_SHORT).show();
+                        MeFeedbackAty.this.finish();
+                    } else {
+                        Toast.makeText(MeFeedbackAty.this, "上传数据失败, 请稍后再试!",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         } else {

@@ -3,7 +3,6 @@ package com.example.dm.myapplication.me;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -13,6 +12,7 @@ import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.AppUser;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
@@ -21,7 +21,6 @@ import cn.bmob.v3.listener.UpdateListener;
  */
 public class MeEditorJobAty extends Activity implements View.OnClickListener {
     private static final String LOG = "LOG";
-    private static final int RESULT_CODE = 2;
 
     private ImageView titleLeftImv;
 
@@ -233,25 +232,24 @@ public class MeEditorJobAty extends Activity implements View.OnClickListener {
      *
      * @param jobStr job名称
      */
-    private void uploadJobData(String jobStr) {
+    private void uploadJobData(final String jobStr) {
         AppUser newAppUser = new AppUser();
         newAppUser.setUserJob(jobStr);
-        AppUser currentAppUser = BmobUser.getCurrentUser(MeEditorJobAty.this, AppUser.class);
-        newAppUser.update(MeEditorJobAty.this, currentAppUser.getObjectId(), new UpdateListener() {
+        AppUser currentAppUser = BmobUser.getCurrentUser(AppUser.class);
+        newAppUser.update(currentAppUser.getObjectId(), new UpdateListener() {
             @Override
-            public void onSuccess() {
-                Toast.makeText(MeEditorJobAty.this, "修改成功!", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-                Log.i(LOG, "i = " + i + ", s = " + s);
+            public void done(BmobException e) {
+                if (e == null) {
+                    Toast.makeText(MeEditorJobAty.this, "修改成功!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MeEditorJobAty.this, "修改失败! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         Intent intent1 = new Intent();
         intent1.putExtra("MeEditorJobAty.jobStr", jobStr);
-        MeEditorJobAty.this.setResult(RESULT_CODE, intent1);
+        MeEditorJobAty.this.setResult(RESULT_OK, intent1);
         MeEditorJobAty.this.finish();
     }
 }

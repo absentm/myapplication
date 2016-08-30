@@ -133,7 +133,7 @@ public class LoginActivity extends Activity {
                 } else if (!"".equals(emailAddressStr) && !"".equals(passwordStr)) {
                     emailWarnImv.setVisibility(View.GONE);
 
-                    BmobUser.loginByAccount(LoginActivity.this, emailAddressStr, passwordStr, new LogInListener<AppUser>() {
+                    BmobUser.loginByAccount(emailAddressStr, passwordStr, new LogInListener<AppUser>() {
                         @Override
                         public void done(AppUser appUser, BmobException e) {
                             if (appUser != null) {

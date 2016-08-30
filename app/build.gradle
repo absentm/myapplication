@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.dm.myapplication"
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 2
         versionName "1.01"
@@ -26,17 +26,13 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     //以下SDK开发者请根据需要自行选择
     //bmob-sdk ：Bmob的android sdk包
-    compile 'cn.bmob.android:bmob-sdk:3.4.5'
+    compile 'cn.bmob.android:bmob-sdk:3.5.1'
     //bmob-push：Bmob的推送包
     compile 'cn.bmob.android:bmob-push:0.6'
-    //okhttp（选填）：为解决弱网情况下SDK请求失败及响应慢的问题，自`V3.4.3版本`开始使用`okhttp`优化SDK的网络框架。
-    compile 'com.squareup.okhttp:okhttp:2.4.0'
-    compile 'com.squareup.okio:okio:1.4.0'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     //bmob-sms ：Bmob单独为短信服务提供的包
     compile 'cn.bmob.android:bmob-sms:1.0.1'
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
     compile files('libs/AMap_Location_V2.4.1_20160414.jar')
-    compile 'com.google.code.gson:gson:2.4'
     compile files('libs/faceppsdk.jar')
 }

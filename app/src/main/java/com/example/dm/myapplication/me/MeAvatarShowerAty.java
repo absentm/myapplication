@@ -56,7 +56,7 @@ public class MeAvatarShowerAty extends Activity {
     }
 
     private void eventDeal() {
-        AppUser appUser = BmobUser.getCurrentUser(MeAvatarShowerAty.this, AppUser.class);
+        AppUser appUser = BmobUser.getCurrentUser(AppUser.class);
         String avatarUrl = appUser.getUserAvatarUrl();
         ImageSize targetSize = new ImageSize(300, 300);
         Bitmap bitmap = ImageLoader.getInstance().loadImageSync(avatarUrl, targetSize,

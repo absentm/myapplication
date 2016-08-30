@@ -3,6 +3,7 @@ package com.example.dm.myapplication.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -10,6 +11,7 @@ import android.view.animation.ScaleAnimation;
 import android.widget.TextView;
 
 import com.example.dm.myapplication.R;
+import com.example.dm.myapplication.utiltools.SystemUtils;
 
 import cn.bmob.v3.Bmob;
 
@@ -19,7 +21,7 @@ import cn.bmob.v3.Bmob;
  */
 public class FirstActivity extends Activity {
     private final static String BMOB_APP_ID = "e2d69e80b15a0f55066e1b77654e20f9";
-
+    private String aMapSHA1Value = "";
     private TextView launchTv;
 
     @Override
@@ -32,6 +34,9 @@ public class FirstActivity extends Activity {
         setContentView(R.layout.launch_layout);
 
         initViews();
+
+        aMapSHA1Value = SystemUtils.aMapSHA1(FirstActivity.this);
+        Log.i("FirstActivity", "aMapSHA1Value >>> " + aMapSHA1Value);
 
         AnimationSet animationSet = new AnimationSet(true);
         ScaleAnimation scaleAnimation = new ScaleAnimation(1, 1, 1, 1,

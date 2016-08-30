@@ -28,6 +28,7 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
 
@@ -103,7 +104,7 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
         mPostNewImv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppUser appUser = BmobUser.getCurrentUser(getActivity(), AppUser.class);
+                AppUser appUser = BmobUser.getCurrentUser(AppUser.class);
                 if (appUser == null) {
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                 } else {
@@ -151,24 +152,22 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
     private void generateData1() {
         BmobQuery<ComUserPostInfo> postInfoBmobQuery = new BmobQuery<>();
         postInfoBmobQuery.addWhereLessThanOrEqualTo("createdAt", new BmobDate(new Date()));
-        postInfoBmobQuery.findObjects(getActivity(), new FindListener<ComUserPostInfo>() {
+        postInfoBmobQuery.findObjects(new FindListener<ComUserPostInfo>() {
             @Override
-            public void onSuccess(List<ComUserPostInfo> list) {
-                for (ComUserPostInfo comUserPostInfo : list) {
-                    mList.add(comUserPostInfo);
-                }
+            public void done(List<ComUserPostInfo> list, BmobException e) {
+                if (e == null) {
+                    for (ComUserPostInfo comUserPostInfo : list) {
+                        mList.add(comUserPostInfo);
+                    }
 
 //        Log.i("LOG", "mList.toString" + mList.toString());
-                mComAppAdapter = new ComAppAdapter(getActivity());
-                mComAppAdapter.setData(mList);
-                mListView.setAdapter(mComAppAdapter);
-                mProgressBar.setVisibility(ProgressBar.GONE);
-            }
-
-            @Override
-            public void onError(int i, String s) {
-                mProgressBar.setVisibility(ProgressBar.GONE);
-
+                    mComAppAdapter = new ComAppAdapter(getActivity());
+                    mComAppAdapter.setData(mList);
+                    mListView.setAdapter(mComAppAdapter);
+                    mProgressBar.setVisibility(ProgressBar.GONE);
+                } else {
+                    mProgressBar.setVisibility(ProgressBar.GONE);
+                }
             }
         });
 

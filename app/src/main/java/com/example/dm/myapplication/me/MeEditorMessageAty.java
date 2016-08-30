@@ -16,6 +16,7 @@ import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.AppUser;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
@@ -24,7 +25,6 @@ import cn.bmob.v3.listener.UpdateListener;
  */
 public class MeEditorMessageAty extends Activity {
     private static final String LOG = "LOG";
-    private static final int RESULT_CODE = 2;
 
     private ImageView titleLeftImv;
     private TextView titleRightTv;
@@ -83,22 +83,21 @@ public class MeEditorMessageAty extends Activity {
                 Log.i("log", ">>>>>> messageStr:::" + messageStr);
                 AppUser newAppUser = new AppUser();
                 newAppUser.setUserMessage(messageStr);
-                AppUser currentAppUser = BmobUser.getCurrentUser(MeEditorMessageAty.this, AppUser.class);
-                newAppUser.update(MeEditorMessageAty.this, currentAppUser.getObjectId(), new UpdateListener() {
+                AppUser currentAppUser = BmobUser.getCurrentUser(AppUser.class);
+                newAppUser.update(currentAppUser.getObjectId(), new UpdateListener() {
                     @Override
-                    public void onSuccess() {
-                        Toast.makeText(MeEditorMessageAty.this, "修改成功!", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onFailure(int i, String s) {
-                        Log.i(LOG, "i = " + i + ", s = " + s);
+                    public void done(BmobException e) {
+                        if (e == null) {
+                            Toast.makeText(MeEditorMessageAty.this, "修改成功, 数据已上传!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MeEditorMessageAty.this, "修改失败! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
                 Intent intent1 = new Intent();
                 intent1.putExtra("MeEditorMessageAty.messageStr", messageStr);
-                MeEditorMessageAty.this.setResult(RESULT_CODE, intent1);
+                MeEditorMessageAty.this.setResult(RESULT_OK, intent1);
                 MeEditorMessageAty.this.finish();
             }
         });

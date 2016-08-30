@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.AppUser;
 
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
 /**
@@ -148,28 +149,16 @@ public class RegisterActivity extends Activity {
                     appUser.setPassword(passwordStr);
                     appUser.setEmail(emailAddressStr);
 
-                    appUser.signUp(RegisterActivity.this, new SaveListener() {
+                    appUser.signUp(new SaveListener<AppUser>() {
                         @Override
-                        public void onSuccess() {
-                            Log.i(LOG_MSG, "$$$$$$: 注册成功");
-                            Toast.makeText(RegisterActivity.this, "注册成功!", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                        }
-
-                        @Override
-                        public void onFailure(int i, String s) {
-                            Log.i(LOG_MSG, ">>>>> " + i + "=   " + s);
-
-                            if (BMOB_301 == i) {
-                                Toast.makeText(RegisterActivity.this, "注册失败, 邮箱地址不正确!", Toast.LENGTH_LONG).show();
-                            } else if (BMOB_202 == i) {
-                                Toast.makeText(RegisterActivity.this, "注册失败, 该邮箱地址已被占用!", Toast.LENGTH_LONG).show();
-                            } else if (BMOB_9016 == i) {
-                                Toast.makeText(RegisterActivity.this, "网络不可用, 请检查您的网络设置!", Toast.LENGTH_LONG).show();
+                        public void done(AppUser appUser, BmobException e) {
+                            if (e == null) {
+                                Log.i(LOG_MSG, "$$$$$$: 注册成功");
+                                Toast.makeText(RegisterActivity.this, "注册成功!", Toast.LENGTH_LONG).show();
+                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                             } else {
-                                Toast.makeText(RegisterActivity.this, "注册失败!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(RegisterActivity.this, "注册失败! " + e.getMessage(), Toast.LENGTH_LONG).show();
                             }
-
                         }
                     });
                 }

@@ -31,6 +31,7 @@ import java.util.Calendar;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
@@ -112,7 +113,7 @@ public class MeInfoDetailActivity extends Activity {
         titleImv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppUser appUser = BmobUser.getCurrentUser(MeInfoDetailActivity.this, AppUser.class);
+                AppUser appUser = BmobUser.getCurrentUser(AppUser.class);
                 String avatarUrl = appUser.getUserAvatarUrl();
                 Log.i(LOG, "avatarUrl" + avatarUrl);
 
@@ -167,7 +168,7 @@ public class MeInfoDetailActivity extends Activity {
      * 从Bmob云端下载数据,填充"个人资料"详情页面
      */
     private void fillUserDatas() {
-        AppUser appUser = BmobUser.getCurrentUser(MeInfoDetailActivity.this, AppUser.class);
+        AppUser appUser = BmobUser.getCurrentUser(AppUser.class);
 
         if (appUser != null) {
             meDetailtNickNameTv.setText(appUser.getUserNickName());
@@ -367,20 +368,20 @@ public class MeInfoDetailActivity extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         AppUser newAppUser = new AppUser();
                         newAppUser.setUserSex(changedSexStr);
-                        AppUser currentAppUser = BmobUser.getCurrentUser(MeInfoDetailActivity.this,
-                                AppUser.class);
-                        newAppUser.update(MeInfoDetailActivity.this, currentAppUser.getObjectId(),
+                        AppUser currentAppUser = BmobUser.getCurrentUser(AppUser.class);
+                        newAppUser.update(currentAppUser.getObjectId(),
                                 new UpdateListener() {
                                     @Override
-                                    public void onSuccess() {
-                                        meDetailtSexTv.setText(changedSexStr);
-                                        Toast.makeText(MeInfoDetailActivity.this, "修改成功!",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-
-                                    @Override
-                                    public void onFailure(int i, String s) {
-                                        Log.i(LOG, "i = " + i + ", s = " + s);
+                                    public void done(BmobException e) {
+                                        if (e == null) {
+                                            meDetailtSexTv.setText(changedSexStr);
+                                            Toast.makeText(MeInfoDetailActivity.this, "修改成功!",
+                                                    Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(MeInfoDetailActivity.this, "Error: " +
+                                                            e.getMessage(),
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 });
                     }
@@ -448,23 +449,18 @@ public class MeInfoDetailActivity extends Activity {
 
                                 AppUser newAppUser = new AppUser();
                                 newAppUser.setUserBirthday(changedBirthStr);
-                                AppUser currentAppUser = BmobUser.getCurrentUser(MeInfoDetailActivity.this,
-                                        AppUser.class);
-                                newAppUser.update(MeInfoDetailActivity.this,
-                                        currentAppUser.getObjectId(),
-                                        new UpdateListener() {
-                                            @Override
-                                            public void onSuccess() {
-                                                meDetailtBirthTv.setText(changedBirthStr);
-                                                Toast.makeText(MeInfoDetailActivity.this, "修改成功!",
-                                                        Toast.LENGTH_SHORT).show();
-                                            }
-
-                                            @Override
-                                            public void onFailure(int i, String s) {
-                                                Log.i(LOG, "i = " + i + ", s = " + s);
-                                            }
-                                        });
+                                AppUser currentAppUser = BmobUser.getCurrentUser(AppUser.class);
+                                newAppUser.update(currentAppUser.getObjectId(), new UpdateListener() {
+                                    @Override
+                                    public void done(BmobException e) {
+                                        if (e == null) {
+                                            meDetailtBirthTv.setText(changedBirthStr);
+                                            Toast.makeText(MeInfoDetailActivity.this, "修改成功!", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(MeInfoDetailActivity.this, "ERROR! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
                             }
                         },
                         currentYear, currentMonth - 1, currentDay);
@@ -545,7 +541,8 @@ public class MeInfoDetailActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_CODE) {
+        Log.i(LOG, "MeInfoDetailActivity: ");
+        if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_NICKNAME_1:
                     String nicknameStr = data.getStringExtra("MeEditorNicknameAty.nickname");
@@ -581,31 +578,28 @@ public class MeInfoDetailActivity extends Activity {
                     Log.i(LOG, "MeInfo, data = " + data);
                     meDetailtMessageTv.setText(messageStr);
                     break;
-                default:
-                    break;
-            }
-        } else if (resultCode == RESULT_OK) {
-            switch (requestCode) {
+
                 case REQUEST_CODE_CAPTURE_IMAGE_10:
                     File temp = new File(Environment.getExternalStorageDirectory() + File.separator
                             + IMAGE_FILE_NAME);
                     startPhotoZoom(Uri.fromFile(temp));
-
                     break;
+
                 case REQUEST_CODE_ALBUM_11:
                     try {
                         startPhotoZoom(data.getData());
                     } catch (NullPointerException e) {
                         Log.i(LOG, e.getMessage());
                     }
-
                     break;
+
                 case REQUEST_CODE_CROP_12:   // 取得裁剪后的图片
                     if (data != null) {
                         setPicToView(data);
                         Log.i(LOG, ">> " + REQUEST_CODE_CROP_12);
                     }
                     break;
+
                 default:
                     break;
             }
@@ -646,37 +640,32 @@ public class MeInfoDetailActivity extends Activity {
                     "tempAvatar.jpg", bmobAvatarBitmap);
             Log.i(LOG, "avatarFilePathStr = " + avatarFilePathStr);
             final BmobFile bmobFile = new BmobFile(new File(avatarFilePathStr));
-            bmobFile.uploadblock(MeInfoDetailActivity.this, new UploadFileListener() {
+            bmobFile.uploadblock(new UploadFileListener() {
                 @Override
-                public void onSuccess() {
-                    avatarBmobPathStr = bmobFile.getFileUrl(MeInfoDetailActivity.this);
-                    Log.i(LOG, "getFileUrl = " + avatarBmobPathStr);
+                public void done(BmobException e) {
+                    if (e == null) {
+                        avatarBmobPathStr = bmobFile.getFileUrl();
+                        Log.i(LOG, "getFileUrl = " + avatarBmobPathStr);
 
-                    // 修改云端头像地址
-                    AppUser newAppUser = new AppUser();
-                    newAppUser.setUserAvatarUrl(avatarBmobPathStr);
-                    Log.i(LOG, "avatarBmobPathStr = " + avatarBmobPathStr);
-                    AppUser currentAppUser = BmobUser.getCurrentUser(MeInfoDetailActivity.this,
-                            AppUser.class);
-                    newAppUser.update(MeInfoDetailActivity.this,
-                            currentAppUser.getObjectId(),
-                            new UpdateListener() {
-                                @Override
-                                public void onSuccess() {
-
+                        // 修改云端头像地址
+                        AppUser newAppUser = new AppUser();
+                        newAppUser.setUserAvatarUrl(avatarBmobPathStr);
+                        Log.i(LOG, "avatarBmobPathStr = " + avatarBmobPathStr);
+                        AppUser currentAppUser = BmobUser.getCurrentUser(AppUser.class);
+                        newAppUser.update(currentAppUser.getObjectId(), new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                if (e != null) {
+                                    Toast.makeText(MeInfoDetailActivity.this, "Error! " +
+                                                    e.getMessage(),
+                                            Toast.LENGTH_SHORT).show();
                                 }
-
-                                @Override
-                                public void onFailure(int i, String s) {
-                                    Log.i(LOG, "i = " + i + ", s = " + s);
-                                }
-                            });
-                }
-
-                @Override
-                public void onFailure(int i, String s) {
-                    Toast.makeText(MeInfoDetailActivity.this, "头像上传失败, 请稍后再试!",
-                            Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(MeInfoDetailActivity.this, "头像上传失败, 请稍后再试!",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
 

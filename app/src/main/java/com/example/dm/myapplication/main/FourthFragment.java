@@ -66,7 +66,7 @@ public class FourthFragment extends Fragment {
     }
 
     private void fillDatas() {
-        AppUser appUser = BmobUser.getCurrentUser(getActivity(), AppUser.class);
+        AppUser appUser = BmobUser.getCurrentUser(AppUser.class);
         if (appUser == null) {
             meNickNameTv.setText("未登录, 请点击登录");
             meMessageTv.setText("这位童鞋很懒, 什么都没留下...");
@@ -143,7 +143,7 @@ public class FourthFragment extends Fragment {
                 String nicknameStr = meNickNameTv.getText().toString();
                 String messageStr = meMessageTv.getText().toString();
 
-                AppUser appUser = BmobUser.getCurrentUser(getActivity(), AppUser.class);
+                AppUser appUser = BmobUser.getCurrentUser(AppUser.class);
                 if (appUser == null) {
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                 } else {

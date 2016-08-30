@@ -24,6 +24,7 @@ import com.example.dm.myapplication.customviews.kankan.wheel.widget.adapters.Arr
 import com.example.dm.myapplication.utiltools.AMapUtils;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
@@ -32,7 +33,6 @@ import cn.bmob.v3.listener.UpdateListener;
  */
 public class MeEditorAreaAty extends BaseActivity implements View.OnClickListener, OnWheelChangedListener, AMapLocationListener {
     private static final String LOG = "LOG";
-    private static final int RESULT_CODE = 2;
 
     // 初始化顶部栏显示
     private ImageView titleLeftImv;
@@ -79,7 +79,7 @@ public class MeEditorAreaAty extends BaseActivity implements View.OnClickListene
         mViewDistrict = (WheelView) findViewById(R.id.me_editor_district_wheel);
         mConfirmTv = (TextView) findViewById(R.id.me_editor_area_finish_tv);
 
-        AppUser appUser = BmobUser.getCurrentUser(MeEditorAreaAty.this, AppUser.class);
+        AppUser appUser = BmobUser.getCurrentUser(AppUser.class);
         if (appUser != null) {
             fullAreaTv.setText(appUser.getUserArea());
         } else {
@@ -205,22 +205,21 @@ public class MeEditorAreaAty extends BaseActivity implements View.OnClickListene
     private void uploadAreaData(String areaStr) {
         AppUser newAppUser = new AppUser();
         newAppUser.setUserArea(areaStr);
-        AppUser currentAppUser = BmobUser.getCurrentUser(MeEditorAreaAty.this, AppUser.class);
-        newAppUser.update(MeEditorAreaAty.this, currentAppUser.getObjectId(), new UpdateListener() {
+        AppUser currentAppUser = BmobUser.getCurrentUser(AppUser.class);
+        newAppUser.update(currentAppUser.getObjectId(), new UpdateListener() {
             @Override
-            public void onSuccess() {
-                Toast.makeText(MeEditorAreaAty.this, "修改成功, 数据已上传!", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-                Log.i(LOG, "i = " + i + ", s = " + s);
+            public void done(BmobException e) {
+                if (e == null) {
+                    Toast.makeText(MeEditorAreaAty.this, "修改成功, 数据已上传!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MeEditorAreaAty.this, "修改失败! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         Intent intent1 = new Intent();
         intent1.putExtra("MeEditorAreaAty.areaStr", areaStr);
-        MeEditorAreaAty.this.setResult(RESULT_CODE, intent1);
+        MeEditorAreaAty.this.setResult(RESULT_OK, intent1);
     }
 
     @Override

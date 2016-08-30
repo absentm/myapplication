@@ -16,6 +16,7 @@ import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.AppUser;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
@@ -24,7 +25,6 @@ import cn.bmob.v3.listener.UpdateListener;
  */
 public class MeEditorSchoolAty extends Activity {
     private static final String LOG = "LOG";
-    private static final int RESULT_CODE = 2;
 
     private ImageView titleLeftImv;
     private TextView titleRightTv;
@@ -73,22 +73,21 @@ public class MeEditorSchoolAty extends Activity {
                 Log.i("log", ">>>>>> schoolNameStr:::" + schoolNameStr);
                 AppUser newAppUser = new AppUser();
                 newAppUser.setUserSchool(schoolNameStr);
-                AppUser currentAppUser = BmobUser.getCurrentUser(MeEditorSchoolAty.this, AppUser.class);
-                newAppUser.update(MeEditorSchoolAty.this, currentAppUser.getObjectId(), new UpdateListener() {
+                AppUser currentAppUser = BmobUser.getCurrentUser(AppUser.class);
+                newAppUser.update(currentAppUser.getObjectId(), new UpdateListener() {
                     @Override
-                    public void onSuccess() {
-                        Toast.makeText(MeEditorSchoolAty.this, "修改成功!", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onFailure(int i, String s) {
-                        Log.i(LOG, "i = " + i + ", s = " + s);
+                    public void done(BmobException e) {
+                        if (e == null) {
+                            Toast.makeText(MeEditorSchoolAty.this, "修改成功!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MeEditorSchoolAty.this, "修改失败! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
                 Intent intent1 = new Intent();
                 intent1.putExtra("MeEditorSchoolAty.schoolNameStr", schoolNameStr);
-                MeEditorSchoolAty.this.setResult(RESULT_CODE, intent1);
+                MeEditorSchoolAty.this.setResult(RESULT_OK, intent1);
                 MeEditorSchoolAty.this.finish();
             }
         });

@@ -51,7 +51,7 @@ public class MeSettingsAty extends Activity {
             }
         });
 
-        appUser = BmobUser.getCurrentUser(MeSettingsAty.this, AppUser.class);
+        appUser = BmobUser.getCurrentUser(AppUser.class);
         if (appUser == null) {
             logoutBtn.setBackgroundColor(Color.parseColor("#616161"));
             logoutBtn.setClickable(false);
@@ -68,7 +68,7 @@ public class MeSettingsAty extends Activity {
                     builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            AppUser.logOut(MeSettingsAty.this);
+                            AppUser.logOut();
                             startActivity(new Intent(MeSettingsAty.this, MainActivity.class));
                             MeSettingsAty.this.finish();
                         }

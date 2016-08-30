@@ -16,6 +16,7 @@ import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.AppUser;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
@@ -24,7 +25,6 @@ import cn.bmob.v3.listener.UpdateListener;
  */
 public class MeEditorNicknameAty extends Activity {
     private static final String LOG = "LOG";
-    private static final int RESULT_CODE = 2;
 
     private ImageView titleLeftImv;
     private TextView titleRightTv;
@@ -73,22 +73,22 @@ public class MeEditorNicknameAty extends Activity {
                 Log.i("log", ">>>>>> nicknameStr:::" + nicknameStr);
                 AppUser newAppUser = new AppUser();
                 newAppUser.setUserNickName(nicknameStr);
-                AppUser currentAppUser = BmobUser.getCurrentUser(MeEditorNicknameAty.this, AppUser.class);
-                newAppUser.update(MeEditorNicknameAty.this, currentAppUser.getObjectId(), new UpdateListener() {
+                AppUser currentAppUser = BmobUser.getCurrentUser(AppUser.class);
+                newAppUser.update(currentAppUser.getObjectId(), new UpdateListener() {
                     @Override
-                    public void onSuccess() {
-                        Toast.makeText(MeEditorNicknameAty.this, "修改成功!", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onFailure(int i, String s) {
-                        Log.i(LOG, "i = " + i + ", s = " + s);
+                    public void done(BmobException e) {
+                        if (e == null) {
+                            Toast.makeText(MeEditorNicknameAty.this, "修改成功!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MeEditorNicknameAty.this, "修改失败! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
                 Intent intent1 = new Intent();
                 intent1.putExtra("MeEditorNicknameAty.nickname", nicknameStr);
-                MeEditorNicknameAty.this.setResult(RESULT_CODE, intent1);
+                Log.i("log", ">>>>>> nicknameStr >>> " + nicknameStr);
+                MeEditorNicknameAty.this.setResult(RESULT_OK, intent1);
 
                 MeEditorNicknameAty.this.finish();
             }
