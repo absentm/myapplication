@@ -38,9 +38,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
-            android:clickable="false"
             android:text="发表"
-            android:textColor="@color/darkgrey"
+            android:textColor="@color/white"
             android:textSize="16sp"/>
     </RelativeLayout>
 

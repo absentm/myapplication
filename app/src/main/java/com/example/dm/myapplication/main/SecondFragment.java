@@ -110,38 +110,6 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
                 } else {
                     startActivity(new Intent(getActivity(), ComPostTopicActivity.class));
                 }
-
-//                String currentTime = DateUtil.getCurrentTimeStr();
-//                Toast.makeText(getActivity(), "发表", Toast.LENGTH_SHORT).show();
-//                ComUserPostInfo comUserPostInfo = new ComUserPostInfo();
-//
-//                if (appUser != null) {
-//                    comUserPostInfo.setUserNameStr(appUser.getUsername());
-//                    comUserPostInfo.setUserHeadImgUrl(appUser.getUserAvatarUrl());
-//                    comUserPostInfo.setUserNickNameStr(appUser.getUserNickName());
-//                    comUserPostInfo.setUserTimeStr(currentTime);
-//                    comUserPostInfo.setUserContentStr("事在人为休言万般皆是命，境由心造退一步天地宽!");
-//                    comUserPostInfo.setUserImageUrlList(stringArrayList);
-//                    comUserPostInfo.setUserRepostCounter(10);
-//                    comUserPostInfo.setUserCommentCounter(25);
-//                    comUserPostInfo.setUserLikeCounter(123);
-//                    comUserPostInfo.save(getActivity(), new SaveListener() {
-//                        @Override
-//                        public void onSuccess() {
-//                            Toast.makeText(getActivity(), "发表成功!",
-//                                    Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                        @Override
-//                        public void onFailure(int i, String s) {
-//                            Toast.makeText(getActivity(), "发表失败, 请稍后再试!",
-//                                    Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-//                } else {
-//                    Toast.makeText(getActivity(), "请先登录!",
-//                            Toast.LENGTH_SHORT).show();
-//                }
             }
         });
     }
