@@ -69,17 +69,14 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
 
-        <activity android:name=".com.ComImagePagerActivity"/>
-        <activity android:name=".com.ComPostTopicActivity"/>
-        <activity android:name=".com.ComAlbumActivity"/>
-        <activity android:name=".com.ComGalleryActivity"/>
-        <activity android:name=".com.ComImageFileActivtiy"/>
-        <activity android:name=".com.ComShowAllPhotoActivity"/>
-        <activity android:name=".com.ComPhotoShowActivity"/>
         <activity android:name=".home.HomeNewsDetailActivity"/>
         <activity android:name=".me.MeFavouritrActivity"/>
 
         <activity android:name=".find.FindHowOldAct"/>
+
+        <activity android:name=".com.ComImagePagerActivity"/>
+        <activity android:name=".com.ComPostTopicActivity"/>
+        <activity android:name=".com.ComPhotosSelectAty"/>
     </application>
 
 </manifest>

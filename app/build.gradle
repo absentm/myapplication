@@ -35,4 +35,7 @@ dependencies {
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
     compile files('libs/AMap_Location_V2.4.1_20160414.jar')
     compile files('libs/faceppsdk.jar')
+    // multiple image picker
+    compile 'com.github.sd6352051:android-image-picker:v1.0.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
 }

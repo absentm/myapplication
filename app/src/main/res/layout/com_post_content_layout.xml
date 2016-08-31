@@ -53,7 +53,7 @@
         <EditText
             android:id="@+id/com_post_comtent_et"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
             android:background="@null"
             android:gravity="top|left"
             android:hint="发现了什么新的情况 ?"
@@ -62,46 +62,11 @@
             android:paddingTop="8dp"
             android:text=""
             android:textColor="@color/black"
-            android:textSize="16sp"/>
-
-        <GridView
-            android:id="@+id/com_post_photo_gdv"
-            android:layout_width="290dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:horizontalSpacing="1dp"
-            android:numColumns="4"
-            android:scrollbars="none"
-            android:verticalSpacing="5dp"/>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0.01dp"
-            android:background="@color/darkgrey"/>
-
-        <RelativeLayout
-            android:id="@+id/com_post_location_rout"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@drawable/item_selector_no_border">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="16dp"
-                android:text="地点"
-                android:textColor="@color/black"
-                android:textSize="16sp"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="8dp"
-                android:src="@drawable/ic_chevron_right_grey600_24dp"/>
-        </RelativeLayout>
+            android:textSize="17sp"/>
     </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>
