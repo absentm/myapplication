@@ -14,7 +14,7 @@ import android.support.v4.app.DialogFragment;
  * Created by dm on 16-4-24.
  */
 public class ImageDealDialog extends DialogFragment {
-    private String[] mImageDealVals = new String[]{"保存到手机", "分享给好友", "收藏"};
+    private String[] mImageDealVals = new String[]{"保存到手机"};
     public static final String RESPONSE = "response";
 
     @NonNull

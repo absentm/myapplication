@@ -6,7 +6,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
 import android.util.Log;
+import android.widget.AbsListView;
 import android.widget.Toast;
 
 import java.security.MessageDigest;
@@ -143,6 +145,7 @@ public class SystemUtils {
 
     /**
      * 高的地图定位API的SHA值获取
+     *
      * @param context context
      * @return String
      */
@@ -173,6 +176,48 @@ public class SystemUtils {
         }
 
         return null;
+    }
+
+    /**
+     * 设置listView回滚至顶部
+     * <p/>
+     * 缺点是：滑动数据量很大时，回滚时间会比较长。改进办法是将handler里的这两行代码：
+     * listView.smoothScrollToPosition(0);
+     * handler.postDelayed(this, 100);
+     * <p/>
+     * 换成：
+     * listView.setSelection(0);再根据需要修改间隔时间（100毫秒），
+     *
+     * @param listView tem单一样式的，多种样式的都可以
+     */
+    public static void scrollToListviewTop(final AbsListView listView) {
+        listView.smoothScrollToPosition(0);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (listView.getFirstVisiblePosition() > 0) {
+                    listView.smoothScrollToPosition(0);
+//                    listView.setSelection(0);
+                    handler.postDelayed(this, 100);
+                }
+            }
+        }, 100);
+    }
+
+    /**
+     * 异步执行toast
+     * @param context context
+     * @param message Sting
+     */
+    public static void showHandlerToast(final Context context, final String message) {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+            }
+        }, 100);
     }
 
 }

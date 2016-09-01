@@ -3,6 +3,7 @@ package com.example.dm.myapplication.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.dm.myapplication.R;
@@ -20,10 +22,12 @@ import com.example.dm.myapplication.com.ComPostTopicActivity;
 import com.example.dm.myapplication.customviews.xlistview.XListView;
 import com.example.dm.myapplication.customviews.xlistview.adapter.ComAppAdapter;
 import com.example.dm.myapplication.utiltools.DateUtil;
+import com.example.dm.myapplication.utiltools.SystemUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -37,11 +41,9 @@ import cn.bmob.v3.listener.FindListener;
  * 第二个页面
  */
 public class SecondFragment extends Fragment implements XListView.IXListViewListener {
-    private static String liuDeHuaUrl = "http://www.faceplusplus.com.cn/wp-content/themes/faceplusplus/assets/img/demo/16.jpg?v=2";
-    private static String laoWaiUrl = "http://www.faceplusplus.com.cn/wp-content/themes/faceplusplus/assets/img/demo/18.jpg?v=2";
-    private static String liuYanUrl = "http://www.faceplusplus.com.cn/wp-content/themes/faceplusplus/assets/img/demo/12.jpg?v=2";
-    private static String zhiLingUrl = "http://www.faceplusplus.com.cn/wp-content/themes/faceplusplus/assets/img/demo/2.jpg?v=2";
-    private static String fanBingUrl = "http://www.faceplusplus.com.cn/wp-content/themes/faceplusplus/assets/img/demo/1.jpg?v=2";
+    private final static int QUERY_ITEM_LIMITS = 5;     // 查询结果条目限制个数
+
+    private RelativeLayout mTitleRout;
 
     private ImageView mPostNewImv;
     private XListView mListView = null;
@@ -52,10 +54,11 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
     private List<ComUserPostInfo> mList = new ArrayList<>();
 
     private String currentTimeStr = DateUtil.getCurrentTimeStr();
-
     private View view;
+    private Date mDate;
+    private String lastItemPostTimeStr;
 
-    private ArrayList<String> stringArrayList;
+    private long[] mHits = new long[2];     //存储时间的数组
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,7 +66,7 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
         view = inflater.inflate(R.layout.fg2, container, false);
 
         initView();
-        generateData1();
+        generateData();
         dealEvents();   // 事件处理: gridview item的点击事件
 
         return view;
@@ -71,6 +74,7 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
 
 
     private void initView() {
+        mTitleRout = (RelativeLayout) view.findViewById(R.id.title_rout);
         mPostNewImv = (ImageView) view.findViewById(R.id.com_post_new_rout);
         mListView = (XListView) view.findViewById(R.id.lv_main);
         mProgressBar = (ProgressBar) view.findViewById(R.id.com_loading_prbar);
@@ -80,17 +84,6 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
         handler = new Handler();
 
         mProgressBar.setVisibility(ProgressBar.VISIBLE);
-
-        stringArrayList = new ArrayList<>();
-        stringArrayList.add("http://img.blog.csdn.net/20160405180856569");
-        stringArrayList.add(liuYanUrl);
-        stringArrayList.add("http://img.blog.csdn.net/20160405180856569");
-        stringArrayList.add(liuYanUrl);
-        stringArrayList.add("http://img.blog.csdn.net/20160405180856569");
-        stringArrayList.add(laoWaiUrl);
-        stringArrayList.add("http://img.blog.csdn.net/20160405180856569");
-        stringArrayList.add(fanBingUrl);
-        stringArrayList.add(liuDeHuaUrl);
     }
 
     private void dealEvents() {
@@ -112,14 +105,38 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
                 }
             }
         });
+
+        // 双击事件，回顶部栏
+        mTitleRout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //实现数组的移位操作，点击一次，左移一位，
+                // 末尾补上当前开机时间（cpu的时间）
+                System.arraycopy(mHits, 1, mHits, 0, mHits.length - 1);
+                mHits[mHits.length - 1] = SystemClock.uptimeMillis();
+
+                //双击事件的时间间隔500ms
+                if (mHits[0] >= (SystemClock.uptimeMillis() - 500)) {
+                    Log.i("LOG", "I am here!");
+                    SystemUtils.scrollToListviewTop(mListView);
+                }
+            }
+        });
     }
 
     /**
-     * 测试数据：生成静态数据
+     * 获取数据：获取云端最近时间内的5条数据
      */
-    private void generateData1() {
+    private void generateData() {
+        mDate = new Date();
+        Log.i("LOG", "mDate in generateData >>> " + mDate);
         BmobQuery<ComUserPostInfo> postInfoBmobQuery = new BmobQuery<>();
-        postInfoBmobQuery.addWhereLessThanOrEqualTo("createdAt", new BmobDate(new Date()));
+        postInfoBmobQuery.addWhereLessThanOrEqualTo("createdAt", new BmobDate(mDate));
+        postInfoBmobQuery.order("-createdAt");  // 按时间降序排列
+        postInfoBmobQuery.setLimit(QUERY_ITEM_LIMITS);  // 设定返回的查询条数
+        // 设定查询缓存策略-CACHE_ELSE_NETWORK: 先从缓存读取数据, 如果没有, 再从网络获取.
+        postInfoBmobQuery.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
+        postInfoBmobQuery.setMaxCacheAge(TimeUnit.DAYS.toMillis(1));    //此表示缓存一天
         postInfoBmobQuery.findObjects(new FindListener<ComUserPostInfo>() {
             @Override
             public void done(List<ComUserPostInfo> list, BmobException e) {
@@ -128,143 +145,153 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
                         mList.add(comUserPostInfo);
                     }
 
-//        Log.i("LOG", "mList.toString" + mList.toString());
                     mComAppAdapter = new ComAppAdapter(getActivity());
                     mComAppAdapter.setData(mList);
                     mListView.setAdapter(mComAppAdapter);
+                    mProgressBar.setVisibility(ProgressBar.GONE);
+
+                    // get the last item post time
+                    if (!mList.isEmpty()) {
+                        ComUserPostInfo lastPostInfo = mList.get(mList.size() - 1);
+                        Log.i("LOG", "lastPostInfo.getUserTimeStr() in generateData " +
+                                lastPostInfo.getUserTimeStr());
+                        lastItemPostTimeStr = lastPostInfo.getUserTimeStr();
+                    }
+
+                } else {
+                    mProgressBar.setVisibility(ProgressBar.GONE);
+                }
+            }
+        });
+    }
+
+    /**
+     * 下拉刷新数据：获取云端最近时间内的5条数据
+     * 思路：记录第一次加载应用或下拉刷新的时间，
+     * 取第二次或之后下拉刷新的时间这一段时间内的数据；
+     * 从Bmob云端进行复合查询
+     */
+    private void generateRefleshData() {
+        // 使用复合查询
+        Log.i("LOG", "mDate in generateRefleshData query1 >>> " + mDate);
+        BmobQuery<ComUserPostInfo> query1 = new BmobQuery<>();
+        query1.addWhereGreaterThanOrEqualTo("createdAt", new BmobDate(mDate));
+
+        mDate = new Date();     // 获取当前最新时间
+        Log.i("LOG", "mDate in generateRefleshData query2 >>> " + mDate);
+        BmobQuery<ComUserPostInfo> query2 = new BmobQuery<>();
+        query2.addWhereLessThanOrEqualTo("createdAt", new BmobDate(mDate));
+
+        List<BmobQuery<ComUserPostInfo>> andQuerys = new ArrayList<>();
+        andQuerys.add(query1);
+        andQuerys.add(query2);
+
+        BmobQuery<ComUserPostInfo> postInfoBmobQuery = new BmobQuery<>();
+        postInfoBmobQuery.and(andQuerys);
+        postInfoBmobQuery.addWhereLessThanOrEqualTo("createdAt", new BmobDate(mDate));
+        postInfoBmobQuery.order("-createdAt");  // 按时间降序排列
+        postInfoBmobQuery.setLimit(QUERY_ITEM_LIMITS);  // 设定返回的查询条数
+        // 设定查询缓存策略-NETWORK_ELSE_CACHE: 先从网络读取数据, 如果没有, 再从缓存获取.
+        postInfoBmobQuery.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        postInfoBmobQuery.setMaxCacheAge(TimeUnit.DAYS.toMillis(1));    //此表示缓存一天
+        postInfoBmobQuery.findObjects(new FindListener<ComUserPostInfo>() {
+            @Override
+            public void done(List<ComUserPostInfo> list, BmobException e) {
+                if (e == null) {
+                    if (list.size() == 0) {
+                        SystemUtils.showHandlerToast(getActivity(), "没有更多内容了...");
+                        Log.i("LOG", "list.size() in generateRefleshData >>> " + list.size());
+                    } else {
+                        for (ComUserPostInfo comUserPostInfo : list) {
+                            mList.add(comUserPostInfo);
+                        }
+
+                        mComAppAdapter = new ComAppAdapter(getActivity());
+                        mComAppAdapter.setData(mList);
+                        mListView.setAdapter(mComAppAdapter);
+                    }
+
                     mProgressBar.setVisibility(ProgressBar.GONE);
                 } else {
                     mProgressBar.setVisibility(ProgressBar.GONE);
                 }
             }
         });
-
-        Log.i("LOG", "mList.toString" + mList.toString());
     }
 
-//    /**
-//     * 测试数据：生成静态数据
-//     */
-//    private void generateData() {
-//
-//        // 添加数据，含一张图片的情况
-//        ComUserPostInfo mComUserPostInfo0 = new ComUserPostInfo();
-//
-//        mComUserPostInfo0.setUserNickNameStr("乔布斯");
-//        mComUserPostInfo0.setUserHeadImgUrl(liuDeHuaUrl);
-//        mComUserPostInfo0.setUserTimeStr(currentTimeStr);
-//        mComUserPostInfo0.setUserContentStr("事在人为休言万般皆是命，境由心造退一步天地宽!");
-//        mComUserPostInfo0.setUserCommentCounter(999);
-//        mComUserPostInfo0.setUserLikeCounter(9999);
-//
-//
-//        List<String> photoStringLists = new ArrayList<>();
-//        photoStringLists.add(liuDeHuaUrl);
-//        mComUserPostInfo0.setUserImageUrlList(photoStringLists);
-//
-//        mList.add(mComUserPostInfo0);
-//
-//        // 使用构造器初始化
-//        ArrayList<String> imgsArrayList = new ArrayList<>();
-//        imgsArrayList.add(liuYanUrl);
-//        imgsArrayList.add(fanBingUrl);
-//        imgsArrayList.add(zhiLingUrl);
-//
-//        ComUserPostInfo mComUserPostInfo00 = new ComUserPostInfo("", liuYanUrl, "sslk",
-//                currentTimeStr, "你好，明天", imgsArrayList, 1, 15, 22);
-//
-//        mList.add(mComUserPostInfo00);
-//
-//        // 添加数据，含2张图片的情况
-//        ComUserPostInfo mComUserPostInfo1 = new ComUserPostInfo();
-//
-//        mComUserPostInfo1.setUserNickNameStr("马云");
-//        mComUserPostInfo1.setUserHeadImgUrl(fanBingUrl);
-//        mComUserPostInfo1.setUserTimeStr("2015-05-13 23:59:59");
-//        mComUserPostInfo1.setUserContentStr("淘宝不是假货多，是你太贪" +
-//                "“二十五块钱就想买一个劳力士手表，这是不可能的，这是你自己太贪了”，阿里巴巴董事局主席马云将淘宝上假货泛滥归咎于易受骗和“贪心”的消费者。这位首富还有一句名言“空气是不行的，水是不行的，手机再好又有什么用呢？”把雷布斯当场给噎住了。");
-//        mComUserPostInfo1.setUserRepostCounter(100);
-//        mComUserPostInfo1.setUserCommentCounter(1000);
-//        mComUserPostInfo1.setUserLikeCounter(19999);
-//
-//        ArrayList<String> imgsArrayList2 = new ArrayList<>();
-//        imgsArrayList2.add(liuYanUrl);
-//        imgsArrayList2.add(fanBingUrl);
-//        imgsArrayList2.add(zhiLingUrl);
-//        mComUserPostInfo1.setUserImageUrlList(imgsArrayList2);
-//        mList.add(mComUserPostInfo1);
-//
-//        // 添加数据，含5张图片的情况
-//        ComUserPostInfo mComUserPostInfo3 = new ComUserPostInfo();
-//
-//        mComUserPostInfo3.setUserNickNameStr("李彦宏");
-//        mComUserPostInfo3.setUserHeadImgUrl(zhiLingUrl);
-//        mComUserPostInfo3.setUserTimeStr("2015-05-15 21:59:49");
-//        mComUserPostInfo3.setUserContentStr("“与马云每天睡懒觉不同，我每天5点多就醒了，我很着急。”在百度CEO李彦宏，机会多是一种负担，企业一定要学会放弃，要把目光聚焦在自己最喜爱、能力范围内最擅长的领域。");
-//
-//        ArrayList<String> arrayList = new ArrayList<>();
-//        arrayList.add(laoWaiUrl);
-//        arrayList.add(fanBingUrl);
-//        arrayList.add(laoWaiUrl);
-//        arrayList.add(liuDeHuaUrl);
-//        arrayList.add(liuYanUrl);
-//        mComUserPostInfo3.setUserImageUrlList(arrayList);
-//        mList.add(mComUserPostInfo3);
-//
-//        // 添加数据，含9张图片的情况
-//        ComUserPostInfo mComUserPostInfo4 = new ComUserPostInfo();
-//
-//        mComUserPostInfo4.setUserNickNameStr("罗永浩");
-//        mComUserPostInfo4.setUserHeadImgUrl("http://img.blog.csdn.net/20160405180856569");
-//        mComUserPostInfo4.setUserTimeStr("2015-05-16 23:58:45");
-//        mComUserPostInfo4.setUserContentStr("我特别反感有的手机厂商在新品上市时定一个高价，之后很快又会降价的做法。我们的这个价格会一直坚持整个产品周期，除非下一代产品上市了，前一代需要清理库存了，才有可能降价销售。");
-//        mComUserPostInfo4.setUserCommentCounter(1100000);
-//        mComUserPostInfo4.setUserLikeCounter(1101101);
-//
-//        ArrayList<String> stringArrayList = new ArrayList<>();
-//        stringArrayList.add("http://img.blog.csdn.net/20160405180856569");
-//        stringArrayList.add(liuYanUrl);
-//        stringArrayList.add("http://img.blog.csdn.net/20160405180856569");
-//        stringArrayList.add(liuYanUrl);
-//        stringArrayList.add("http://img.blog.csdn.net/20160405180856569");
-//        stringArrayList.add(laoWaiUrl);
-//        stringArrayList.add("http://img.blog.csdn.net/20160405180856569");
-//        stringArrayList.add(fanBingUrl);
-//        stringArrayList.add(liuDeHuaUrl);
-//
-//        mComUserPostInfo4.setUserImageUrlList(stringArrayList);
-//        mList.add(mComUserPostInfo4);
-//    }
+    /**
+     * 上拉加载更多数据：获取云端最近时间内的5条数据
+     * 思路：获取应用第一次打开时加载的数据的最后一个时间,
+     * 上滑加载更多时, 数据取该日期之前的数据, 之后更新时间
+     */
+    private void generateLoadMoreData() {
+        // get last item post time
+        Date newdate = DateUtil.string2Date(lastItemPostTimeStr);
+        Log.i("LOG", "newdate in generateLoadMoreData >>> " + newdate);
 
+        BmobQuery<ComUserPostInfo> postInfoBmobQuery = new BmobQuery<>();
+        postInfoBmobQuery.addWhereLessThanOrEqualTo("createdAt", new BmobDate(newdate));
+        postInfoBmobQuery.order("-createdAt");  // 按时间降序排列
+        postInfoBmobQuery.setLimit(QUERY_ITEM_LIMITS);  // 设定返回的查询条数
+        // 设定查询缓存策略-CACHE_ELSE_NETWORK: 先从网络读取数据, 如果没有, 再从缓存获取.
+        postInfoBmobQuery.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        postInfoBmobQuery.setMaxCacheAge(TimeUnit.DAYS.toMillis(1));    //此表示缓存一天
+        postInfoBmobQuery.findObjects(new FindListener<ComUserPostInfo>() {
+            @Override
+            public void done(List<ComUserPostInfo> list, BmobException e) {
+                if (e == null) {
+                    if (list.size() == 0) {
+                        SystemUtils.showHandlerToast(getActivity(), "没有更多内容了...");
+                        Log.i("LOG", "list.size() in generateLoadMoreData >>> " + list.size());
+                    } else {
+                        for (ComUserPostInfo comUserPostInfo : list) {
+                            mList.add(comUserPostInfo);
+                        }
+
+                        // 监听数据的变化, 上拉加载更多后处于当前可视的最后一个item位置
+                        mComAppAdapter.notifyDataSetChanged();
+
+                        // get the last item post time
+                        if (!mList.isEmpty()) {
+                            ComUserPostInfo lastPostInfo = mList.get(mList.size() - 1);
+                            Log.i("LOG", "lastPostInfo.getUserTimeStr() in generateLoadMoreData" +
+                                    lastPostInfo.getUserTimeStr());
+                            lastItemPostTimeStr = lastPostInfo.getUserTimeStr();
+                        }
+                    }
+
+                    mProgressBar.setVisibility(ProgressBar.GONE);
+                } else {
+                    mProgressBar.setVisibility(ProgressBar.GONE);
+                }
+            }
+        });
+    }
 
     @Override
     public void onRefresh() {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                generateData1();
+                generateRefleshData();
 
                 mComAppAdapter = new ComAppAdapter(getActivity());
                 mComAppAdapter.setData(mList);
                 mListView.setAdapter(mComAppAdapter);
                 onLoad();
             }
-        }, 2000);
-
+        }, 500);
     }
 
     @Override
     public void onLoadMore() {
-
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                generateData1();
-                mComAppAdapter.notifyDataSetChanged();
+                generateLoadMoreData();
                 onLoad();
             }
-        }, 2000);
-
+        }, 500);
     }
 
     /**

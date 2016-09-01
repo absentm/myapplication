@@ -154,12 +154,6 @@ public class ImageDetailFragment extends Fragment {
                     Toast.makeText(getActivity(), "照片已保存（手机相册 -> AbsentM）", Toast.LENGTH_LONG).show();
 
                     break;
-                case "分享给好友":
-                    Toast.makeText(getActivity(), "Waitting...", Toast.LENGTH_LONG).show();
-                    break;
-                case "收藏":
-                    Toast.makeText(getActivity(), "Waitting...", Toast.LENGTH_LONG).show();
-                    break;
             }
         }
     }

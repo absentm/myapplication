@@ -1,8 +1,13 @@
 package com.example.dm.myapplication.utiltools;
 
+import android.util.Log;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import static com.example.dm.myapplication.utiltools.StringUtils.DEFAULT_DATETIME_PATTERN;
 
 /**
  * Created by dm on 16-4-26.
@@ -57,7 +62,7 @@ public class DateUtil {
 
             return new Date(date);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.i("LOG", e.getMessage());
         }
 
         return null;
@@ -84,5 +89,24 @@ public class DateUtil {
         Date date = randomDate(ZHUHU_API_BEGIN_DATESTR, getCurrentTimeStr("yyyyMMdd"));
 
         return simpleDateFormat.format(date);
+    }
+
+    /**
+     * 日期类型字符串转Date日期类
+     *
+     * @param timeStr 日期类型字符串: 2016-04-26 15:50:23
+     * @return Date
+     */
+    public static Date string2Date(String timeStr) {
+        SimpleDateFormat simpleDateFormat =
+                new SimpleDateFormat(DEFAULT_DATETIME_PATTERN);
+        Date date = null;
+        try {
+            date = simpleDateFormat.parse(timeStr);
+        } catch (ParseException e) {
+            Log.i("LOG", e.getMessage());
+        }
+
+        return date;
     }
 }
