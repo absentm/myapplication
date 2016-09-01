@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white100"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/me_settings_title"
+        layout="@layout/title_layout"/>
+
+    <com.example.dm.myapplication.customviews.RoundImageView
+        android:id="@+id/me_settings_image"
+        android:layout_width="88dp"
+        android:layout_height="88dp"
+        android:layout_below="@+id/me_settings_title"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/icon"/>
+
+    <TextView
+        android:id="@+id/me_settings_appname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/me_settings_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
+        android:text="AbsentM"
+        android:textColor="@color/gray900"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/me_settings_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/me_settings_appname"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="3dp"
+        android:text="V 1.1.0"
+        android:textColor="@color/gray700"
+        android:textSize="14sp"/>
+
+    <View
+        android:id="@+id/me_settings_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.01dp"
+        android:layout_below="@+id/me_settings_version"
+        android:layout_marginTop="10dp"
+        android:background="@color/gray700"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/me_settings_line"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:lineSpacingExtra="1.5dp"
+            android:lineSpacingMultiplier="1.2"
+            android:text="这是一款基于Android传统的MVC技术的个人APP， 包含四个主要页面：\n\n[1]. Home页面：数据来源知乎日报，自动解析；\n[2]. 社区页面：后端采用Bmob存储数据；\n[3]. 发现页面：使用一些第三方库实现一些小功能；\n[4]. 我的页面：实现一个完整的个人用户系统功能 。\n\n@AbsentM\nGithub：https://github.com/absentm\nBlogs：https://absentm.github.io\nEmail：absentm@163.com"
+            android:textColor="@color/gray800"
+            android:textSize="15sp"/>
+    </RelativeLayout>
+</RelativeLayout>

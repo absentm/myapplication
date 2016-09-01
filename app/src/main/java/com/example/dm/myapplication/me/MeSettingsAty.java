@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.dm.myapplication.R;
@@ -26,6 +27,8 @@ public class MeSettingsAty extends Activity {
     private TextView titleTv;
     private Button logoutBtn;
 
+    private RelativeLayout mAboutRout;
+
     private AppUser appUser;
 
     @Override
@@ -41,6 +44,9 @@ public class MeSettingsAty extends Activity {
     private void initView() {
         titleLeftImv = (ImageView) findViewById(R.id.me_settings_title).findViewById(R.id.title_imv);
         titleTv = (TextView) findViewById(R.id.me_settings_title).findViewById(R.id.title_center_text_tv);
+
+        mAboutRout = (RelativeLayout) findViewById(R.id.settings_about_rout);
+
         logoutBtn = (Button) findViewById(R.id.settings_logout_btn);
 
         titleTv.setText("个人设置");
@@ -83,6 +89,13 @@ public class MeSettingsAty extends Activity {
 
                     builder.show();
                 }
+            }
+        });
+
+        mAboutRout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MeSettingsAty.this, MeSetingsAboutAty.class));
             }
         });
     }

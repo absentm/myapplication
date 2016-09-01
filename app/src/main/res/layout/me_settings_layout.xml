@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/ghostwhite"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/ghostwhite"
+              android:orientation="vertical">
 
     <include
         android:id="@+id/me_settings_title"
-        layout="@layout/title_layout" />
+        layout="@layout/title_layout"/>
 
     <RelativeLayout
         android:id="@+id/me_collect_rout"
@@ -26,7 +26,7 @@
             android:layout_toRightOf="@+id/imageView3"
             android:text="推送通知"
             android:textColor="@color/gray700"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:src="@drawable/ic_chevron_right_grey600_24dp" />
+            android:src="@drawable/ic_chevron_right_grey600_24dp"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -54,7 +54,7 @@
             android:layout_toRightOf="@+id/imageView3"
             android:text="自动更新"
             android:textColor="@color/gray700"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:src="@drawable/ic_chevron_right_grey600_24dp" />
+            android:src="@drawable/ic_chevron_right_grey600_24dp"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -82,7 +82,7 @@
             android:layout_toRightOf="@+id/imageView3"
             android:text="设置字体"
             android:textColor="@color/gray700"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -91,7 +91,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:src="@drawable/ic_chevron_right_grey600_24dp" />
+            android:src="@drawable/ic_chevron_right_grey600_24dp"/>
     </RelativeLayout>
 
 
@@ -111,7 +111,7 @@
             android:layout_toRightOf="@+id/imageView3"
             android:text="应用推荐"
             android:textColor="@color/gray700"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -120,15 +120,16 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:src="@drawable/ic_chevron_right_grey600_24dp" />
+            android:src="@drawable/ic_chevron_right_grey600_24dp"/>
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/settings_about_rout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_below="@+id/find_line"
         android:layout_marginTop="8dp"
-        android:background="@drawable/item_selector_no_border">
+        android:background="@drawable/item_selector">
 
         <TextView
             android:layout_width="wrap_content"
@@ -139,7 +140,7 @@
             android:layout_toRightOf="@+id/imageView3"
             android:text="关于我们"
             android:textColor="@color/gray700"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -148,7 +149,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:src="@drawable/ic_chevron_right_grey600_24dp" />
+            android:src="@drawable/ic_chevron_right_grey600_24dp"/>
     </RelativeLayout>
 
     <Button
@@ -161,7 +162,7 @@
         android:background="@color/teal"
         android:text="退出账户"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="16sp"/>
 
 
 </LinearLayout>

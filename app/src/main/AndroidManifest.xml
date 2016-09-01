@@ -64,6 +64,7 @@
         <activity android:name=".me.area.activity.BaseActivity"/>
         <activity android:name=".me.MeFeedbackAty"/>
         <activity android:name=".me.MeAvatarShowerAty"/>
+        <activity android:name=".me.MeSetingsAboutAty"/>
         <activity
             android:name="cn.bmob.v3.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
@@ -77,6 +78,7 @@
         <activity android:name=".com.ComImagePagerActivity"/>
         <activity android:name=".com.ComPostTopicActivity"/>
         <activity android:name=".com.ComPhotosSelectAty"/>
+
     </application>
 
 </manifest>
