@@ -65,15 +65,17 @@
         <activity android:name=".me.MeFeedbackAty"/>
         <activity android:name=".me.MeAvatarShowerAty"/>
         <activity android:name=".me.MeSetingsAboutAty"/>
+        <activity android:name=".me.MeFavouritrActivity"/>
         <activity
             android:name="cn.bmob.v3.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
 
         <activity android:name=".home.HomeNewsDetailActivity"/>
-        <activity android:name=".me.MeFavouritrActivity"/>
 
         <activity android:name=".find.FindHowOldAct"/>
+        <activity android:name=".find.FindMeiziAty"/>
+        <activity android:name=".find.FindPhotoDetailAty"/>
 
         <activity android:name=".com.ComImagePagerActivity"/>
         <activity android:name=".com.ComPostTopicActivity"/>

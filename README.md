@@ -27,7 +27,7 @@ Hello MyApplication
 </figure>
 
 <figure class="third">
-<img src="https://o8zyn0sct.qnssl.com/app_find.png" height="400" width="240">
+    <img src="https://o8zyn0sct.qnssl.com/app_find.png" height="400" width="240">
     <img src="https://o8zyn0sct.qnssl.com/app_me.png" height="400" width="240">
     <img src="https://o8zyn0sct.qnssl.com/app_register.png" height="400" width="240">
 </figure>
@@ -39,4 +39,6 @@ Hello MyApplication
 > * PhotoView框架: https://github.com/chrisbanes/PhotoView
 > * 图片多选框架: https://github.com/sd6352051/android-image-picker
 > * EventBus框架: https://github.com/greenrobot/EventBus
+> * Volley框架: http://blog.csdn.net/guolin_blog/article/details/17482095
+> * Glide框架: https://github.com/bumptech/glide
 
