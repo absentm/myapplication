@@ -76,7 +76,7 @@
         <activity android:name=".find.FindHowOldAct"/>
         <activity android:name=".find.FindMeiziAty"/>
         <activity android:name=".find.FindPhotoDetailAty"/>
-        <activity android:name=".find.FIndWeatherAty"/>
+        <activity android:name=".find.FindWeatherAty"/>
 
         <activity android:name=".com.ComImagePagerActivity"/>
         <activity android:name=".com.ComPostTopicActivity"/>

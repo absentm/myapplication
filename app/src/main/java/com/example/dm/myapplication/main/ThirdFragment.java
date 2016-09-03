@@ -11,7 +11,7 @@ import android.widget.AdapterView;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.customviews.ninegridview.NineGridView;
 import com.example.dm.myapplication.customviews.ninegridview.NineGridViewAdapter;
-import com.example.dm.myapplication.find.FIndWeatherAty;
+import com.example.dm.myapplication.find.FindWeatherAty;
 import com.example.dm.myapplication.find.FindHowOldAct;
 import com.example.dm.myapplication.find.FindMeiziAty;
 
@@ -69,7 +69,7 @@ public class ThirdFragment extends Fragment {
 
                         break;
                     case 6:
-                        startActivity(new Intent(getActivity(), FIndWeatherAty.class));
+                        startActivity(new Intent(getActivity(), FindWeatherAty.class));
                         break;
                     case 7:
 
