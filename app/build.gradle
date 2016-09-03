@@ -32,7 +32,7 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     //bmob-sms ：Bmob单独为短信服务提供的包
     compile 'cn.bmob.android:bmob-sms:1.0.1'
-    compile 'com.github.chrisbanes:PhotoView:1.2.6'
+    compile 'com.github.chrisbanes:PhotoView:1.3.0'
     compile files('libs/AMap_Location_V2.4.1_20160414.jar')
     compile files('libs/faceppsdk.jar')
     // multiple image picker

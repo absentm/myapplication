@@ -60,7 +60,7 @@
         <activity android:name=".me.MeEditorSchoolAty"/>
         <activity android:name=".me.MeEditorJobAty"/>
         <activity android:name=".me.MeSettingsAty"/>
-        <activity android:name=".me.area.activity.MeEditorAreaAty"/>
+        <activity android:name=".me.MeEditorAreaAty"/>
         <activity android:name=".me.area.activity.BaseActivity"/>
         <activity android:name=".me.MeFeedbackAty"/>
         <activity android:name=".me.MeAvatarShowerAty"/>
@@ -76,6 +76,7 @@
         <activity android:name=".find.FindHowOldAct"/>
         <activity android:name=".find.FindMeiziAty"/>
         <activity android:name=".find.FindPhotoDetailAty"/>
+        <activity android:name=".find.FIndWeatherAty"/>
 
         <activity android:name=".com.ComImagePagerActivity"/>
         <activity android:name=".com.ComPostTopicActivity"/>

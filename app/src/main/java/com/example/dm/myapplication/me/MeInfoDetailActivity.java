@@ -21,7 +21,6 @@ import android.widget.Toast;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.AppUser;
 import com.example.dm.myapplication.customviews.CustomAvatarDialog;
-import com.example.dm.myapplication.me.area.activity.MeEditorAreaAty;
 import com.example.dm.myapplication.utiltools.FileUtil;
 import com.example.dm.myapplication.utiltools.HttpUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;

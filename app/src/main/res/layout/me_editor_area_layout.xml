@@ -38,7 +38,7 @@
         android:textSize="14sp" />
 
     <RelativeLayout
-        android:id="@+id/me_editor__current_area_rout"
+        android:id="@+id/me_editor_current_area_rout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
