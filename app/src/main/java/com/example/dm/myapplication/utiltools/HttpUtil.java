@@ -5,9 +5,12 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 /**
  * Created by dm on 16-4-22.
@@ -64,4 +67,35 @@ public class HttpUtil {
         return get(NEWSDETAIL + id);
     }
 
+    public static String getWeatherJson(String city) throws UnsupportedEncodingException {
+        String cityName = URLEncoder.encode(city, "utf-8");
+        String requestUrl = "http://api.map.baidu.com/telematics/v3/weather?location=" + cityName + "&output=json&ak=8a435fdb57f244acc087a50656965562";
+        StringBuffer buffer = null;
+        try {
+            // 建立连接
+            URL url = new URL(requestUrl);
+            HttpURLConnection httpUrlConn = (HttpURLConnection) url.openConnection();
+            httpUrlConn.setDoInput(true);
+            httpUrlConn.setRequestMethod("GET");
+            // 获取输入流
+            InputStream inputStream = httpUrlConn.getInputStream();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "utf-8");
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            // 读取返回结果
+            buffer = new StringBuffer();
+            String str = null;
+            while ((str = bufferedReader.readLine()) != null) {
+                buffer.append(str);
+            }
+
+            // 释放资源
+            bufferedReader.close();
+            inputStreamReader.close();
+            inputStream.close();
+            httpUrlConn.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return buffer.toString();  //返回获取的xml字符串
+    }
 }

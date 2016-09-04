@@ -2,20 +2,26 @@ package com.example.dm.myapplication.find;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.dm.myapplication.R;
+import com.example.dm.myapplication.beans.WeatherBeans.WeatherInfo;
 import com.example.dm.myapplication.customviews.WeatherChartView;
+import com.example.dm.myapplication.utiltools.HttpUtil;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * FindWeatherAty: 天气
  * Created by dm on 16-9-3.
  */
-public class FindWeatherAty extends Activity {
+public class FindWeatherAty extends Activity implements SwipeRefreshLayout.OnRefreshListener {
     private final static String LOG = "FindWeatherAty";
     private ImageView titleLeftImv;
     private TextView titleCityTv;
@@ -85,6 +91,8 @@ public class FindWeatherAty extends Activity {
     private TextView mSunTv;
     private TextView mSunTipTv;
 
+    private WeatherInfo mWeatherDatas;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,15 +125,6 @@ public class FindWeatherAty extends Activity {
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,
                 R.color.colorPrimary,
                 R.color.teal);
-
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-
-            }
-        });
-
-
     }
 
     private void initViews() {
@@ -197,5 +196,34 @@ public class FindWeatherAty extends Activity {
         mSunTv = (TextView) findViewById(R.id.find_ziwaixian_tv);
         mSunTipTv = (TextView) findViewById(R.id.find_ziwaixian_tip_tv);
 
+        // please use handle
+        try {
+            String jsonDatas = HttpUtil.getWeatherJson("郑州");
+            Log.d(LOG, "jsonDatas >>> " + jsonDatas);
+
+        } catch (UnsupportedEncodingException e) {
+            Log.d(LOG, e.getMessage());
+        }
+
+    }
+
+    private void fillWeatherDatas(WeatherInfo weatherInfos) {
+//        mCurDateTv.setText(weatherInfos.getDate() + " 发布");
+//        mCurPm25Tv.setText("PM2.5 " + weatherInfos.getResults().get(0).getPm25());
+
+
+    }
+
+    @Override
+    public void onRefresh() {
+        //模拟加载网络数据，这里设置4秒，正好能看到4色进度条
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                //显示或隐藏刷新进度条
+                mSwipeRefreshLayout.setRefreshing(false);
+                // 更新数据数据
+                fillWeatherDatas(mWeatherDatas);
+            }
+        }, 3000);
     }
 }

@@ -98,14 +98,6 @@ public class FindImageUrlLoader {
 
 
     /**
-     * 获取下一页内容
-     */
-    public void nextPage() {
-        currentPage += 1;
-        loadImageUrl(currentPage);
-    }
-
-    /**
      * 回调函数 * 向数据集中添加新增的数据
      */
     public interface Callback {
