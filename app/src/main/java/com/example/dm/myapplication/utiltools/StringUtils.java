@@ -393,4 +393,8 @@ public class StringUtils {
         return (Environment.getExternalStorageDirectory() + File.separator +
                 "AbsentM" + File.separator + faceImgName);
     }
+
+    public static int string2Int(String string) {
+        return Integer.parseInt(string);
+    }
 }

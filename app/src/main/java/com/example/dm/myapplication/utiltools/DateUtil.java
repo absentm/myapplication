@@ -109,4 +109,20 @@ public class DateUtil {
 
         return date;
     }
+
+    /**
+     * 判断是否为夜晚
+     *
+     * @return boolean
+     */
+    public static boolean isNight() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH");
+        String hour = sdf.format(new Date());
+        int k = Integer.parseInt(hour);
+        if ((k >= 0 && k < 6) || (k >= 18 && k < 24)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
