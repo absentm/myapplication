@@ -41,4 +41,5 @@ Hello MyApplication
 > * EventBus框架: https://github.com/greenrobot/EventBus
 > * Volley框架: http://blog.csdn.net/guolin_blog/article/details/17482095
 > * Glide框架: https://github.com/bumptech/glide
+> * material-dialogs: https://github.com/afollestad/material-dialogs
 

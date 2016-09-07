@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.WeatherBeans.IndexBean;
@@ -33,11 +34,10 @@ import java.util.Map;
  * FindWeatherAty: 天气
  * Created by dm on 16-9-3.
  */
-public class FindWeatherAty extends Activity implements SwipeRefreshLayout.OnRefreshListener {
+public class FindWeatherAty extends Activity {
     private final static String LOG = "FindWeatherAty";
     private ImageView titleLeftImv;
     private TextView titleCityTv;
-    private ImageView titleRightImv;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -105,6 +105,10 @@ public class FindWeatherAty extends Activity implements SwipeRefreshLayout.OnRef
 
     private WeatherInfo mWeatherDatas;
     private List<Map<String, String>> tmpMap = new ArrayList<>();
+    private List<IndexBean> index;
+    private List<WeatherDataBean> weather_data;
+
+    private String mCityName = "郑州";     // 默认郑州
 
     private Handler mHandler = new Handler() {
         @Override
@@ -121,6 +125,8 @@ public class FindWeatherAty extends Activity implements SwipeRefreshLayout.OnRef
                         "数据加载出错！",
                         Toast.LENGTH_SHORT).show();
             }
+
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     };
 
@@ -136,12 +142,6 @@ public class FindWeatherAty extends Activity implements SwipeRefreshLayout.OnRef
     private void initViews() {
         titleLeftImv = (ImageView) findViewById(R.id.title_left_imv);
         titleCityTv = (TextView) findViewById(R.id.title_center_tv);
-        titleRightImv = (ImageView) findViewById(R.id.title_right_imv);
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.find_weather_SRfLout);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,
-                R.color.colorPrimary,
-                R.color.teal);
 
         mCurDateTv = (TextView) findViewById(R.id.find_today_date);
         mCurTempTv = (TextView) findViewById(R.id.find_weather_temp);
@@ -204,8 +204,21 @@ public class FindWeatherAty extends Activity implements SwipeRefreshLayout.OnRef
 
         mSunTv = (TextView) findViewById(R.id.find_ziwaixian_tv);
         mSunTipTv = (TextView) findViewById(R.id.find_ziwaixian_tip_tv);
-    }
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.find_weather_SRfLout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,
+                R.color.colorPrimary,
+                R.color.teal);
+
+        // 进入页面mSwipeRefreshLayout自动刷新并填充数据
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+                refresh2GetDatas(mCityName);
+            }
+        });
+    }
 
     private void EventDeal() {
         titleLeftImv.setOnClickListener(new View.OnClickListener() {
@@ -215,19 +228,119 @@ public class FindWeatherAty extends Activity implements SwipeRefreshLayout.OnRef
             }
         });
 
-        titleRightImv.setOnClickListener(new View.OnClickListener() {
+        mDressRout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                new MaterialDialog.Builder(FindWeatherAty.this)
+                        .title("穿衣提醒")
+                        .content(index.get(0).getDes())
+                        .positiveText("OK")
+                        .positiveColorRes(R.color.teal)
+                        .show();
             }
         });
 
+        mCarRout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(FindWeatherAty.this)
+                        .title("洗车提醒")
+                        .content(index.get(1).getDes())
+                        .positiveText("OK")
+                        .positiveColorRes(R.color.teal)
+                        .show();
+            }
+        });
+
+        mTripRout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(FindWeatherAty.this)
+                        .title("旅行提醒")
+                        .content(index.get(2).getDes())
+                        .positiveText("OK")
+                        .positiveColorRes(R.color.teal)
+                        .show();
+            }
+        });
+
+        mColdlRout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(FindWeatherAty.this)
+                        .title("感冒提醒")
+                        .content(index.get(3).getDes())
+                        .positiveText("OK")
+                        .positiveColorRes(R.color.teal)
+                        .show();
+            }
+        });
+
+        mSportRout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(FindWeatherAty.this)
+                        .title("运动提醒")
+                        .content(index.get(4).getDes())
+                        .positiveText("OK")
+                        .positiveColorRes(R.color.teal)
+                        .show();
+            }
+        });
+
+        mSunRout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(FindWeatherAty.this)
+                        .title("穿紫外线提醒")
+                        .content(index.get(5).getDes())
+                        .positiveText("OK")
+                        .positiveColorRes(R.color.teal)
+                        .show();
+            }
+        });
+
+        // 下拉刷新事件
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh2GetDatas(mCityName);
+            }
+        });
+
+        titleCityTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(FindWeatherAty.this)
+                        .title("选择城市")
+                        .items(R.array.city_values)
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+                                Toast.makeText(FindWeatherAty.this,
+                                        "pos: " + position + ", " + text,
+                                        Toast.LENGTH_SHORT).show();
+                                mCityName = (String) text;
+
+                                // 修改城市后自动刷新并填充数据
+                                refresh2GetDatas(mCityName);
+                            }
+                        }).show();
+            }
+        });
+    }
+
+    /**
+     * 激活刷新填充数据
+     *
+     * @param cityStr
+     */
+    private void refresh2GetDatas(final String cityStr) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.d(LOG, "-=-=-=-=>begin");
                 try {
-                    String weatherDatas = HttpUtil.getWeatherJson("郑州");
+                    String weatherDatas = HttpUtil.getWeatherJson(cityStr);
                     if (!weatherDatas.equals("")) {
                         Message message = mHandler.obtainMessage();
                         message.obj = weatherDatas;
@@ -238,7 +351,6 @@ public class FindWeatherAty extends Activity implements SwipeRefreshLayout.OnRef
                 }
             }
         }).start();
-
     }
 
 
@@ -255,8 +367,7 @@ public class FindWeatherAty extends Activity implements SwipeRefreshLayout.OnRef
         mCurPm25Tv.setText("PM2.5  " + weatherInfos.getResults().get(0).getPm25() + "μg/m³");
 
         // 获取4天的天气数据
-        List<WeatherDataBean> weather_data =
-                weatherInfos.getResults().get(0).getWeather_data();
+        weather_data = weatherInfos.getResults().get(0).getWeather_data();
 
         mCurTempTv.setText(parseTempData(weather_data.get(0).getDate()));
         mCurWeaDesTv.setText(weather_data.get(0).getWeather());
@@ -324,8 +435,7 @@ public class FindWeatherAty extends Activity implements SwipeRefreshLayout.OnRef
         }
 
         // 获取生活指数数据
-        List<IndexBean> index =
-                weatherInfos.getResults().get(0).getIndex();
+        index = weatherInfos.getResults().get(0).getIndex();
 
         mDressTv.setText(mDressTv.getText().toString() + " - ".toString() + index.get(0).getZs());
         mDressTipTv.setText(index.get(0).getDes());
@@ -346,16 +456,23 @@ public class FindWeatherAty extends Activity implements SwipeRefreshLayout.OnRef
         mSunTipTv.setText(index.get(5).getDes());
 
         // 获取天气气温折线图
-        int[] higherTmp = new int[4];
-        int[] lowerTmp = new int[4];
+        Log.d(LOG, "tmpMap.size() >>>> " + tmpMap.size());
+        int[] higherTmp = new int[tmpMap.size()];
+        int[] lowerTmp = new int[tmpMap.size()];
+
         for (int i = 0; i < tmpMap.size(); i++) {
             higherTmp[i] = StringUtils.string2Int(tmpMap.get(i).get("high"));
             lowerTmp[i] = StringUtils.string2Int(tmpMap.get(i).get("low"));
+            Log.d(LOG, "i >>>> " + i);
         }
 
         mWeatherChartView.setTempDay(higherTmp);
         mWeatherChartView.setTempNight(lowerTmp);
         mWeatherChartView.invalidate();
+
+        tmpMap.clear();
+        index.clear();
+        weather_data.clear();
     }
 
     private void loadWeatherPng(String url, ImageView imageView) {
@@ -401,19 +518,6 @@ public class FindWeatherAty extends Activity implements SwipeRefreshLayout.OnRef
         map.put("low", tempStr1[0].trim());
 
         return map;
-    }
-
-    @Override
-    public void onRefresh() {
-        //模拟加载网络数据，这里设置3秒，正好能看到3色进度条
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                //显示或隐藏刷新进度条
-                mSwipeRefreshLayout.setRefreshing(false);
-                // 更新数据数据
-                fillWeatherDatas(mWeatherDatas);
-            }
-        }, 3000);
     }
 
 }

@@ -96,6 +96,6 @@ public class HttpUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return buffer.toString();  //返回获取的xml字符串
+        return buffer.toString();  //返回获取的json字符串
     }
 }
