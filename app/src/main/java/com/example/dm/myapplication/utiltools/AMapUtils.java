@@ -79,4 +79,29 @@ public class AMapUtils {
         }
         return sb.toString();
     }
+
+    /**
+     * 根据定位结果返回定位信息的字符串
+     *
+     * @param location
+     * @return
+     */
+    public synchronized static String getLocationCityStr(AMapLocation location) {
+        if (null == location) {
+            return null;
+        }
+
+        StringBuffer sb = new StringBuffer();
+        //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
+        if (location.getErrorCode() == 0) {
+            sb.append(location.getCity() + "");
+        } else {
+            //定位失败
+            sb.append("定位失败" + "\n");
+            sb.append("错误码:" + location.getErrorCode() + "\n");
+            sb.append("错误信息:" + location.getErrorInfo() + "\n");
+            sb.append("错误描述:" + location.getLocationDetail() + "\n");
+        }
+        return sb.toString();
+    }
 }

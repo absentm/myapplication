@@ -13,12 +13,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.bumptech.glide.Glide;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.WeatherBeans.IndexBean;
 import com.example.dm.myapplication.beans.WeatherBeans.WeatherDataBean;
 import com.example.dm.myapplication.beans.WeatherBeans.WeatherInfo;
 import com.example.dm.myapplication.customviews.WeatherChartView;
+import com.example.dm.myapplication.utiltools.AMapUtils;
 import com.example.dm.myapplication.utiltools.DateUtil;
 import com.example.dm.myapplication.utiltools.HttpUtil;
 import com.example.dm.myapplication.utiltools.StringUtils;
@@ -34,7 +39,7 @@ import java.util.Map;
  * FindWeatherAty: 天气
  * Created by dm on 16-9-3.
  */
-public class FindWeatherAty extends Activity {
+public class FindWeatherAty extends Activity implements AMapLocationListener {
     private final static String LOG = "FindWeatherAty";
     private ImageView titleLeftImv;
     private TextView titleCityTv;
@@ -109,6 +114,9 @@ public class FindWeatherAty extends Activity {
     private List<WeatherDataBean> weather_data;
 
     private String mCityName = "郑州";     // 默认郑州
+
+    private AMapLocationClient aMapLocationClient = null;
+    private AMapLocationClientOption aMapLocationClientOption = null;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -218,6 +226,19 @@ public class FindWeatherAty extends Activity {
                 refresh2GetDatas(mCityName);
             }
         });
+
+        // 设置高德地图
+        aMapLocationClient = new AMapLocationClient(FindWeatherAty.this);
+        aMapLocationClientOption = new AMapLocationClientOption();
+        aMapLocationClientOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        aMapLocationClientOption.setOnceLocation(true);
+        aMapLocationClient.setLocationListener(this);
+
+        aMapLocationClientOption.setNeedAddress(true);
+        aMapLocationClientOption.setInterval(1000);
+        aMapLocationClient.setLocationOption(aMapLocationClientOption);
+        aMapLocationClient.startLocation();
+        mLocationHandler.sendEmptyMessage(AMapUtils.MSG_LOCATION_START);
     }
 
     private void EventDeal() {
@@ -292,7 +313,7 @@ public class FindWeatherAty extends Activity {
             @Override
             public void onClick(View view) {
                 new MaterialDialog.Builder(FindWeatherAty.this)
-                        .title("穿紫外线提醒")
+                        .title("紫外线提醒")
                         .content(index.get(5).getDes())
                         .positiveText("OK")
                         .positiveColorRes(R.color.teal)
@@ -317,9 +338,6 @@ public class FindWeatherAty extends Activity {
                         .itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
                             public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
-                                Toast.makeText(FindWeatherAty.this,
-                                        "pos: " + position + ", " + text,
-                                        Toast.LENGTH_SHORT).show();
                                 mCityName = (String) text;
 
                                 // 修改城市后自动刷新并填充数据
@@ -437,22 +455,22 @@ public class FindWeatherAty extends Activity {
         // 获取生活指数数据
         index = weatherInfos.getResults().get(0).getIndex();
 
-        mDressTv.setText(mDressTv.getText().toString() + " - ".toString() + index.get(0).getZs());
+        mDressTv.setText(new StringBuilder().append("穿衣 - ").append(index.get(0).getZs()).toString());
         mDressTipTv.setText(index.get(0).getDes());
 
-        mCarTv.setText(mCarTv.getText().toString() + " - ".toString() + index.get(1).getZs());
+        mCarTv.setText(new StringBuilder().append("洗车 - ").append(index.get(1).getZs()).toString());
         mCarTipTv.setText(index.get(1).getDes());
 
-        mTripTv.setText(mTripTv.getText().toString() + " - ".toString() + index.get(2).getZs());
+        mTripTv.setText(new StringBuilder().append("旅行 - ").append(index.get(2).getZs()).toString());
         mTripTipTv.setText(index.get(2).getDes());
 
-        mColdlTv.setText(mColdlTv.getText().toString() + " - ".toString() + index.get(3).getZs());
+        mColdlTv.setText(new StringBuilder().append("感冒 - ").append(index.get(3).getZs()).toString());
         mColdlTipTv.setText(index.get(3).getDes());
 
-        mSportTv.setText(mSportTv.getText().toString() + " - ".toString() + index.get(4).getZs());
+        mSportTv.setText(new StringBuilder().append("运动 - ").append(index.get(4).getZs()).toString());
         mSportTipTv.setText(index.get(4).getDes());
 
-        mSunTv.setText(mSunTv.getText().toString() + " - ".toString() + index.get(5).getZs());
+        mSunTv.setText(new StringBuilder().append("紫外线 - ").append(index.get(5).getZs()).toString());
         mSunTipTv.setText(index.get(5).getDes());
 
         // 获取天气气温折线图
@@ -471,8 +489,6 @@ public class FindWeatherAty extends Activity {
         mWeatherChartView.invalidate();
 
         tmpMap.clear();
-        index.clear();
-        weather_data.clear();
     }
 
     private void loadWeatherPng(String url, ImageView imageView) {
@@ -520,4 +536,57 @@ public class FindWeatherAty extends Activity {
         return map;
     }
 
+    @Override
+    public void onLocationChanged(AMapLocation aMapLocation) {
+        if (null != aMapLocation) {
+            Message message = mLocationHandler.obtainMessage();
+            message.obj = aMapLocation;
+            message.what = AMapUtils.MSG_LOCATION_FINISH;
+            mLocationHandler.sendMessage(message);
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (null != aMapLocationClient) {
+            aMapLocationClient.onDestroy();
+            aMapLocationClient = null;
+            aMapLocationClientOption = null;
+        }
+    }
+
+    Handler mLocationHandler = new Handler() {
+        @Override
+        public void dispatchMessage(Message msg) {
+            switch (msg.what) {
+                case AMapUtils.MSG_LOCATION_START:
+                    Toast.makeText(FindWeatherAty.this, "正在定位中.....",
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case AMapUtils.MSG_LOCATION_FINISH:
+                    AMapLocation aMapLocation = (AMapLocation) msg.obj;
+                    String result = AMapUtils.getLocationCityStr(aMapLocation);
+
+                    if (result.startsWith("定位失败")) {
+                        Log.i(LOG, "result = " + result);
+                        Toast.makeText(FindWeatherAty.this, "定位失败, 请稍后再试.....",
+                                Toast.LENGTH_SHORT).show();
+                        titleCityTv.setText("定位失败，请手动添加");
+                    } else {
+                        Log.i(LOG, "result = " + result);
+                        titleCityTv.setText(result);
+
+                        mCityName = result;
+                        // 修改城市后自动刷新并填充数据
+                        refresh2GetDatas(mCityName);
+                    }
+
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 }
