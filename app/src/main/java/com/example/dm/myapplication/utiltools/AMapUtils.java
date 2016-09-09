@@ -3,6 +3,8 @@
  */
 package com.example.dm.myapplication.utiltools;
 
+import android.util.Log;
+
 import com.amap.api.location.AMapLocation;
 
 /**
@@ -94,7 +96,8 @@ public class AMapUtils {
         StringBuffer sb = new StringBuffer();
         //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
         if (location.getErrorCode() == 0) {
-            sb.append(location.getCity() + "");
+            String tmpSb = location.getCity();
+            sb.append(tmpSb.substring(0, tmpSb.length() - 1));
         } else {
             //定位失败
             sb.append("定位失败" + "\n");
@@ -102,6 +105,8 @@ public class AMapUtils {
             sb.append("错误信息:" + location.getErrorInfo() + "\n");
             sb.append("错误描述:" + location.getLocationDetail() + "\n");
         }
+        
+        Log.d("AMapUtils", sb.toString());
         return sb.toString();
     }
 }

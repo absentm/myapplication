@@ -26,5 +26,7 @@
     <color name="plugin_camera_black">#000000</color>
     <color name="none_color">#00000000</color>
     <color name="swipeRefreshLayout">#07680b</color>
+    <color name="low_qian_touming">#0e000000</color>
+    <color name="qian_touming">#0e0cb000</color>
 
 </resources>

@@ -2,6 +2,7 @@
 <resources>
 
     <string-array name="city_values">
+        <item>自动定位</item>
         <item>北京</item>
         <item>上海</item>
         <item>广州</item>
@@ -17,6 +18,11 @@
         <item>#673AB7</item>
         <item>#3F51B5</item>
         <item>#2196F3</item>
+        <item>#00000000</item>
+        <item>#0e000000</item>
+        <item>#0e0cb000</item>
+
+
     </array>
 
 </resources>

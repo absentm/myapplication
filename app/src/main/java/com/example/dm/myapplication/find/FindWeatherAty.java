@@ -27,6 +27,7 @@ import com.example.dm.myapplication.utiltools.AMapUtils;
 import com.example.dm.myapplication.utiltools.DateUtil;
 import com.example.dm.myapplication.utiltools.HttpUtil;
 import com.example.dm.myapplication.utiltools.StringUtils;
+import com.example.dm.myapplication.utiltools.SystemUtils;
 import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
@@ -41,6 +42,8 @@ import java.util.Map;
  */
 public class FindWeatherAty extends Activity implements AMapLocationListener {
     private final static String LOG = "FindWeatherAty";
+    private boolean isConnected;
+
     private ImageView titleLeftImv;
     private TextView titleCityTv;
 
@@ -148,6 +151,8 @@ public class FindWeatherAty extends Activity implements AMapLocationListener {
     }
 
     private void initViews() {
+        isConnected = SystemUtils.checkNetworkConnection(this);
+
         titleLeftImv = (ImageView) findViewById(R.id.title_left_imv);
         titleCityTv = (TextView) findViewById(R.id.title_center_tv);
 
@@ -218,15 +223,6 @@ public class FindWeatherAty extends Activity implements AMapLocationListener {
                 R.color.colorPrimary,
                 R.color.teal);
 
-        // 进入页面mSwipeRefreshLayout自动刷新并填充数据
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(true);
-                refresh2GetDatas(mCityName);
-            }
-        });
-
         // 设置高德地图
         aMapLocationClient = new AMapLocationClient(FindWeatherAty.this);
         aMapLocationClientOption = new AMapLocationClientOption();
@@ -234,11 +230,23 @@ public class FindWeatherAty extends Activity implements AMapLocationListener {
         aMapLocationClientOption.setOnceLocation(true);
         aMapLocationClient.setLocationListener(this);
 
-        aMapLocationClientOption.setNeedAddress(true);
-        aMapLocationClientOption.setInterval(1000);
-        aMapLocationClient.setLocationOption(aMapLocationClientOption);
-        aMapLocationClient.startLocation();
-        mLocationHandler.sendEmptyMessage(AMapUtils.MSG_LOCATION_START);
+        // 进入页面mSwipeRefreshLayout自动刷新并填充数据
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(true);
+
+                if (isConnected) {
+                    aMapLocationClientOption.setNeedAddress(true);
+                    aMapLocationClientOption.setInterval(1000);
+                    aMapLocationClient.setLocationOption(aMapLocationClientOption);
+                    aMapLocationClient.startLocation();
+                    mLocationHandler.sendEmptyMessage(AMapUtils.MSG_LOCATION_START);
+                } else {
+                    SystemUtils.noNetworkAlert(FindWeatherAty.this);
+                }
+            }
+        });
     }
 
     private void EventDeal() {
@@ -321,11 +329,16 @@ public class FindWeatherAty extends Activity implements AMapLocationListener {
             }
         });
 
+
         // 下拉刷新事件
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refresh2GetDatas(mCityName);
+                if (isConnected) {
+                    refresh2GetDatas(mCityName);
+                } else {
+                    Toast.makeText(FindWeatherAty.this, "No Network!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -340,8 +353,23 @@ public class FindWeatherAty extends Activity implements AMapLocationListener {
                             public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
                                 mCityName = (String) text;
 
-                                // 修改城市后自动刷新并填充数据
-                                refresh2GetDatas(mCityName);
+                                Log.d(LOG, "text >>> " + text);
+
+                                if (isConnected) {
+                                    if (mCityName.equals("自动定位")) {
+                                        aMapLocationClientOption.setNeedAddress(true);
+                                        aMapLocationClientOption.setInterval(1000);
+                                        aMapLocationClient.setLocationOption(aMapLocationClientOption);
+                                        aMapLocationClient.startLocation();
+                                        mLocationHandler.sendEmptyMessage(AMapUtils.MSG_LOCATION_START);
+                                    } else {
+                                        // 修改城市后自动刷新并填充数据
+                                        refresh2GetDatas(mCityName);
+                                    }
+                                } else {
+                                    Toast.makeText(FindWeatherAty.this, "No Network!", Toast.LENGTH_SHORT).show();
+                                }
+
                             }
                         }).show();
             }
@@ -370,7 +398,6 @@ public class FindWeatherAty extends Activity implements AMapLocationListener {
             }
         }).start();
     }
-
 
     /**
      * 填充数据
@@ -562,8 +589,7 @@ public class FindWeatherAty extends Activity implements AMapLocationListener {
         public void dispatchMessage(Message msg) {
             switch (msg.what) {
                 case AMapUtils.MSG_LOCATION_START:
-                    Toast.makeText(FindWeatherAty.this, "正在定位中.....",
-                            Toast.LENGTH_SHORT).show();
+                    titleCityTv.setText("正在定位.....");
                     break;
                 case AMapUtils.MSG_LOCATION_FINISH:
                     AMapLocation aMapLocation = (AMapLocation) msg.obj;
@@ -571,8 +597,6 @@ public class FindWeatherAty extends Activity implements AMapLocationListener {
 
                     if (result.startsWith("定位失败")) {
                         Log.i(LOG, "result = " + result);
-                        Toast.makeText(FindWeatherAty.this, "定位失败, 请稍后再试.....",
-                                Toast.LENGTH_SHORT).show();
                         titleCityTv.setText("定位失败，请手动添加");
                     } else {
                         Log.i(LOG, "result = " + result);
