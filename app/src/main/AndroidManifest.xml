@@ -77,6 +77,7 @@
         <activity android:name=".find.FindMeiziAty"/>
         <activity android:name=".find.FindPhotoDetailAty"/>
         <activity android:name=".find.FindWeatherAty"/>
+        <activity android:name=".find.FindMapAroundAty"/>
 
         <activity android:name=".com.ComImagePagerActivity"/>
         <activity android:name=".com.ComPostTopicActivity"/>

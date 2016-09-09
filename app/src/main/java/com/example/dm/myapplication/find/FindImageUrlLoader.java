@@ -31,7 +31,7 @@ public class FindImageUrlLoader {
     private static final String TYPE_FL = "福利";
     //分类数据: http://gank.avosapps.com/api/data/数据类型/请求个数/第几页
     private static final String DATA_URL = "http://gank.io/api/data/%s/%d/%d";
-    private static final int DEFAULT_COUNT = 10;//默认每页10个
+    private static final int DEFAULT_COUNT = 5;//默认每页10个
     private static final int DEFAULT_TIMEOUT = 5000;//默认超时请求
 
     private List<String> imageUrlList;//用于存放图片url

@@ -34,6 +34,7 @@ import cn.bmob.v3.update.UpdateStatus;
  */
 public class FourthFragment extends Fragment {
     private static final String LOG = "LOG";
+    private static final String SHARE_APK_LINK = "@AbsentM: https://o8zyn0sct.qnssl.com/app-debug-v0.0.1.apk";
 
     private static final int REQUEST_CODE = 1;
 
@@ -159,7 +160,6 @@ public class FourthFragment extends Fragment {
         meCollectRout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "我的收藏", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(getActivity(), MeFavouritrActivity.class));
             }
         });
@@ -174,7 +174,13 @@ public class FourthFragment extends Fragment {
         meShareRout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "我的分享", Toast.LENGTH_SHORT).show();
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, SHARE_APK_LINK);
+                shareIntent.setType("text/plain");
+
+                //设置分享列表的标题，并且每次都显示分享列表
+                startActivity(Intent.createChooser(shareIntent, "分享到"));
             }
         });
 

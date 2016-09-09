@@ -41,4 +41,5 @@ dependencies {
     compile files('libs/volley.jar')
     compile 'com.android.support:cardview-v7:21.+'
     compile 'com.afollestad.material-dialogs:commons:0.9.0.1'
+    compile files('libs/Amap_2DMap_V2.9.1_20160825.jar')
 }

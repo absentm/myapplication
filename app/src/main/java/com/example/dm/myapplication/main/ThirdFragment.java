@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.customviews.ninegridview.NineGridView;
 import com.example.dm.myapplication.customviews.ninegridview.NineGridViewAdapter;
+import com.example.dm.myapplication.find.FindMapAroundAty;
 import com.example.dm.myapplication.find.FindWeatherAty;
 import com.example.dm.myapplication.find.FindHowOldAct;
 import com.example.dm.myapplication.find.FindMeiziAty;
@@ -66,13 +68,16 @@ public class ThirdFragment extends Fragment {
 
                         break;
                     case 5:
-
+                        startActivity(new Intent(getActivity(), FindMapAroundAty.class));
                         break;
                     case 6:
                         startActivity(new Intent(getActivity(), FindWeatherAty.class));
                         break;
                     case 7:
 
+                        break;
+                    case 8:
+                        Toast.makeText(getActivity(), "Waitting.....", Toast.LENGTH_SHORT).show();
                         break;
 
                 }

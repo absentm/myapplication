@@ -244,6 +244,7 @@ public class FindWeatherAty extends Activity implements AMapLocationListener {
                     mLocationHandler.sendEmptyMessage(AMapUtils.MSG_LOCATION_START);
                 } else {
                     SystemUtils.noNetworkAlert(FindWeatherAty.this);
+                    mSwipeRefreshLayout.setRefreshing(false);
                 }
             }
         });

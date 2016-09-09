@@ -18,7 +18,7 @@ public class NineGridViewAdapter extends BaseAdapter {
     private Context mContext;
 
     public String[] img_text = {"笔记", "How old", "云同步", "览图",
-            "音乐", "周边", "天气", "关注", "更多",};
+            "音乐", "周边", "天气", "视频", "更多",};
 
     public int[] imgs = {R.drawable.ic_mode_edit_grey600_36dp,
             R.drawable.ic_accessibility_grey600_36dp,
@@ -27,7 +27,7 @@ public class NineGridViewAdapter extends BaseAdapter {
             R.drawable.ic_queue_music_grey600_36dp,
             R.drawable.ic_map_grey600_36dp,
             R.drawable.ic_wb_sunny_grey600_36dp,
-            R.drawable.ic_wb_auto_grey600_36dp,
+            R.drawable.ic_video_collection_grey600_36dp,
             R.drawable.ic_more_horiz_grey600_36dp};
 
     public NineGridViewAdapter(Context mContext) {
