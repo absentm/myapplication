@@ -19,8 +19,8 @@ import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.UiSettings;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
-import com.amap.api.maps2d.model.MyLocationStyle;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.utiltools.SystemUtils;
 
@@ -31,7 +31,7 @@ import java.util.Date;
  * FindMapAroundAty
  * Created by dm on 16-9-9.
  */
-public class FindMapAroundAty extends Activity implements LocationSource, AMapLocationListener {
+public class FindMapAroundAty extends Activity implements LocationSource, AMapLocationListener, AMap.OnMarkerClickListener {
     private final static String LOG = "FindMapAroundAty";
     private boolean isConnected;
 
@@ -46,6 +46,8 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
     private AMapLocationClient mLocationClient = null;      //定位发起端
     private AMapLocationClientOption mLocationOption = null;    //定位参数
     private OnLocationChangedListener mListener = null;     //定位监听器
+    private AMap.OnMarkerClickListener mOnMarkerClickListener = null;   // Mark监听器
+    private Marker mMarker;
 
     // 标识，用于判断是否只显示一次定位信息和用户重新定位
     private boolean isFirstLoc = true;
@@ -76,15 +78,18 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
         aMap.setLocationSource(this);
         // 是否显示定位按钮
         settings.setMyLocationButtonEnabled(true);
+        // 是否显示指南针按钮
+        settings.setCompassEnabled(true);
         // 是否可触发定位并显示定位层
         aMap.setMyLocationEnabled(true);
+        aMap.setOnMarkerClickListener(FindMapAroundAty.this);
 
         //定位的小图标 默认是蓝点 这里自定义一团火，其实就是一张图片
-        MyLocationStyle myLocationStyle = new MyLocationStyle();
-        myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location_on_black_36dp));
-        myLocationStyle.radiusFillColor(android.R.color.transparent);
-        myLocationStyle.strokeColor(android.R.color.transparent);
-        aMap.setMyLocationStyle(myLocationStyle);
+//        MyLocationStyle myLocationStyle = new MyLocationStyle();
+//        myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location_on_black_36dp));
+//        myLocationStyle.radiusFillColor(android.R.color.transparent);
+//        myLocationStyle.strokeColor(android.R.color.transparent);
+//        aMap.setMyLocationStyle(myLocationStyle);
 
         //开始定位
         initLoc();
@@ -104,7 +109,7 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
         //设置是否返回地址信息（默认返回地址信息）
         mLocationOption.setNeedAddress(true);
         //设置是否只定位一次,默认为false
-        mLocationOption.setOnceLocation(false);
+        mLocationOption.setOnceLocation(true);
         //设置是否强制刷新WIFI，默认为强制刷新
         mLocationOption.setWifiActiveScan(true);
         //设置是否允许模拟位置,默认为false，不允许模拟位置
@@ -159,14 +164,12 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
                     //点击定位按钮 能够将地图的中心移动到定位点
                     mListener.onLocationChanged(amapLocation);
                     //添加图钉
-                    aMap.addMarker(getMarkerOptions(amapLocation));
+                    mMarker = aMap.addMarker(getMarkerOptions(amapLocation));
                     //获取定位信息
                     StringBuffer buffer = new StringBuffer();
                     buffer.append(amapLocation.getCountry() + "" + amapLocation.getProvince() + "" + amapLocation.getCity() + "" + amapLocation.getProvince() + "" + amapLocation.getDistrict() + "" + amapLocation.getStreet() + "" + amapLocation.getStreetNum());
-                    Toast.makeText(getApplicationContext(), buffer.toString(), Toast.LENGTH_LONG).show();
                     isFirstLoc = false;
                 }
-
 
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
@@ -174,7 +177,7 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
                         + amapLocation.getErrorCode() + ", errInfo:"
                         + amapLocation.getErrorInfo());
 
-                Toast.makeText(getApplicationContext(), "定位失败", Toast.LENGTH_LONG).show();
+                Toast.makeText(FindMapAroundAty.this, "定位失败", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -184,7 +187,7 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
         //设置图钉选项
         MarkerOptions options = new MarkerOptions();
         //图标
-        options.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location_on_black_36dp));
+        options.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location_on_black_48dp));
         //位置
         options.position(new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude()));
         StringBuffer buffer = new StringBuffer();
@@ -192,7 +195,7 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
         //标题
         options.title(buffer.toString());
         //子标题
-        options.snippet("I'am Here!");
+//        options.snippet("I'am Here!");
         //设置多少帧刷新一次图片资源
         options.period(60);
 
@@ -245,5 +248,11 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        marker = mMarker;
+        return false;
     }
 }

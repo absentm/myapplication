@@ -261,75 +261,123 @@ public class FindWeatherAty extends Activity implements AMapLocationListener {
         mDressRout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MaterialDialog.Builder(FindWeatherAty.this)
-                        .title("穿衣提醒")
-                        .content(index.get(0).getDes())
-                        .positiveText("OK")
-                        .positiveColorRes(R.color.teal)
-                        .show();
+                if (isConnected) {
+                    if (!index.get(0).getDes().equals("")) {
+                        new MaterialDialog.Builder(FindWeatherAty.this)
+                                .title("穿衣提醒")
+                                .content(index.get(0).getDes())
+                                .positiveText("OK")
+                                .positiveColorRes(R.color.teal)
+                                .show();
+                    } else {
+                        Toast.makeText(FindWeatherAty.this, "数据加载出错!", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(FindWeatherAty.this, "No Network!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         mCarRout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MaterialDialog.Builder(FindWeatherAty.this)
-                        .title("洗车提醒")
-                        .content(index.get(1).getDes())
-                        .positiveText("OK")
-                        .positiveColorRes(R.color.teal)
-                        .show();
+                if (isConnected) {
+                    if (!index.get(1).getDes().equals("")) {
+                        new MaterialDialog.Builder(FindWeatherAty.this)
+                                .title("洗车提醒")
+                                .content(index.get(1).getDes())
+                                .positiveText("OK")
+                                .positiveColorRes(R.color.teal)
+                                .show();
+                    } else {
+                        Toast.makeText(FindWeatherAty.this, "数据加载出错!", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(FindWeatherAty.this, "No Network!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         mTripRout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MaterialDialog.Builder(FindWeatherAty.this)
-                        .title("旅行提醒")
-                        .content(index.get(2).getDes())
-                        .positiveText("OK")
-                        .positiveColorRes(R.color.teal)
-                        .show();
+                if (isConnected) {
+                    if (!index.get(2).getDes().equals("")) {
+                        new MaterialDialog.Builder(FindWeatherAty.this)
+                                .title("旅行提醒")
+                                .content(index.get(2).getDes())
+                                .positiveText("OK")
+                                .positiveColorRes(R.color.teal)
+                                .show();
+                    } else {
+                        Toast.makeText(FindWeatherAty.this, "数据加载出错!", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(FindWeatherAty.this, "No Network!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         mColdlRout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MaterialDialog.Builder(FindWeatherAty.this)
-                        .title("感冒提醒")
-                        .content(index.get(3).getDes())
-                        .positiveText("OK")
-                        .positiveColorRes(R.color.teal)
-                        .show();
+                if (isConnected) {
+                    if (!index.get(3).getDes().equals("")) {
+                        new MaterialDialog.Builder(FindWeatherAty.this)
+                                .title("感冒提醒")
+                                .content(index.get(3).getDes())
+                                .positiveText("OK")
+                                .positiveColorRes(R.color.teal)
+                                .show();
+                    } else {
+                        Toast.makeText(FindWeatherAty.this, "数据加载出错!", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(FindWeatherAty.this, "No Network!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         mSportRout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MaterialDialog.Builder(FindWeatherAty.this)
-                        .title("运动提醒")
-                        .content(index.get(4).getDes())
-                        .positiveText("OK")
-                        .positiveColorRes(R.color.teal)
-                        .show();
+                if (isConnected) {
+                    if (!index.get(4).getDes().equals("")) {
+                        new MaterialDialog.Builder(FindWeatherAty.this)
+                                .title("运动提醒")
+                                .content(index.get(4).getDes())
+                                .positiveText("OK")
+                                .positiveColorRes(R.color.teal)
+                                .show();
+                    } else {
+                        Toast.makeText(FindWeatherAty.this, "数据加载出错!", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(FindWeatherAty.this, "No Network!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         mSunRout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MaterialDialog.Builder(FindWeatherAty.this)
-                        .title("紫外线提醒")
-                        .content(index.get(5).getDes())
-                        .positiveText("OK")
-                        .positiveColorRes(R.color.teal)
-                        .show();
+                if (isConnected) {
+                    if (!index.get(4).getDes().equals("")) {
+                        new MaterialDialog.Builder(FindWeatherAty.this)
+                                .title("紫外线提醒")
+                                .content(index.get(5).getDes())
+                                .positiveText("OK")
+                                .positiveColorRes(R.color.teal)
+                                .show();
+                    } else {
+                        Toast.makeText(FindWeatherAty.this, "数据加载出错!", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(FindWeatherAty.this, "No Network!", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
-
 
         // 下拉刷新事件
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -338,6 +386,7 @@ public class FindWeatherAty extends Activity implements AMapLocationListener {
                 if (isConnected) {
                     refresh2GetDatas(mCityName);
                 } else {
+                    mSwipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(FindWeatherAty.this, "No Network!", Toast.LENGTH_SHORT).show();
                 }
             }
