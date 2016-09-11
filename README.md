@@ -42,4 +42,5 @@ Hello MyApplication
 > * Volley框架: http://blog.csdn.net/guolin_blog/article/details/17482095
 > * Glide框架: https://github.com/bumptech/glide
 > * material-dialogs: https://github.com/afollestad/material-dialogs
+> * ZXingLib: https://github.com/xuyisheng/ZXingLib
 

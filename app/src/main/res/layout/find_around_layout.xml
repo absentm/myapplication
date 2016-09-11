@@ -39,4 +39,13 @@
         android:layout_below="@+id/around_title_rout"
         />
 
+    <ImageView
+        android:id="@+id/find_map_float_imv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="35dp"
+        android:layout_marginLeft="8dp"
+        android:src="@drawable/ic_location_searching_grey600_48dp"/>
+
 </RelativeLayout>

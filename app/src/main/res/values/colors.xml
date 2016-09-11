@@ -21,12 +21,35 @@
     <color name="black">#000000</color>
     <color name="province_line_border">#D3D3D3</color>
     <color name="bantuming">#b0000000</color>
-    <color name="light_bantuming">#50000000</color>
+    <color name="deep_bantuming">#ff000000</color>
+    <color name="light_bantuming">#c0000000</color>
     <color name="albumback">#E1E0DE</color>
     <color name="plugin_camera_black">#000000</color>
     <color name="none_color">#00000000</color>
     <color name="swipeRefreshLayout">#07680b</color>
     <color name="low_qian_touming">#0e000000</color>
     <color name="qian_touming">#0e0cb000</color>
+
+    <color name="black_trans10">#1a000000</color>
+    <!-- 黑色: 10 -->
+    <color name="black_trans15">#26000000</color>
+    <!-- 黑色: 15 -->
+    <color name="black_trans20">#33000000</color>
+    <!-- 黑色: 20 -->
+    <color name="black_trans25">#40000000</color>
+    <!-- 黑色: 25 -->
+    <color name="black_trans30">#4d000000</color>
+    <!-- 黑色: 30 -->
+    <color name="black_trans40">#66000000</color>
+    <!-- 黑色: 40 -->
+    <color name="black_trans50">#80000000</color>
+    <!-- 黑色: 50 -->
+    <color name="black_trans60">#99000000</color>
+    <!-- 黑色：60 -->
+    <color name="black_trans70">#b3000000</color>
+    <!-- 黑色：70 -->
+    <color name="black_trans80">#CC000000</color>
+    <!-- 黑色：80 -->
+    <color name="black_trans90">#E6000000</color>
 
 </resources>

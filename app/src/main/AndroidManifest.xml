@@ -25,6 +25,8 @@
     <uses-feature android:name="android.hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus"/>
 
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
 
     <application
         android:name=".main.BasicApplication"
@@ -78,6 +80,8 @@
         <activity android:name=".find.FindPhotoDetailAty"/>
         <activity android:name=".find.FindWeatherAty"/>
         <activity android:name=".find.FindMapAroundAty"/>
+        <activity android:name=".find.FindQrScanerAty"/>
+        <activity android:name=".find.zxing.activity.CaptureActivity"/>
 
         <activity android:name=".com.ComImagePagerActivity"/>
         <activity android:name=".com.ComPostTopicActivity"/>

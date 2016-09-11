@@ -21,8 +21,16 @@
         <item>#00000000</item>
         <item>#0e000000</item>
         <item>#0e0cb000</item>
-
-
     </array>
+
+    <string-array name="map_list_values">
+        <item>银行</item>
+        <item>学校</item>
+        <item>酒店</item>
+        <item>餐饮</item>
+        <item>加油站</item>
+        <item>公交站</item>
+        <item>汽车维修</item>
+    </string-array>
 
 </resources>

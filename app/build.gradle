@@ -42,4 +42,5 @@ dependencies {
     compile 'com.android.support:cardview-v7:21.+'
     compile 'com.afollestad.material-dialogs:commons:0.9.0.1'
     compile files('libs/Amap_2DMap_V2.9.1_20160825.jar')
+    compile files('libs/zxing-4.7.3.jar')
 }

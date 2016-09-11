@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -36,7 +37,7 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
     private boolean isConnected;
 
     private ImageView titleLeftImv;
-    private TextView titleCityTv;
+    private ImageView mMapListImv;
 
     // 显示地图需要的变量
     private MapView mapView;        //地图控件
@@ -70,7 +71,8 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
         isConnected = SystemUtils.checkNetworkConnection(this);
 
         titleLeftImv = (ImageView) findViewById(R.id.around_title_left_imv);
-        titleCityTv = (TextView) findViewById(R.id.around_title_center_tv);
+        TextView titleCenterTv = (TextView) findViewById(R.id.around_title_center_tv);
+        mMapListImv = (ImageView) findViewById(R.id.find_map_float_imv);
 
         //设置显示定位按钮 并且可以点击
         UiSettings settings = aMap.getUiSettings();
@@ -127,6 +129,21 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
             @Override
             public void onClick(View view) {
                 FindMapAroundAty.this.finish();
+            }
+        });
+
+        mMapListImv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(FindMapAroundAty.this)
+                        .title("周边搜索")
+                        .items(R.array.map_list_values)
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+                                Toast.makeText(FindMapAroundAty.this, text, Toast.LENGTH_SHORT).show();
+                            }
+                        }).show();
             }
         });
 
