@@ -1,5 +1,6 @@
 package com.example.dm.myapplication.find.zxing.encoding;
 
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
@@ -24,10 +25,12 @@ public class EncodingUtils {
      * @param content   content
      * @param widthPix  widthPix
      * @param heightPix heightPix
-     * @param logoBm    logoBm
+     * @param logoBm    logoBitmap
+     * @param foreColor 前景色
+     * @param backColor 背景色
      * @return 二维码
      */
-    public static Bitmap createQRCode(String content, int widthPix, int heightPix, Bitmap logoBm) {
+    public static Bitmap createQRCode(String content, int widthPix, int heightPix, Bitmap logoBm, int foreColor, int backColor) {
         try {
             if (content == null || "".equals(content)) {
                 return null;
@@ -46,9 +49,9 @@ public class EncodingUtils {
             for (int y = 0; y < heightPix; y++) {
                 for (int x = 0; x < widthPix; x++) {
                     if (bitMatrix.get(x, y)) {
-                        pixels[y * widthPix + x] = 0xff000000;
+                        pixels[y * widthPix + x] = foreColor;
                     } else {
-                        pixels[y * widthPix + x] = 0xffffffff;
+                        pixels[y * widthPix + x] = backColor;
                     }
                 }
             }

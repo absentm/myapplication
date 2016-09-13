@@ -98,11 +98,7 @@ public class SystemUtils {
      * @param context
      */
     public static void checkNetWork(Context context) {
-        ConnectivityManager con = (ConnectivityManager) context.getSystemService(Activity.CONNECTIVITY_SERVICE);
-        boolean wifi = con.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting();
-        boolean internet = con.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting();
-
-        if (!wifi && !internet) {
+        if (!isWifi(context) && !isInternet(context)) {
             Toast.makeText(context.getApplicationContext(), "亲， 检测到网络有问题，请设置！", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(context.getApplicationContext(), "网络连接正常！", Toast.LENGTH_LONG).show();
@@ -207,6 +203,7 @@ public class SystemUtils {
 
     /**
      * 异步执行toast
+     *
      * @param context context
      * @param message Sting
      */
@@ -218,6 +215,48 @@ public class SystemUtils {
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
             }
         }, 100);
+    }
+
+
+    /**
+     * 网址验证
+     *
+     * @param url 需要验证的内容
+     */
+    public static boolean checkWebSite(String url) {
+        //http://www.163.com
+//        String format = "^(http)\\://(\\w+\\.\\w+\\.\\w+|\\w+\\.\\w+)";
+        //TODO: 正则表达式理解
+        String format = "(http|ftp|https):\\/\\/[\\w\\-_]+(\\.[\\w\\-_]+)+" +
+                "([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?";
+        return startCheck(format, url);
+    }
+
+    /**
+     * 网址路径（无协议部分）验证
+     *
+     * @param url 需要验证的路径
+     */
+    public static boolean checkWebSitePath(String url) {
+        String format = "[\\w\\-_]+(\\.[\\w\\-_]+)+" +
+                "([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?";
+        return startCheck(format, url);
+    }
+
+    /**
+     * 匹配正则表达式
+     *
+     * @param format 匹配格式
+     * @param str    匹配内容
+     * @return 是否匹配成功
+     */
+    private static boolean startCheck(String format, String str) {
+        boolean tem;
+        Pattern pattern = Pattern.compile(format);
+        Matcher matcher = pattern.matcher(str);
+
+        tem = matcher.matches();
+        return tem;
     }
 
 }

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/generate_title_rout"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/teal"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/generate_title_left_ibtn"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:background="@drawable/item_teal_selector_no_bord"
+            android:padding="5dp"
+            android:src="@drawable/ic_navigate_before_white_24dp"/>
+
+        <TextView
+            android:id="@+id/generate_title_center_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:text="二维码制作"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
+
+        <ImageButton
+            android:id="@+id/generate_title_right_ibtn"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/item_teal_selector_no_bord"
+            android:src="@drawable/ic_add_white_18dp"/>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray_background_color">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/generate_qr_code_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="19dp"
+                android:layout_marginRight="19dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/antiquewhite"
+                android:hint="输入二维码信息"
+                android:maxLength="180"
+                android:padding="20dp"
+                android:textColor="@color/black_text_normal_common"
+                android:textSize="16sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <com.example.dm.myapplication.customviews.RoundImageView
+                    android:id="@+id/generate_logo_imv"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="19dp"
+                    android:background="@drawable/app_icon"
+                    android:scaleType="centerCrop"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_weight="1"
+                    android:gravity="center|left"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Logo"
+                        android:textColor="@color/black_text_normal_common"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:maxLines="3"
+                        android:text="二维码中央是否显示Logo"
+                        android:textColor="@color/dark_gray"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+
+                <ToggleButton
+                    android:id="@+id/generate_logo_tgbtn"
+                    style="@style/toggle_btn"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/generate_qr_code_btn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_margin="19dp"
+                android:background="@drawable/item_teal_selector"
+                android:text="生成二维码"
+                android:textColor="@color/gray700"
+                android:textSize="16sp"/>
+
+            <ImageView
+                android:id="@+id/generate_result_imv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="30dp"
+                android:layout_marginLeft="19dp"
+                android:layout_marginRight="19dp"
+                android:layout_marginTop="10dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

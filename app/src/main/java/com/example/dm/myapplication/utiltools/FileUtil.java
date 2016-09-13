@@ -26,7 +26,7 @@ public class FileUtil {
     /**
      * 将Bitmap 图片保存到本地路径，并返回路径
      *
-     * @param c context
+     * @param c        context
      * @param fileName 文件名称
      * @param bitmap   图片
      * @return string

@@ -52,10 +52,17 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="cn.bmob.v3.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        </activity>
+
         <activity android:name=".main.MainActivity"/>
         <activity android:name=".main.LoginActivity"/>
         <activity android:name=".main.RegisterActivity"/>
         <activity android:name=".main.ResetPasswordActivity"/>
+
         <activity android:name=".me.MeInfoDetailActivity"/>
         <activity android:name=".me.MeEditorNicknameAty"/>
         <activity android:name=".me.MeEditorMessageAty"/>
@@ -68,10 +75,6 @@
         <activity android:name=".me.MeAvatarShowerAty"/>
         <activity android:name=".me.MeSetingsAboutAty"/>
         <activity android:name=".me.MeFavouritrActivity"/>
-        <activity
-            android:name="cn.bmob.v3.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
-        </activity>
 
         <activity android:name=".home.HomeNewsDetailActivity"/>
 
@@ -80,8 +83,9 @@
         <activity android:name=".find.FindPhotoDetailAty"/>
         <activity android:name=".find.FindWeatherAty"/>
         <activity android:name=".find.FindMapAroundAty"/>
-        <activity android:name=".find.FindQrScanerAty"/>
         <activity android:name=".find.zxing.activity.CaptureActivity"/>
+        <activity android:name=".find.FindScanResultAty"/>
+        <activity android:name=".find.FindGenerateCodeAty"/>
 
         <activity android:name=".com.ComImagePagerActivity"/>
         <activity android:name=".com.ComPostTopicActivity"/>
