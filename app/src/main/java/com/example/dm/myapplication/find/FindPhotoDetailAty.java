@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.dm.myapplication.R;
-import com.example.dm.myapplication.utiltools.StringUtils;
+import com.example.dm.myapplication.utiltools.FileUtil;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -67,7 +67,7 @@ public class FindPhotoDetailAty extends Activity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Bitmap bitmap = photoViewAttacher.getVisibleRectangleBitmap();
-                                String savePath = StringUtils.saveBitmapToJpg(FindPhotoDetailAty.this, bitmap);
+                                String savePath = FileUtil.saveBitmapToJpg(FindPhotoDetailAty.this, bitmap);
                                 Toast.makeText(FindPhotoDetailAty.this, "save -> " +
                                         savePath, Toast.LENGTH_SHORT).show();
                             }

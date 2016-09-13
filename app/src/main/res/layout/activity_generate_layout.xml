@@ -72,7 +72,7 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <com.example.dm.myapplication.customviews.RoundImageView
+                <ImageView
                     android:id="@+id/generate_logo_imv"
                     android:layout_width="35dp"
                     android:layout_height="35dp"

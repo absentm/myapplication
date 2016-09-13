@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.AppUser;
+import com.example.dm.myapplication.utiltools.FileUtil;
 import com.example.dm.myapplication.utiltools.HttpUtil;
-import com.example.dm.myapplication.utiltools.StringUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 
@@ -80,7 +80,7 @@ public class MeAvatarShowerAty extends Activity {
             switch (which) {
                 case 0:
                     Bitmap bitmap = photoViewAttacher.getVisibleRectangleBitmap();
-                    String savePath = StringUtils.saveBitmapToJpg(MeAvatarShowerAty.this, bitmap);
+                    String savePath = FileUtil.saveBitmapToJpg(MeAvatarShowerAty.this, bitmap);
                     Toast.makeText(MeAvatarShowerAty.this, "头像保存至: " +
                             savePath, Toast.LENGTH_SHORT).show();
                     break;

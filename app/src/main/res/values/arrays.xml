@@ -33,4 +33,12 @@
         <item>汽车维修</item>
     </string-array>
 
+    <string-array name="qr_settings_values">
+        <item>从相册选择Logo</item>
+        <item>保存二维码至手机</item>
+        <item>二维码前景色</item>
+        <item>二维码背景色</item>
+        <item>恢复默认</item>
+    </string-array>
+
 </resources>

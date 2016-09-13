@@ -3,7 +3,12 @@ package com.example.dm.myapplication.utiltools;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.MediaScannerConnection;
 import android.os.Environment;
+import android.util.Log;
+import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -162,5 +167,64 @@ public class FileUtil {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 保存到指定目录，但能立即更新到系统相册中（红米2）
+     *
+     * @param context    上下文环境
+     * @param faceBitmap 位图资源
+     * @return 保存图片的路径
+     */
+    public static String saveBitmapToJpg(Context context, Bitmap faceBitmap) {
+        String sdStatus = Environment.getExternalStorageState();
+        if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) {
+            Log.i("LOG", "SD *****>> SD卡不存在");
+        } else {
+            Log.i("LOG", "SD *****>> SD卡 存在");
+        }
+
+        // 创建图片保存目录
+        File faceImgDir = new File(Environment.getExternalStorageDirectory(), "AbsentM");
+        if (!faceImgDir.exists()) {
+            faceImgDir.mkdir();
+        }
+
+        // 以系统时间命名文件
+        String faceImgName = "absentm-" + String.valueOf(System.currentTimeMillis()) + ".jpg";
+        File file = new File(faceImgDir, faceImgName);
+
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            faceBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // 保存后要扫描一下文件，及时更新到系统目录（一定要加绝对路径，这样才能更新）
+        MediaScannerConnection.scanFile(context,
+                new String[]{Environment.getExternalStorageDirectory() +
+                        File.separator + "AbsentM" + File.separator + faceImgName},
+                null, null);
+
+        return (Environment.getExternalStorageDirectory() + File.separator +
+                "AbsentM" + File.separator + faceImgName);
+    }
+
+    /**
+     * ImageView 转换为 Bimap
+     *
+     * @param context
+     * @param imageView
+     * @return
+     */
+    public static Bitmap imageView2Bitmap(Context context, ImageView imageView) {
+        Drawable drawable = imageView.getDrawable();
+        BitmapDrawable bd = (BitmapDrawable) drawable;
+        Bitmap bitmap = bd.getBitmap();
+
+        return bitmap;
     }
 }

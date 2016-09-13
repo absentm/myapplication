@@ -176,11 +176,11 @@ public class SystemUtils {
 
     /**
      * 设置listView回滚至顶部
-     * <p/>
+     * <p>
      * 缺点是：滑动数据量很大时，回滚时间会比较长。改进办法是将handler里的这两行代码：
      * listView.smoothScrollToPosition(0);
      * handler.postDelayed(this, 100);
-     * <p/>
+     * <p>
      * 换成：
      * listView.setSelection(0);再根据需要修改间隔时间（100毫秒），
      *

@@ -540,7 +540,7 @@ public class MeInfoDetailActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i(LOG, "MeInfoDetailActivity: ");
+        
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_NICKNAME_1:
