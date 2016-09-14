@@ -176,11 +176,11 @@ public class SystemUtils {
 
     /**
      * 设置listView回滚至顶部
-     * <p>
+     * <p/>
      * 缺点是：滑动数据量很大时，回滚时间会比较长。改进办法是将handler里的这两行代码：
      * listView.smoothScrollToPosition(0);
      * handler.postDelayed(this, 100);
-     * <p>
+     * <p/>
      * 换成：
      * listView.setSelection(0);再根据需要修改间隔时间（100毫秒），
      *
@@ -215,6 +215,42 @@ public class SystemUtils {
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
             }
         }, 100);
+    }
+
+    /**
+     * 异步执行toast
+     *
+     * @param context context
+     * @param message Sting
+     */
+    public static void showHandlerLongToast(final Context context, final String message) {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+            }
+        }, 100);
+    }
+
+    /**
+     * toast
+     *
+     * @param context context
+     * @param message Sting
+     */
+    public static void showShortToast(final Context context, final String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * toast
+     *
+     * @param context context
+     * @param message Sting
+     */
+    public static void showLongToast(final Context context, final String message) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
 

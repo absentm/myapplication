@@ -28,4 +28,15 @@
     <string name="action_star">Star</string>
     <string name="date_format">EEE,  MMM d,  yyyy</string>
 
+    <string name="fore_color">前景色</string>
+    <string name="back_color">背景色</string>
+    <string name="custom_define">自定义</string>
+    <string name="colors">颜色</string>
+    <string name="sure">确定</string>
+    <string name="cancel">取消</string>
+    <string name="back">返回</string>
+    <string name="restore">恢复默认</string>
+    <string name="reset_logo_color">重置Logo、前景色、背景色？</string>
+
+
 </resources>

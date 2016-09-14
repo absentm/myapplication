@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,15 +33,19 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.find.FindGenerateCodeAty;
 import com.example.dm.myapplication.find.FindScanResultAty;
 import com.example.dm.myapplication.find.zxing.camera.CameraManager;
 import com.example.dm.myapplication.find.zxing.decode.DecodeThread;
-import com.example.dm.myapplication.find.zxing.utils.BeepManager;
+import com.example.dm.myapplication.find.zxing.decode.DecodeUtils;
 import com.example.dm.myapplication.find.zxing.utils.CaptureActivityHandler;
 import com.example.dm.myapplication.find.zxing.utils.InactivityTimer;
 import com.example.dm.myapplication.utiltools.AudioPlayer;
@@ -63,11 +68,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     private static final String TAG = "CaptureActivity";
     public static final String SCAN_RESULT = "scan_result";
     public static final String SCAN_TYPE = "scan_type";
+    private static final int SCAN_CODE_ALBUM_1 = 1;
+    private static final int SCAN_CODE_CROP_2 = 2;
 
     private CameraManager cameraManager;
     private CaptureActivityHandler handler;
     private InactivityTimer inactivityTimer;
-    private BeepManager beepManager;
 
     private SurfaceView scanPreview = null;
     private RelativeLayout scanContainer;
@@ -85,11 +91,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         return cameraManager;
     }
 
-    private ImageView mTtitleBackImv;
+    private ImageButton mTtitleBackIbtn;
     private Button mGenerateBtn;
     private ImageView mLightImv;
     private Button mAlbumBtn;
     private boolean mIsLightOpen;
+    private String qrCodePathStr;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -105,7 +112,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         scanLine = (ImageView) findViewById(R.id.capture_scan_line);
 
         inactivityTimer = new InactivityTimer(this);
-        beepManager = new BeepManager(this);
 
         TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation
                 .RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT,
@@ -119,12 +125,12 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
 
     private void initButton() {
-        mTtitleBackImv = (ImageView) findViewById(R.id.scan_title_left_imv);
+        mTtitleBackIbtn = (ImageButton) findViewById(R.id.scan_title_left_imv);
         mGenerateBtn = (Button) findViewById(R.id.find_scan_generate_btn);
         mLightImv = (ImageView) findViewById(R.id.find_scan_light_btn);
         mAlbumBtn = (Button) findViewById(R.id.find_scan_album_btn);
 
-        mTtitleBackImv.setOnClickListener(CaptureActivity.this);
+        mTtitleBackIbtn.setOnClickListener(CaptureActivity.this);
         mGenerateBtn.setOnClickListener(CaptureActivity.this);
         mLightImv.setOnClickListener(CaptureActivity.this);
         mAlbumBtn.setOnClickListener(CaptureActivity.this);
@@ -166,7 +172,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             handler = null;
         }
         inactivityTimer.onPause();
-        beepManager.close();
         cameraManager.closeDriver();
         if (!isHasSurface) {
             scanPreview.getHolder().removeCallback(this);
@@ -219,14 +224,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 //        beepManager.playBeepSoundAndVibrate();
         AudioPlayer.getInstance(this).playRaw(R.raw.scan, false, false);
 
-//        Intent resultIntent = new Intent();
-//        bundle.putInt("width", mCropRect.width());
-//        bundle.putInt("height", mCropRect.height());
-//        bundle.putString("result", rawResult.getText());
-//        resultIntent.putExtras(bundle);
-//        this.setResult(RESULT_OK, resultIntent);
-//        CaptureActivity.this.finish();
-
         operateResult(rawResult);
     }
 
@@ -264,7 +261,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         } else if ("EAN_13".equals(codeType)) {
             displayResult(scanResult, 1);
         } else {
-            SystemUtils.showHandlerToast(CaptureActivity.this, "未发现二维码/条形码");
+            SystemUtils.showShortToast(CaptureActivity.this, "未发现二维码/条形码");
         }
     }
 
@@ -393,24 +390,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         return 0;
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.scan_title_left_imv:
-                CaptureActivity.this.finish();
-                break;
-            case R.id.find_scan_generate_btn:
-                startActivity(new Intent(CaptureActivity.this, FindGenerateCodeAty.class));
-                break;
-            case R.id.find_scan_light_btn:
-                operateLight();
-                break;
-            case R.id.find_scan_album_btn:
-                break;
-        }
-
-    }
-
     /**
      * 开关灯
      */
@@ -434,6 +413,75 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             cameraManager.offLight();
             mIsLightOpen = false;
             mLightImv.setImageResource(R.drawable.light_normal);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.scan_title_left_imv:
+                CaptureActivity.this.finish();
+                break;
+            case R.id.find_scan_generate_btn:
+                startActivity(new Intent(CaptureActivity.this, FindGenerateCodeAty.class));
+                break;
+            case R.id.find_scan_light_btn:
+                operateLight();
+                break;
+            case R.id.find_scan_album_btn:
+                offLight();
+                Intent intentAlbum = new Intent(Intent.ACTION_GET_CONTENT);
+                intentAlbum.addCategory(Intent.CATEGORY_OPENABLE);
+                intentAlbum.setType("image/*");
+                intentAlbum.putExtra("return-data", true);
+                startActivityForResult(intentAlbum, SCAN_CODE_ALBUM_1);
+                overridePendingTransition(R.anim.zoomin, 0);
+                break;
+        }
+    }
+
+    /**
+     * 从相册返回扫描结果
+     *
+     * @param uri 图片地址
+     */
+    private void operateAlbumScanResult(Uri uri) {
+        int myWidth = getResources().getDisplayMetrics().widthPixels;
+        int myHeight = getResources().getDisplayMetrics().heightPixels;
+
+        Glide.with(CaptureActivity.this)
+                .load(uri)
+                .asBitmap()
+                .into(new SimpleTarget<Bitmap>(myWidth, myHeight) {
+                    @Override
+                    public void onResourceReady(Bitmap resource,
+                                                GlideAnimation<? super Bitmap> glideAnimation) {
+                        Result resultZxing = new DecodeUtils(DecodeUtils.DECODE_DATA_MODE_ALL)
+                                .decodeWithZxing(resource);
+                        Log.i(TAG, "resultZxing >> " + resultZxing);
+
+                        if (resultZxing != null) {
+                            handleDecode(resultZxing, null);
+                        } else {
+                            SystemUtils.showHandlerToast(CaptureActivity.this,
+                                    "未发现二维码/条形码");
+                        }
+                    }
+                });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case SCAN_CODE_ALBUM_1:
+                    // 从uri获取选择相册返回的图片地址
+                    Uri uri = data.getData();
+                    Log.i(TAG, "uri >> " + uri);
+                    operateAlbumScanResult(uri);
+                    break;
+            }
         }
     }
 }

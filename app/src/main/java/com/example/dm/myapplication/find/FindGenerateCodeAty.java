@@ -7,6 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,7 +21,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ToggleButton;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.find.zxing.encoding.EncodingUtils;
 import com.example.dm.myapplication.utiltools.AbsentMConstants;
@@ -30,7 +35,7 @@ import com.example.dm.myapplication.utiltools.SystemUtils;
  * FindGenerateCodeAty
  * Created by dm on 16-9-13.
  */
-public class FindGenerateCodeAty extends Activity implements View.OnClickListener {
+public class FindGenerateCodeAty extends AppCompatActivity implements View.OnClickListener, ColorChooserDialog.ColorCallback {
     private static final String LOG_TAG = "FindGenerateCodeAty";
     private static final int REQUEST_CODE_ALBUM_1 = 1;
     private static final int REQUEST_CODE_CROP_2 = 2;
@@ -47,7 +52,9 @@ public class FindGenerateCodeAty extends Activity implements View.OnClickListene
     private int mBackColor;     // 二维码背景色：默认白色
     private String mLogoPathStr;    // 二维码片保存地址
     private boolean isQRcodeGenerated;  // 是否生成
+
     private String qrSettingsItemStr;
+    private int mPalette = 0;       // 调色板使用状态：0，前景色；1，背景色
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +130,9 @@ public class FindGenerateCodeAty extends Activity implements View.OnClickListene
         });
     }
 
+    /**
+     * 生成二维码片
+     */
     private void generateQRcode() {
         String contentString = mQrCodeInfoEt.getText().toString();
         Bitmap logoBitmap = null;
@@ -167,6 +177,9 @@ public class FindGenerateCodeAty extends Activity implements View.OnClickListene
         }
     }
 
+    /**
+     * 二维码片设置
+     */
     private void operateQrSettins() {
         new MaterialDialog.Builder(FindGenerateCodeAty.this)
                 .title("二维码片设置")
@@ -186,6 +199,11 @@ public class FindGenerateCodeAty extends Activity implements View.OnClickListene
                 }).show();
     }
 
+    /**
+     * 处理设置条目事件
+     *
+     * @param itemStr
+     */
     private void dealChooseItemEvent(String itemStr) {
         switch (itemStr) {
             case "从相册选择Logo":
@@ -203,19 +221,78 @@ public class FindGenerateCodeAty extends Activity implements View.OnClickListene
                     String savePath = FileUtil.saveBitmapToJpg(
                             FindGenerateCodeAty.this, bitmap);
 
-                    SystemUtils.showHandlerToast(FindGenerateCodeAty.this,
+                    SystemUtils.showShortToast(FindGenerateCodeAty.this,
                             "保存至 -> " + savePath);
                 } else {
-                    SystemUtils.showHandlerToast(FindGenerateCodeAty.this,
+                    SystemUtils.showShortToast(FindGenerateCodeAty.this,
                             "请先制作二维码片");
                 }
 
                 break;
             case "二维码前景色":
+                mPalette = 0;
+                new ColorChooserDialog.Builder(FindGenerateCodeAty.this, R.string.fore_color)
+                        .titleSub(R.string.colors)
+                        .doneButton(R.string.sure)
+                        .cancelButton(R.string.cancel)
+                        .backButton(R.string.back)
+                        .customButton(R.string.custom_define)
+                        .presetsButton(R.string.back)
+                        .show();
                 break;
             case "二维码背景色":
+                mPalette = 1;
+                new ColorChooserDialog.Builder(FindGenerateCodeAty.this, R.string.back_color)
+                        .titleSub(R.string.colors)
+                        .doneButton(R.string.sure)
+                        .cancelButton(R.string.cancel)
+                        .backButton(R.string.back)
+                        .customButton(R.string.custom_define)
+                        .presetsButton(R.string.back)
+                        .show();
                 break;
             case "恢复默认":
+                final MaterialDialog materialDialog = new MaterialDialog.Builder(FindGenerateCodeAty.this)
+                        .title(R.string.restore)
+                        .content(R.string.reset_logo_color)
+                        .positiveText(R.string.sure)
+                        .positiveColorRes(R.color.teal)
+                        .negativeText(R.string.cancel)
+                        .negativeColorRes(R.color.teal)
+                        .show();
+
+                View positiveBtn = materialDialog.getActionButton(DialogAction.POSITIVE);
+                positiveBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mLogoPathStr = null;
+                        mForeColor = 0xff000000;
+                        mBackColor = 0xffffffff;
+                        mQrLogoImv.setImageResource(R.drawable.app_icon);
+
+                        if (isQRcodeGenerated) {
+                            generateQRcode();
+                        }
+
+                        SharedPreferences share = getSharedPreferences(
+                                AbsentMConstants.EXTRA_ABSENTM_SHARE, Activity.MODE_PRIVATE);
+                        SharedPreferences.Editor edit = share.edit();
+                        edit.putString(AbsentMConstants.QRCODE_LOGO_PATH, null);
+                        edit.putInt(AbsentMConstants.FORE_COLOR, 0xff000000);
+                        edit.putInt(AbsentMConstants.BACK_COLOR, 0xffffffff);
+                        edit.apply();
+
+                        materialDialog.dismiss();
+                    }
+                });
+
+                View negativeBtn = materialDialog.getActionButton(DialogAction.NEGATIVE);
+                negativeBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        materialDialog.cancel();
+                    }
+                });
                 break;
         }
     }
@@ -239,7 +316,7 @@ public class FindGenerateCodeAty extends Activity implements View.OnClickListene
     }
 
     /**
-     * 保存裁剪之后的图片数据
+     * 保存裁剪之后的图片数据,并更改二维码样式
      *
      * @param picdata intent
      */
@@ -249,6 +326,10 @@ public class FindGenerateCodeAty extends Activity implements View.OnClickListene
 
         Bitmap qrLogoBitmap = extras.getParcelable("data");
         mQrLogoImv.setImageBitmap(qrLogoBitmap);
+
+        if (isQRcodeGenerated) {
+            generateQRcode();
+        }
     }
 
     @Override
@@ -285,5 +366,43 @@ public class FindGenerateCodeAty extends Activity implements View.OnClickListene
                     break;
             }
         }
+    }
+
+    @Override
+    public void onColorSelection(@NonNull ColorChooserDialog dialog,
+                                 @ColorInt int selectedColor) {
+
+        Log.d(LOG_TAG, "onColorSelection: " + selectedColor);
+        switch (mPalette) {
+            // 前景色
+            case 0:
+                mForeColor = selectedColor;
+                operateColor(selectedColor, AbsentMConstants.FORE_COLOR);
+                break;
+            // 背景色
+            case 1:
+                mBackColor = selectedColor;
+                operateColor(selectedColor, AbsentMConstants.BACK_COLOR);
+                break;
+        }
+
+    }
+
+    /**
+     * 选择颜色，设置前景色和背景色
+     *
+     * @param selectedColor
+     * @param saveColorKey
+     */
+    private void operateColor(int selectedColor, String saveColorKey) {
+        if (isQRcodeGenerated) {
+            generateQRcode();
+        }
+
+        SharedPreferences share = getSharedPreferences(
+                AbsentMConstants.EXTRA_ABSENTM_SHARE, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor edit = share.edit();
+        edit.putInt(saveColorKey, selectedColor);
+        edit.apply();
     }
 }
