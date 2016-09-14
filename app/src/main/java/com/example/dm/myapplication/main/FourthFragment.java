@@ -34,7 +34,7 @@ import cn.bmob.v3.update.UpdateStatus;
  */
 public class FourthFragment extends Fragment {
     private static final String LOG = "LOG";
-    private static final String SHARE_APK_LINK = "我正在使用『AbsentM』个人App，感觉很不错，推荐您也来试试。下载地址：https://o8zyn0sct.qnssl.com/app-debug-v0.0.1.apk PC端直接点击链接下载安装至手机，Android手机端请复制链接至手机浏览器下载。";
+    private static final String SHARE_APK_LINK = "我正在使用『AbsentM』个人App，感觉很不错，推荐您也来试试。下载地址：https://o8zyn0sct.qnssl.com/app-debug-v0.1.0.apk PC端直接点击链接下载安装至手机，Android手机端请复制链接至手机浏览器下载。";
 
     private static final int REQUEST_CODE = 1;
 

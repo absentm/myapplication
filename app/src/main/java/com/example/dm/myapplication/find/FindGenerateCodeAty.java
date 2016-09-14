@@ -128,6 +128,48 @@ public class FindGenerateCodeAty extends AppCompatActivity implements View.OnCli
 
             }
         });
+
+        if (isQRcodeGenerated) {
+            mGenerateQrImv.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    final MaterialDialog materialDialog = new MaterialDialog
+                            .Builder(FindGenerateCodeAty.this)
+                            .positiveColorRes(R.color.teal)
+                            .positiveText("OK")
+                            .negativeColorRes(R.color.teal)
+                            .negativeText("CANCEL")
+                            .content("保存至本地？")
+                            .show();
+
+                    View positiveBtn = materialDialog.getActionButton(DialogAction.POSITIVE);
+                    positiveBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Bitmap bitmap = FileUtil.imageView2Bitmap(
+                                    FindGenerateCodeAty.this, mGenerateQrImv);
+
+                            String savePath = FileUtil.saveBitmapToJpg(
+                                    FindGenerateCodeAty.this, bitmap);
+
+                            SystemUtils.showShortToast(FindGenerateCodeAty.this,
+                                    "保存至 -> " + savePath);
+                            materialDialog.dismiss();
+                        }
+                    });
+
+                    View negativeBtn = materialDialog.getActionButton(DialogAction.NEGATIVE);
+                    negativeBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            materialDialog.cancel();
+                        }
+                    });
+
+                    return true;
+                }
+            });
+        }
     }
 
     /**
