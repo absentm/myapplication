@@ -7,7 +7,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +24,7 @@ import cn.bmob.v3.listener.SaveListener;
  * 意见反馈
  */
 public class MeFeedbackAty extends Activity implements View.OnClickListener {
-    private ImageView titleImv;
+    private ImageButton titleImv;
     private EditText feedbackEt;
     private TextView feedbackHasNumTv;
     private Button feedbackSubmitBtn;
@@ -41,7 +41,7 @@ public class MeFeedbackAty extends Activity implements View.OnClickListener {
 
 
     private void initView() {
-        titleImv = (ImageView) findViewById(R.id.title_imv);
+        titleImv = (ImageButton) findViewById(R.id.title_imv);
         feedbackEt = (EditText) findViewById(R.id.me_feedback_et);
         feedbackHasNumTv = (TextView) findViewById(R.id.me_feedback_hasnum_tv);
         feedbackSubmitBtn = (Button) findViewById(R.id.me_feedback_submit_btn);

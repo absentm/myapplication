@@ -11,7 +11,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.dm.myapplication.R;
@@ -29,7 +29,7 @@ import java.util.List;
 public class FindMeiziAty extends AppCompatActivity implements FindImageUrlLoader.Callback, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "FindMeiziAty";
     private static final int DEFAULT_IMG_COUNT = 10;    //默认每页加载10张图
-    private ImageView titleImv;
+    private ImageButton titleImv;
     private FloatingActionButton fab;
 
     private RecyclerView mRecyclerView;
@@ -65,7 +65,7 @@ public class FindMeiziAty extends AppCompatActivity implements FindImageUrlLoade
     }
 
     private void initView() {
-        titleImv = (ImageView) findViewById(R.id.title_imv);
+        titleImv = (ImageButton) findViewById(R.id.title_imv);
         fab = (FloatingActionButton) findViewById(R.id.find_fab);
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView = (RecyclerView) findViewById(R.id.find_recycler_view);

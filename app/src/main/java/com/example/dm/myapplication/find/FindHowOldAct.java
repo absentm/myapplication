@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,7 +37,7 @@ public class FindHowOldAct extends Activity {
     final private static String TAG = "MainActivity";
     final private int PICTURE_CHOOSE = 1;
 
-    private ImageView titleBackImv;
+    private ImageButton titleBackImv;
     private TextView titleCenterTv;
 
     private ImageView imageView = null;
@@ -188,7 +189,7 @@ public class FindHowOldAct extends Activity {
     }
 
     private void initViews() {
-        titleBackImv = (ImageView) findViewById(R.id.title_imv);
+        titleBackImv = (ImageButton) findViewById(R.id.title_imv);
         titleCenterTv = (TextView) findViewById(R.id.title_center_text_tv);
 
         titleBackImv.setOnClickListener(new View.OnClickListener() {

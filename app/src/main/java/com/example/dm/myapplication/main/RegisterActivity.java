@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +36,7 @@ public class RegisterActivity extends Activity {
 
     private AppUser appUser;
 
-    private ImageView titleImv;
+    private ImageButton titleImv;
     private TextView titleCenterTv;
     private TextView titleRightTv;
 
@@ -67,7 +68,7 @@ public class RegisterActivity extends Activity {
      * 注册页面的初始化
      */
     private void initView() {
-        titleImv = (ImageView) findViewById(R.id.title_imv);
+        titleImv = (ImageButton) findViewById(R.id.title_imv);
         titleImv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

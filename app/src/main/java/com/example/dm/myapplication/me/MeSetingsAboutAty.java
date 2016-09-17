@@ -3,7 +3,7 @@ package com.example.dm.myapplication.me;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.dm.myapplication.R;
@@ -13,7 +13,7 @@ import com.example.dm.myapplication.R;
  * Created by dm on 16-9-1.
  */
 public class MeSetingsAboutAty extends Activity {
-    private ImageView titleLeftImv;
+    private ImageButton titleLeftImv;
     private TextView titleTv;
 
     @Override
@@ -26,7 +26,7 @@ public class MeSetingsAboutAty extends Activity {
     }
 
     private void initView() {
-        titleLeftImv = (ImageView) findViewById(R.id.me_settings_title).findViewById(R.id.title_imv);
+        titleLeftImv = (ImageButton) findViewById(R.id.me_settings_title).findViewById(R.id.title_imv);
         titleTv = (TextView) findViewById(R.id.me_settings_title).findViewById(R.id.title_center_text_tv);
 
         titleTv.setText("关于");

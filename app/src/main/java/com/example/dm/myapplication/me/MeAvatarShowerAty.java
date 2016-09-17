@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -39,7 +40,7 @@ public class MeAvatarShowerAty extends Activity {
 
     private void initView() {
         avatarImv = (ImageView) findViewById(R.id.me_show_avatar_imv);
-        ImageView titlteImv = (ImageView) findViewById(R.id.title_imv);
+        ImageButton titlteImv = (ImageButton) findViewById(R.id.title_imv);
         titlteImv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

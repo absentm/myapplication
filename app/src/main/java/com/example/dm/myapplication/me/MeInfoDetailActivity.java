@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -107,7 +108,7 @@ public class MeInfoDetailActivity extends Activity {
 
     private void initViews() {
         // 标题栏控件
-        ImageView titleImv = (ImageView) findViewById(R.id.title_imv);
+        ImageButton titleImv = (ImageButton) findViewById(R.id.title_imv);
         titleImv.setImageResource(R.drawable.ic_navigate_before_white_24dp);
         titleImv.setOnClickListener(new View.OnClickListener() {
             @Override

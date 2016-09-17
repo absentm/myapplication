@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,12 +58,11 @@ public class LoginActivity extends Activity {
      */
     private void initView() {
         // 标题栏控件
-        ImageView titleImv = (ImageView) findViewById(R.id.title_imv);
+        ImageButton titleImv = (ImageButton) findViewById(R.id.title_imv);
         titleImv.setImageResource(R.drawable.ic_navigate_before_white_24dp);
         titleImv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 LoginActivity.this.finish();
             }
         });

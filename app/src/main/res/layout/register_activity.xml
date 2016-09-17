@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <include
-        layout="@layout/title_layout" />
+        layout="@layout/title_layout"/>
 
 
     <RelativeLayout
@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
-                android:src="@drawable/ic_perm_identity_grey600_24dp" />
+                android:src="@drawable/ic_perm_identity_grey600_24dp"/>
 
             <EditText
                 android:id="@+id/nickname_et"
@@ -40,7 +40,7 @@
                 android:background="@null"
                 android:hint="请输入昵称"
                 android:singleLine="true"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <ImageView
                 android:id="@+id/reg_nickname_warning_imv"
@@ -51,7 +51,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="5dp"
                 android:src="@drawable/ic_warning_amber_18dp"
-                android:visibility="gone" />
+                android:visibility="gone"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
-                android:src="@drawable/ic_email_grey600_24dp" />
+                android:src="@drawable/ic_email_grey600_24dp"/>
 
             <EditText
                 android:id="@+id/email_et"
@@ -83,7 +83,7 @@
                 android:background="@null"
                 android:hint="请输入登录邮箱"
                 android:singleLine="true"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <ImageView
                 android:id="@+id/reg_email_warning_imv"
@@ -94,7 +94,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="5dp"
                 android:src="@drawable/ic_warning_amber_18dp"
-                android:visibility="gone" />
+                android:visibility="gone"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
-                android:src="@drawable/ic_lock_outline_grey600_24dp" />
+                android:src="@drawable/ic_lock_outline_grey600_24dp"/>
 
             <EditText
                 android:id="@+id/passwd_et"
@@ -125,7 +125,7 @@
                 android:hint="请输入密码"
                 android:inputType="textPassword"
                 android:singleLine="true"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <ImageView
                 android:id="@+id/reg_password_view_off_imv"
@@ -135,7 +135,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/ic_visibility_off_grey600_18dp" />
+                android:src="@drawable/ic_visibility_off_grey600_18dp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -149,10 +149,10 @@
                 android:id="@+id/register_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/teal"
+                android:background="@drawable/item_teal_selector_no_bord"
                 android:text="注  册"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
         </RelativeLayout>
 
     </RelativeLayout>

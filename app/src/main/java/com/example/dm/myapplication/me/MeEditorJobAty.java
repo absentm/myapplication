@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -22,7 +23,7 @@ import cn.bmob.v3.listener.UpdateListener;
 public class MeEditorJobAty extends Activity implements View.OnClickListener {
     private static final String LOG = "LOG";
 
-    private ImageView titleLeftImv;
+    private ImageButton titleLeftImv;
 
     private RelativeLayout jobRout1;
     private ImageView jobImv1;
@@ -70,7 +71,7 @@ public class MeEditorJobAty extends Activity implements View.OnClickListener {
     }
 
     private void initViews() {
-        titleLeftImv = (ImageView) findViewById(R.id.title_imv);
+        titleLeftImv = (ImageButton) findViewById(R.id.title_imv);
 
         jobRout1 = (RelativeLayout) findViewById(R.id.job_item_1_rout);
         jobImv1 = (ImageView) findViewById(R.id.job_item_1_imv);

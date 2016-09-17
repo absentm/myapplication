@@ -159,9 +159,9 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="24dp"
-        android:background="@color/teal"
+        android:background="@drawable/item_teal_selector_no_bord"
         android:text="退出账户"
-        android:textColor="@color/black"
+        android:textColor="@color/gray900"
         android:textSize="16sp"/>
 
 

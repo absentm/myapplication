@@ -8,12 +8,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.dm.myapplication.R;
-import com.example.dm.myapplication.customviews.xlistview.adapter.ViewPagerFixed;
 import com.example.dm.myapplication.customviews.xlistview.adapter.ImageDetailFragment;
+import com.example.dm.myapplication.customviews.xlistview.adapter.ViewPagerFixed;
 
 import java.util.ArrayList;
 
@@ -77,7 +77,7 @@ public class ComImagePagerActivity extends FragmentActivity {
     private void initTitleView() {
         View includeView = findViewById(R.id.image_detail_include);
 
-        ImageView titleBackImv = (ImageView) includeView.findViewById(R.id.title_imv);
+        ImageButton titleBackImv = (ImageButton) includeView.findViewById(R.id.title_imv);
         TextView titleTextTv = (TextView) includeView.findViewById(R.id.title_center_text_tv);
 
         titleBackImv.setVisibility(View.VISIBLE);

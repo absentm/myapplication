@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,7 +36,7 @@ public class MeEditorAreaAty extends BaseActivity implements View.OnClickListene
     private static final String LOG = "LOG";
 
     // 初始化顶部栏显示
-    private ImageView titleLeftImv;
+    private ImageButton titleLeftImv;
     private RelativeLayout currentAreaRout;
     private TextView currentAreaTv;
     private RelativeLayout fullAreaRout;
@@ -68,7 +68,7 @@ public class MeEditorAreaAty extends BaseActivity implements View.OnClickListene
      */
     private void initViews() {
         // 标题栏控件
-        titleLeftImv = (ImageView) findViewById(R.id.title_imv);
+        titleLeftImv = (ImageButton) findViewById(R.id.title_imv);
         currentAreaRout = (RelativeLayout) findViewById(R.id.me_editor_current_area_rout);
         currentAreaTv = (TextView) findViewById(R.id.me_editor_current_area_tv);
         fullAreaRout = (RelativeLayout) findViewById(R.id.me_editor_full_area_rout);

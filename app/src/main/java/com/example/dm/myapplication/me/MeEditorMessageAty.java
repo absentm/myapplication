@@ -8,6 +8,7 @@ import android.text.Spannable;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +27,7 @@ import cn.bmob.v3.listener.UpdateListener;
 public class MeEditorMessageAty extends Activity {
     private static final String LOG = "LOG";
 
-    private ImageView titleLeftImv;
+    private ImageButton titleLeftImv;
     private TextView titleRightTv;
     private EditText meEditorMessageEt;
     private ImageView meEditorClearImv;
@@ -43,7 +44,7 @@ public class MeEditorMessageAty extends Activity {
     }
 
     private void initViews() {
-        titleLeftImv = (ImageView) findViewById(R.id.title_imv);
+        titleLeftImv = (ImageButton) findViewById(R.id.title_imv);
         titleRightTv = (TextView) findViewById(R.id.title_right_tv);
         meEditorMessageEt = (EditText) findViewById(R.id.me_editor_message_et);
         meEditorClearImv = (ImageView) findViewById(R.id.me_editor_message_clear_imv);

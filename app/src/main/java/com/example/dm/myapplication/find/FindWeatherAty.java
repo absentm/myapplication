@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -44,7 +45,7 @@ public class FindWeatherAty extends Activity implements AMapLocationListener {
     private final static String LOG = "FindWeatherAty";
     private boolean isConnected;
 
-    private ImageView titleLeftImv;
+    private ImageButton titleLeftImv;
     private TextView titleCityTv;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -153,7 +154,7 @@ public class FindWeatherAty extends Activity implements AMapLocationListener {
     private void initViews() {
         isConnected = SystemUtils.checkNetworkConnection(this);
 
-        titleLeftImv = (ImageView) findViewById(R.id.title_left_imv);
+        titleLeftImv = (ImageButton) findViewById(R.id.title_left_imv);
         titleCityTv = (TextView) findViewById(R.id.title_center_tv);
 
         mCurDateTv = (TextView) findViewById(R.id.find_today_date);

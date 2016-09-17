@@ -109,7 +109,7 @@
                 android:id="@+id/login_btn"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:background="@color/teal"
+                android:background="@drawable/item_teal_selector_no_bord"
                 android:text="登  录"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
