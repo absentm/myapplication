@@ -42,6 +42,7 @@ import cn.bmob.v3.listener.FindListener;
  */
 public class SecondFragment extends Fragment implements XListView.IXListViewListener {
     private final static int QUERY_ITEM_LIMITS = 5;     // 查询结果条目限制个数
+    private static final int REQUEST_CODE_POST_1 = 1;
 
     private RelativeLayout mTitleRout;
 
@@ -101,7 +102,8 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
                 if (appUser == null) {
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                 } else {
-                    startActivity(new Intent(getActivity(), ComPostTopicActivity.class));
+                    startActivityForResult(new Intent(getActivity(), ComPostTopicActivity.class),
+                            REQUEST_CODE_POST_1);
                 }
             }
         });
@@ -172,6 +174,7 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
      * 从Bmob云端进行复合查询
      */
     private void generateRefleshData() {
+        final List<ComUserPostInfo> tempList = new ArrayList<>();
         // 使用复合查询
         Log.i("LOG", "mDate in generateRefleshData query1 >>> " + mDate);
         BmobQuery<ComUserPostInfo> query1 = new BmobQuery<>();
@@ -203,8 +206,12 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
                         Log.i("LOG", "list.size() in generateRefleshData >>> " + list.size());
                     } else {
                         for (ComUserPostInfo comUserPostInfo : list) {
-                            mList.add(comUserPostInfo);
+                            tempList.add(comUserPostInfo);
                         }
+
+                        // add and remove the same element
+                        mList.addAll(0, tempList);
+                        mList = SystemUtils.removeDuplicateData(mList);
 
                         mComAppAdapter = new ComAppAdapter(getActivity());
                         mComAppAdapter.setData(mList);
@@ -274,10 +281,6 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
             @Override
             public void run() {
                 generateRefleshData();
-
-                mComAppAdapter = new ComAppAdapter(getActivity());
-                mComAppAdapter.setData(mList);
-                mListView.setAdapter(mComAppAdapter);
                 onLoad();
             }
         }, 500);
@@ -301,5 +304,21 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
         mListView.stopRefresh();
         mListView.stopLoadMore();
         mListView.setRefreshTime(currentTimeStr);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (data != null && resultCode == -1) {
+            ComUserPostInfo postData = (ComUserPostInfo) data.getSerializableExtra("newPostData");
+            Log.d("SecondFragment", "postData >>> " + postData);
+
+            switch (requestCode) {
+                case REQUEST_CODE_POST_1:
+                    mComAppAdapter.addDataInTop(postData);
+                    break;
+            }
+        }
     }
 }

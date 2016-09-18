@@ -11,9 +11,16 @@ import android.util.Log;
 import android.widget.AbsListView;
 import android.widget.Toast;
 
+import com.example.dm.myapplication.beans.ComUserPostInfo;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -293,6 +300,44 @@ public class SystemUtils {
 
         tem = matcher.matches();
         return tem;
+    }
+
+    /**
+     * remove the duplicate element in the List
+     *
+     * @param list List
+     * @return
+     */
+    public static List removeDuplicateWithOrder(List list) {
+        Set set = new HashSet();
+        List newList = new ArrayList();
+
+        for (Iterator iter = list.iterator(); iter.hasNext(); ) {
+            Object element = iter.next();
+            if (set.add(element))
+                newList.add(element);
+        }
+
+        return newList;
+    }
+
+    /**
+     * remove the duplicate element in the List
+     *
+     * @param list List
+     * @return
+     */
+    public static List removeDuplicateData(List<ComUserPostInfo> list) {
+        Set set = new HashSet();
+        List newList = new ArrayList();
+
+        for (ComUserPostInfo element : list) {
+            if (set.add(element.getUserTimeStr())) {
+                newList.add(element);
+            }
+        }
+
+        return newList;
     }
 
 }

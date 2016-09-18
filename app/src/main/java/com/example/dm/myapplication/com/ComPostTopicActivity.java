@@ -8,8 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dm.myapplication.R;
@@ -37,14 +37,15 @@ import cn.bmob.v3.listener.UploadBatchListener;
  * Created by dm on 16-8-30.
  */
 public class ComPostTopicActivity extends Activity implements ChooseAdapter.OnItmeClickListener {
-    private TextView titleLeftTv;
-    private TextView titleRightTv;
+    private Button titleLeftTv;
+    private Button titleRightTv;
     private EditText mPostContentEt;
 
     private RecyclerView mRecyclerView;
     private ChooseAdapter mAdapter;
 
     private List<String> urlsList = new ArrayList<>();
+    private int flag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +64,8 @@ public class ComPostTopicActivity extends Activity implements ChooseAdapter.OnIt
     }
 
     private void initBaseViews() {
-        titleLeftTv = (TextView) findViewById(R.id.title_tv);
-        titleRightTv = (TextView) findViewById(R.id.title_right_tv);
+        titleLeftTv = (Button) findViewById(R.id.title_tv);
+        titleRightTv = (Button) findViewById(R.id.title_right_tv);
         mPostContentEt = (EditText) findViewById(R.id.com_post_comtent_et);
 
         // cancle button click
@@ -102,38 +103,42 @@ public class ComPostTopicActivity extends Activity implements ChooseAdapter.OnIt
             stringArrayList.add(photoEntry.getPath());
         }
 
-        // ArrayList<String> to String[], ensure upload to bmob
-        String[] bombImagesPaths = new String[stringArrayList.size()];
-        bombImagesPaths = stringArrayList.toArray(bombImagesPaths);
+        if (!stringArrayList.isEmpty()) {
+            // ArrayList<String> to String[], ensure upload to bmob
+            String[] bombImagesPaths = new String[stringArrayList.size()];
+            bombImagesPaths = stringArrayList.toArray(bombImagesPaths);
 
-        // upload local image to bmob, return bmob image links
-        final String[] finalBombImagesPaths = bombImagesPaths; // temp var
-        BmobFile.uploadBatch(bombImagesPaths, new UploadBatchListener() {
-            @Override
-            public void onSuccess(List<BmobFile> files, List<String> urls) {
-                if (urls.size() == finalBombImagesPaths.length) {
-                    Log.i("LOG", "URLS >>> " + urls.toString());
-                    urlsList = urls;
-                    Log.i("LOG", "urlsList in upLoad >>> " + urlsList.toString());
+            // upload local image to bmob, return bmob image links
+            final String[] finalBombImagesPaths = bombImagesPaths; // temp var
+            BmobFile.uploadBatch(bombImagesPaths, new UploadBatchListener() {
+                @Override
+                public void onSuccess(List<BmobFile> files, List<String> urls) {
+                    if (urls.size() == finalBombImagesPaths.length) {
+                        Log.i("LOG", "URLS >>> " + urls.toString());
+                        urlsList = urls;
+                        Log.i("LOG", "urlsList in upLoad >>> " + urlsList.toString());
 
-                    generatePostInfos();
+                        generatePostInfos();
+                    }
                 }
-            }
 
-            @Override
-            public void onProgress(int i, int i1, int i2, int i3) {
-            }
+                @Override
+                public void onProgress(int i, int i1, int i2, int i3) {
+                }
 
-            @Override
-            public void onError(int statuscode, String errormsg) {
-                Log.i("LOG", "ERROR >>> statuscode: " + statuscode +
-                        "errormsg: " + errormsg);
-                Toast.makeText(ComPostTopicActivity.this,
-                        "ERROR >>> statuscode: " + statuscode +
-                                "errormsg: " + errormsg,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onError(int statuscode, String errormsg) {
+                    Log.i("LOG", "ERROR >>> statuscode: " + statuscode +
+                            "errormsg: " + errormsg);
+                    Toast.makeText(ComPostTopicActivity.this,
+                            "ERROR >>> statuscode: " + statuscode +
+                                    "errormsg: " + errormsg,
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            generatePostInfos();
+        }
     }
 
     /**
@@ -163,10 +168,7 @@ public class ComPostTopicActivity extends Activity implements ChooseAdapter.OnIt
                 @Override
                 public void done(String s, BmobException e) {
                     if (e == null) {
-                        ComPostTopicActivity.this.finish();
-                        Toast.makeText(ComPostTopicActivity.this,
-                                "发表成功！",
-                                Toast.LENGTH_SHORT).show();
+                        flag = 1;
                     } else {
                         Toast.makeText(ComPostTopicActivity.this,
                                 "Error! " + e.getMessage(),
@@ -178,6 +180,17 @@ public class ComPostTopicActivity extends Activity implements ChooseAdapter.OnIt
             Toast.makeText(ComPostTopicActivity.this,
                     "Errors, please wait!",
                     Toast.LENGTH_SHORT).show();
+        }
+
+        if (1 == flag) {
+            Intent intent = new Intent();
+            intent.putExtra("newPostData", comUserPostInfo);
+            ComPostTopicActivity.this.setResult(RESULT_OK, intent);
+
+            Toast.makeText(ComPostTopicActivity.this,
+                    "发表成功！",
+                    Toast.LENGTH_SHORT).show();
+            ComPostTopicActivity.this.finish();
         }
     }
 

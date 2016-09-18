@@ -3,6 +3,7 @@ package com.example.dm.myapplication.customviews.xlistview.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,10 @@ import com.example.dm.myapplication.beans.ComUserPostInfo;
 import com.example.dm.myapplication.com.ComImagePagerActivity;
 import com.example.dm.myapplication.customviews.ninegridview.NineGridView;
 import com.example.dm.myapplication.utiltools.HttpUtil;
+import com.example.dm.myapplication.utiltools.SystemUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -149,5 +152,25 @@ public class ComAppAdapter extends BaseAdapter {
         public LinearLayout userRepostLout;   // 转发键
         public LinearLayout userCommentLout;   // 评论键
         public LinearLayout userLikeLout;  // 点赞键
+    }
+
+    public void addDataInTop(ComUserPostInfo comUserPostInfo) {
+        if (mList == null) {
+            mList = new ArrayList<>();
+        }
+
+        mList.add(0, comUserPostInfo);
+        notifyDataSetChanged();
+    }
+
+    public void addListDataINtop(List<ComUserPostInfo> list) {
+        if (mList == null) {
+            mList = new ArrayList<>();
+        }
+
+        mList.addAll(0, list);
+        mList = SystemUtils.removeDuplicateData(mList);
+        Log.d("LOG", "mList == = == " + mList);
+        notifyDataSetChanged();
     }
 }

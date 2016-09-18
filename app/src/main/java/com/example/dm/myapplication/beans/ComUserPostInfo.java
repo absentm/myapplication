@@ -1,5 +1,6 @@
 package com.example.dm.myapplication.beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import cn.bmob.v3.BmobObject;
  * Created by dm on 16-4-24.
  * 用户发布信息表
  */
-public class ComUserPostInfo extends BmobObject {
+public class ComUserPostInfo extends BmobObject implements Serializable {
     private String userNameStr;   // 用户名
     private String userHeadImgUrl;      // 用户图像id：如需求变更，可设置为String
     private String userNickNameStr;     // 用户昵称

@@ -22,15 +22,15 @@
             android:textColor="@color/white"
             android:textSize="16sp"/>
 
-        <ImageView
+        <ImageButton
             android:id="@+id/com_post_new_rout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"
-            android:src="@drawable/ic_border_color_white_18dp"
-            />
+            android:background="@drawable/item_teal_selector_no_bord"
+            android:padding="10dp"
+            android:src="@drawable/ic_border_color_white_18dp"/>
     </RelativeLayout>
 
     <ProgressBar
