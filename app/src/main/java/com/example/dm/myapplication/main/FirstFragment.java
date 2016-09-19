@@ -123,4 +123,14 @@ public class FirstFragment extends Fragment {
         SimpleDateFormat format = new SimpleDateFormat(getString(R.string.date_format));
         return format.format(c.getTime());
     }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        isConnected = SystemUtils.checkNetworkConnection(getActivity());
+        if (!isConnected) {
+            refreshLayout.setRefreshing(false);
+        }
+    }
+
 }

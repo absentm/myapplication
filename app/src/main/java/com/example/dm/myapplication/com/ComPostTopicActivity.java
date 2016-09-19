@@ -5,17 +5,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.AppUser;
 import com.example.dm.myapplication.beans.ComUserPostInfo;
 import com.example.dm.myapplication.utiltools.DateUtil;
+import com.example.dm.myapplication.utiltools.SystemUtils;
 import com.litao.android.lib.Utils.GridSpacingItemDecoration;
 import com.litao.android.lib.entity.PhotoEntry;
 
@@ -41,11 +42,14 @@ public class ComPostTopicActivity extends Activity implements ChooseAdapter.OnIt
     private Button titleRightTv;
     private EditText mPostContentEt;
 
+    private MaterialDialog mMaterialDialog;
+
     private RecyclerView mRecyclerView;
     private ChooseAdapter mAdapter;
 
     private List<String> urlsList = new ArrayList<>();
-    private int flag = 0;
+
+    private boolean isConnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,8 @@ public class ComPostTopicActivity extends Activity implements ChooseAdapter.OnIt
     }
 
     private void initBaseViews() {
+        isConnected = SystemUtils.checkNetworkConnection(ComPostTopicActivity.this);
+
         titleLeftTv = (Button) findViewById(R.id.title_tv);
         titleRightTv = (Button) findViewById(R.id.title_right_tv);
         mPostContentEt = (EditText) findViewById(R.id.com_post_comtent_et);
@@ -82,7 +88,147 @@ public class ComPostTopicActivity extends Activity implements ChooseAdapter.OnIt
             public void onClick(View view) {
                 if (!mPostContentEt.getText().toString().equals("") ||
                         !mAdapter.getData().isEmpty()) {
-                    postInfos();
+                    if (isConnected) {
+
+
+                        mMaterialDialog = new MaterialDialog.Builder(ComPostTopicActivity.this)
+                                .content("Please waiting...")
+                                .progress(true, 0)
+                                .progressIndeterminateStyle(false)
+                                .show();
+                        mMaterialDialog.setCancelable(false);
+
+                        // print local images' paths log, and save image paths
+                        List<String> stringArrayList = new ArrayList<>();
+                        for (PhotoEntry photoEntry : mAdapter.getData()) {
+                            stringArrayList.add(photoEntry.getPath());
+                        }
+
+                        if (!stringArrayList.isEmpty()) {
+                            // ArrayList<String> to String[], ensure upload to bmob
+                            String[] bombImagesPaths = new String[stringArrayList.size()];
+                            bombImagesPaths = stringArrayList.toArray(bombImagesPaths);
+
+                            // upload local image to bmob, return bmob image links
+                            final String[] finalBombImagesPaths = bombImagesPaths; // temp var
+                            BmobFile.uploadBatch(finalBombImagesPaths, new UploadBatchListener() {
+                                @Override
+                                public void onSuccess(List<BmobFile> files, List<String> urls) {
+                                    if (urls.size() == finalBombImagesPaths.length) {
+                                        urlsList = urls;
+                                        // post topic
+                                        AppUser appUser = BmobUser.getCurrentUser(AppUser.class);
+                                        String currentTime = DateUtil.getCurrentTimeStr();
+                                        long currentTimeMills = DateUtil.getCurrentTimeMills();
+                                        final ComUserPostInfo comUserPostInfo = new ComUserPostInfo();
+
+                                        if (appUser != null) {
+                                            comUserPostInfo.setUserNameStr(appUser.getUsername());
+                                            comUserPostInfo.setUserHeadImgUrl(appUser.getUserAvatarUrl());
+                                            comUserPostInfo.setUserNickNameStr(appUser.getUserNickName());
+                                            comUserPostInfo.setUserTimeStr(currentTime);
+                                            comUserPostInfo.setUserTimeMills(currentTimeMills);
+                                            comUserPostInfo.setUserContentStr(mPostContentEt.getText().toString());
+                                            comUserPostInfo.setUserImageUrlList(urlsList);
+                                            comUserPostInfo.setUserRepostCounter(0);
+                                            comUserPostInfo.setUserCommentCounter(0);
+                                            comUserPostInfo.setUserLikeCounter(0);
+
+                                            new Thread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    comUserPostInfo.save(new SaveListener<String>() {
+                                                        @Override
+                                                        public void done(String s, BmobException e) {
+                                                            if (e == null) {
+                                                                mMaterialDialog.dismiss();
+                                                                Intent intent = new Intent();
+                                                                intent.putExtra("newPostData", comUserPostInfo);
+                                                                ComPostTopicActivity.this.setResult(RESULT_OK, intent);
+                                                                ComPostTopicActivity.this.finish();
+                                                            } else {
+                                                                mMaterialDialog.dismiss();
+                                                                Toast.makeText(ComPostTopicActivity.this,
+                                                                        "Error! " + e.getMessage(),
+                                                                        Toast.LENGTH_LONG).show();
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            }).start();
+                                        } else {
+                                            mMaterialDialog.dismiss();
+                                            Toast.makeText(ComPostTopicActivity.this,
+                                                    "Errors, please wait1!",
+                                                    Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onProgress(int curIndex, int curPercent, int total, int totalPercent) {
+                                }
+
+                                @Override
+                                public void onError(int statuscode, String errormsg) {
+                                    mMaterialDialog.dismiss();
+                                    Toast.makeText(ComPostTopicActivity.this,
+                                            "ERROR >>> statuscode: " + statuscode +
+                                                    "errormsg: " + errormsg,
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        } else {
+                            // post topic
+                            AppUser appUser = BmobUser.getCurrentUser(AppUser.class);
+                            String currentTime = DateUtil.getCurrentTimeStr();
+                            long currentTimeMills = DateUtil.getCurrentTimeMills();
+                            final ComUserPostInfo comUserPostInfo = new ComUserPostInfo();
+
+                            if (appUser != null) {
+                                comUserPostInfo.setUserNameStr(appUser.getUsername());
+                                comUserPostInfo.setUserHeadImgUrl(appUser.getUserAvatarUrl());
+                                comUserPostInfo.setUserNickNameStr(appUser.getUserNickName());
+                                comUserPostInfo.setUserTimeStr(currentTime);
+                                comUserPostInfo.setUserTimeMills(currentTimeMills);
+                                comUserPostInfo.setUserContentStr(mPostContentEt.getText().toString());
+                                comUserPostInfo.setUserImageUrlList(urlsList);
+                                comUserPostInfo.setUserRepostCounter(0);
+                                comUserPostInfo.setUserCommentCounter(0);
+                                comUserPostInfo.setUserLikeCounter(0);
+
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        comUserPostInfo.save(new SaveListener<String>() {
+                                            @Override
+                                            public void done(String s, BmobException e) {
+                                                if (e == null) {
+                                                    mMaterialDialog.dismiss();
+                                                    Intent intent = new Intent();
+                                                    intent.putExtra("newPostData", comUserPostInfo);
+                                                    ComPostTopicActivity.this.setResult(RESULT_OK, intent);
+                                                    ComPostTopicActivity.this.finish();
+                                                } else {
+                                                    mMaterialDialog.dismiss();
+                                                    Toast.makeText(ComPostTopicActivity.this,
+                                                            "Error! " + e.getMessage(),
+                                                            Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+                                        });
+                                    }
+                                }).start();
+                            } else {
+                                mMaterialDialog.dismiss();
+                                Toast.makeText(ComPostTopicActivity.this,
+                                        "Errors, please wait1!",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    } else {
+                        SystemUtils.noNetworkAlert(ComPostTopicActivity.this);
+                    }
                 } else {
                     Toast.makeText(ComPostTopicActivity.this,
                             "发表内容不能为空！",
@@ -90,108 +236,6 @@ public class ComPostTopicActivity extends Activity implements ChooseAdapter.OnIt
                 }
             }
         });
-    }
-
-    /**
-     * 发表新内容
-     */
-    private void postInfos() {
-        // print local images' paths log, and save image paths
-        List<String> stringArrayList = new ArrayList<>();
-        for (PhotoEntry photoEntry : mAdapter.getData()) {
-            Log.i("LOG", "photoEntry.getPath() >> " + photoEntry.getPath());
-            stringArrayList.add(photoEntry.getPath());
-        }
-
-        if (!stringArrayList.isEmpty()) {
-            // ArrayList<String> to String[], ensure upload to bmob
-            String[] bombImagesPaths = new String[stringArrayList.size()];
-            bombImagesPaths = stringArrayList.toArray(bombImagesPaths);
-
-            // upload local image to bmob, return bmob image links
-            final String[] finalBombImagesPaths = bombImagesPaths; // temp var
-            BmobFile.uploadBatch(bombImagesPaths, new UploadBatchListener() {
-                @Override
-                public void onSuccess(List<BmobFile> files, List<String> urls) {
-                    if (urls.size() == finalBombImagesPaths.length) {
-                        Log.i("LOG", "URLS >>> " + urls.toString());
-                        urlsList = urls;
-                        Log.i("LOG", "urlsList in upLoad >>> " + urlsList.toString());
-
-                        generatePostInfos();
-                    }
-                }
-
-                @Override
-                public void onProgress(int i, int i1, int i2, int i3) {
-                }
-
-                @Override
-                public void onError(int statuscode, String errormsg) {
-                    Log.i("LOG", "ERROR >>> statuscode: " + statuscode +
-                            "errormsg: " + errormsg);
-                    Toast.makeText(ComPostTopicActivity.this,
-                            "ERROR >>> statuscode: " + statuscode +
-                                    "errormsg: " + errormsg,
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
-            generatePostInfos();
-        }
-    }
-
-    /**
-     * 生成新发表内容数据
-     */
-    private void generatePostInfos() {
-        // post topic
-        AppUser appUser = BmobUser.getCurrentUser(AppUser.class);
-        String currentTime = DateUtil.getCurrentTimeStr();
-        ComUserPostInfo comUserPostInfo = new ComUserPostInfo();
-
-        if (appUser != null) {
-            Log.i("LOG", "urlsList in if >>> " + urlsList.toString());
-
-            comUserPostInfo.setUserNameStr(appUser.getUsername());
-            comUserPostInfo.setUserHeadImgUrl(appUser.getUserAvatarUrl());
-            comUserPostInfo.setUserNickNameStr(appUser.getUserNickName());
-            comUserPostInfo.setUserTimeStr(currentTime);
-            comUserPostInfo.setUserContentStr(mPostContentEt.getText().toString());
-            comUserPostInfo.setUserImageUrlList(urlsList);
-            comUserPostInfo.setUserRepostCounter(0);
-            comUserPostInfo.setUserCommentCounter(0);
-            comUserPostInfo.setUserLikeCounter(0);
-
-            // sava all post contents
-            comUserPostInfo.save(new SaveListener<String>() {
-                @Override
-                public void done(String s, BmobException e) {
-                    if (e == null) {
-                        flag = 1;
-                    } else {
-                        Toast.makeText(ComPostTopicActivity.this,
-                                "Error! " + e.getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        } else {
-            Toast.makeText(ComPostTopicActivity.this,
-                    "Errors, please wait!",
-                    Toast.LENGTH_SHORT).show();
-        }
-
-        if (1 == flag) {
-            Intent intent = new Intent();
-            intent.putExtra("newPostData", comUserPostInfo);
-            ComPostTopicActivity.this.setResult(RESULT_OK, intent);
-
-            Toast.makeText(ComPostTopicActivity.this,
-                    "发表成功！",
-                    Toast.LENGTH_SHORT).show();
-            ComPostTopicActivity.this.finish();
-        }
     }
 
     @Override

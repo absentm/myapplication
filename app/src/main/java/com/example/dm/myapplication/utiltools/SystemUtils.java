@@ -332,7 +332,7 @@ public class SystemUtils {
         List newList = new ArrayList();
 
         for (ComUserPostInfo element : list) {
-            if (set.add(element.getUserTimeStr())) {
+            if (set.add(element.getUserTimeMills())) {
                 newList.add(element);
             }
         }

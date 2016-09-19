@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dm.myapplication.R;
@@ -49,6 +50,8 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
     private ImageView mPostNewImv;
     private XListView mListView = null;
     private ProgressBar mProgressBar;
+    private TextView mNoDataTv;
+    private boolean isConnected;
 
     private Handler handler = null;
     private ComAppAdapter mComAppAdapter;
@@ -56,7 +59,8 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
 
     private String currentTimeStr = DateUtil.getCurrentTimeStr();
     private View view;
-    private Date mDate;
+    private Date mDate = new Date();
+
     private String lastItemPostTimeStr;
 
     private long[] mHits = new long[2];     //存储时间的数组
@@ -67,7 +71,13 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
         view = inflater.inflate(R.layout.fg2, container, false);
 
         initView();
-        generateData();
+        if (isConnected) {
+            generateData();
+        } else {
+            SystemUtils.noNetworkAlert(getActivity());
+            mProgressBar.setVisibility(ProgressBar.GONE);
+        }
+
         dealEvents();   // 事件处理: gridview item的点击事件
 
         return view;
@@ -75,10 +85,13 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
 
 
     private void initView() {
+        isConnected = SystemUtils.checkNetworkConnection(getActivity());
+
         mTitleRout = (RelativeLayout) view.findViewById(R.id.title_rout);
         mPostNewImv = (ImageView) view.findViewById(R.id.com_post_new_rout);
         mListView = (XListView) view.findViewById(R.id.lv_main);
         mProgressBar = (ProgressBar) view.findViewById(R.id.com_loading_prbar);
+        mNoDataTv = (TextView) view.findViewById(R.id.com_no_data_tv);
 
         mListView.setPullLoadEnable(true);
         mListView.setXListViewListener(SecondFragment.this);
@@ -130,7 +143,6 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
      * 获取数据：获取云端最近时间内的5条数据
      */
     private void generateData() {
-        mDate = new Date();
         Log.i("LOG", "mDate in generateData >>> " + mDate);
         BmobQuery<ComUserPostInfo> postInfoBmobQuery = new BmobQuery<>();
         postInfoBmobQuery.addWhereLessThanOrEqualTo("createdAt", new BmobDate(mDate));
@@ -147,21 +159,26 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
                         mList.add(comUserPostInfo);
                     }
 
-                    mComAppAdapter = new ComAppAdapter(getActivity());
-                    mComAppAdapter.setData(mList);
-                    mListView.setAdapter(mComAppAdapter);
-                    mProgressBar.setVisibility(ProgressBar.GONE);
-
                     // get the last item post time
                     if (!mList.isEmpty()) {
+                        mComAppAdapter = new ComAppAdapter(getActivity());
+                        mComAppAdapter.setData(mList);
+                        mListView.setAdapter(mComAppAdapter);
+
                         ComUserPostInfo lastPostInfo = mList.get(mList.size() - 1);
                         Log.i("LOG", "lastPostInfo.getUserTimeStr() in generateData " +
                                 lastPostInfo.getUserTimeStr());
                         lastItemPostTimeStr = lastPostInfo.getUserTimeStr();
+                    } else {
+                        mNoDataTv.setText("暂无数据!");
+                        mNoDataTv.setVisibility(View.VISIBLE);
                     }
 
+                    mProgressBar.setVisibility(ProgressBar.GONE);
                 } else {
                     mProgressBar.setVisibility(ProgressBar.GONE);
+                    mNoDataTv.setText("加载数据出错");
+                    mNoDataTv.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -277,24 +294,34 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
 
     @Override
     public void onRefresh() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                generateRefleshData();
-                onLoad();
-            }
-        }, 500);
+        if (isConnected) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    generateRefleshData();
+                    onLoad();
+                }
+            }, 500);
+        } else {
+            onLoad();
+        }
+
     }
 
     @Override
     public void onLoadMore() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                generateLoadMoreData();
-                onLoad();
-            }
-        }, 500);
+        if (isConnected) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    generateLoadMoreData();
+                    onLoad();
+                }
+            }, 500);
+        } else {
+            onLoad();
+            SystemUtils.noNetworkAlert(getActivity());
+        }
     }
 
     /**
@@ -320,5 +347,11 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
                     break;
             }
         }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        isConnected = SystemUtils.checkNetworkConnection(getActivity());
     }
 }

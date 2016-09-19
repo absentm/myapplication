@@ -16,6 +16,7 @@ public class ComUserPostInfo extends BmobObject implements Serializable {
     private String userNickNameStr;     // 用户昵称
     private String userTimeStr;     // 用户发布时间
     private String userContentStr;  // 用户发布内容
+    private long userTimeMills;    // 时间戳
 
     private List<String> userImageUrlList = new ArrayList<>();      // 用户发布图片集合
 
@@ -26,12 +27,13 @@ public class ComUserPostInfo extends BmobObject implements Serializable {
     public ComUserPostInfo() {
     }
 
-    public ComUserPostInfo(String userNameStr, String userHeadImgUrl, String userNickNameStr, String userTimeStr, String userContentStr, List<String> userImageUrlList, Integer userRepostCounter, Integer userCommentCounter, Integer userLikeCounter) {
+    public ComUserPostInfo(String userNameStr, String userHeadImgUrl, String userNickNameStr, String userTimeStr, String userContentStr, long userTimeMills, List<String> userImageUrlList, Integer userRepostCounter, Integer userCommentCounter, Integer userLikeCounter) {
         this.userNameStr = userNameStr;
         this.userHeadImgUrl = userHeadImgUrl;
         this.userNickNameStr = userNickNameStr;
         this.userTimeStr = userTimeStr;
         this.userContentStr = userContentStr;
+        this.userTimeMills = userTimeMills;
         this.userImageUrlList = userImageUrlList;
         this.userRepostCounter = userRepostCounter;
         this.userCommentCounter = userCommentCounter;
@@ -76,6 +78,14 @@ public class ComUserPostInfo extends BmobObject implements Serializable {
 
     public void setUserContentStr(String userContentStr) {
         this.userContentStr = userContentStr;
+    }
+
+    public long getUserTimeMills() {
+        return userTimeMills;
+    }
+
+    public void setUserTimeMills(long userTimeMills) {
+        this.userTimeMills = userTimeMills;
     }
 
     public List<String> getUserImageUrlList() {

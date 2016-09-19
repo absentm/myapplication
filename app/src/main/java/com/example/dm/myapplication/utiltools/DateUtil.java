@@ -29,6 +29,15 @@ public class DateUtil {
     }
 
     /**
+     * 获取当前系统时间， 24小时制---"HH"
+     *
+     * @return 当前系统时间
+     */
+    public static long getCurrentTimeMills() {
+        return System.currentTimeMillis();
+    }
+
+    /**
      * @param datePattenStr 日期格式
      * @return 日期字符串
      */

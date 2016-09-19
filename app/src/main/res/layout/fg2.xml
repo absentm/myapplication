@@ -33,6 +33,17 @@
             android:src="@drawable/ic_border_color_white_18dp"/>
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/com_no_data_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="200dp"
+        android:gravity="center"
+        android:text="暂无数据!"
+        android:textSize="16sp"
+        android:visibility="gone"/>
+
     <ProgressBar
         android:id="@+id/com_loading_prbar"
         android:layout_width="wrap_content"
