@@ -155,6 +155,7 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
             @Override
             public void done(List<ComUserPostInfo> list, BmobException e) {
                 if (e == null) {
+                    mNoDataTv.setVisibility(View.GONE);
                     for (ComUserPostInfo comUserPostInfo : list) {
                         mList.add(comUserPostInfo);
                     }
@@ -343,7 +344,21 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
 
             switch (requestCode) {
                 case REQUEST_CODE_POST_1:
-                    mComAppAdapter.addDataInTop(postData);
+                    mNoDataTv.setVisibility(View.GONE);
+
+                    if (mList.isEmpty()) {
+                        mList.add(postData);
+                        mComAppAdapter = new ComAppAdapter(getActivity());
+                        mComAppAdapter.setData(mList);
+                        mListView.setAdapter(mComAppAdapter);
+
+                        // 如果是第一条数据，初始化所有
+                        ComUserPostInfo lastPostInfo = mList.get(mList.size() - 1);
+                        lastItemPostTimeStr = lastPostInfo.getUserTimeStr();
+                    } else {
+                        mComAppAdapter.addDataInTop(postData);
+                    }
+
                     break;
             }
         }

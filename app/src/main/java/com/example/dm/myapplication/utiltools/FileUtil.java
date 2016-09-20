@@ -227,4 +227,53 @@ public class FileUtil {
 
         return bitmap;
     }
+
+    /**
+     * 删除指定文件夹路径下的文件和子目录文件
+     *
+     * @param pathStr
+     */
+    public static void deletePathFiles(String pathStr) {
+        File file = new File(pathStr);
+        if (!file.exists() || !file.isDirectory()) {
+            return;
+        }
+
+        String[] tempList = file.list();
+        File temp = null;
+        for (int i = 0; i < tempList.length; i++) {
+            // 判断是否以路径分隔符结尾
+            if (pathStr.endsWith(File.separator)) {
+                temp = new File(pathStr + tempList[i]);
+            } else {
+                temp = new File(pathStr + File.separator + tempList[i]);
+            }
+
+            if (temp.isFile()) {
+                temp.delete();
+            }
+
+            if (temp.isDirectory()) {
+                deletePathFiles(pathStr + "/" + tempList[i]);// 先删除文件夹里面的文件
+                delFolder(pathStr + "/" + tempList[i]);// 再删除空文件夹
+            }
+        }
+    }
+
+    /**
+     * 删除文件夹
+     *
+     * @param folderPath 文件夹路径及名称 如c:/fqf
+     */
+    public static void delFolder(String folderPath) {
+        try {
+            deletePathFiles(folderPath); // 删除完里面所有内容
+            String filePath = folderPath;
+            filePath = filePath.toString();
+            java.io.File myFilePath = new java.io.File(filePath);
+            myFilePath.delete(); // 删除空文件夹
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

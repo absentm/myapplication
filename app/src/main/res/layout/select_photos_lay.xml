@@ -10,12 +10,12 @@
         android:background="@color/teal"
         android:orientation="horizontal">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/title_imv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
+            android:background="@drawable/item_teal_selector_no_bord"
             android:src="@drawable/ic_navigate_before_white_24dp"/>
 
         <TextView
@@ -45,9 +45,11 @@
         <TextView
             android:id="@+id/album"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="16dp"
             android:layout_weight="1"
+            android:gravity="center_vertical"
             android:text="相册"
             android:textColor="@android:color/white"
             android:textSize="16sp"/>
@@ -65,10 +67,12 @@
 
         <TextView
             android:id="@+id/send_photos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="16dp"
+            android:background="@drawable/item_black_select_no_bord"
+            android:gravity="center"
             android:text="确定"
             android:textColor="@android:color/white"
             android:textSize="16sp"/>

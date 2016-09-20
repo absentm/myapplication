@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.News;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -59,8 +61,12 @@ public class NewsAdapter extends ArrayAdapter<News> {
 
         News news = getItem(position);
         holder.newsTitle.setText(news.getTitle());
-//        Log.d("Image URL", news.getImage());
-        imageLoader.displayImage(news.getImage(), holder.newsImage, options);
+        Glide.with(parent.getContext())
+                .load(news.getImage())
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.newsImage);
+
         return convertView;
 
     }

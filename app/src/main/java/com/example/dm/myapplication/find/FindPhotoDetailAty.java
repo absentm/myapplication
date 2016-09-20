@@ -6,10 +6,12 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.utiltools.FileUtil;
 
@@ -36,7 +38,7 @@ public class FindPhotoDetailAty extends Activity {
 
     private void initView() {
         mImageView = (ImageView) findViewById(R.id.find_photo_imv);
-        ImageView titlteImv = (ImageView) findViewById(R.id.title_imv);
+        ImageButton titlteImv = (ImageButton) findViewById(R.id.title_imv);
         titlteImv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +56,11 @@ public class FindPhotoDetailAty extends Activity {
         // load images
         Glide.with(FindPhotoDetailAty.this)
                 .load(imageUrl)
+                .error(R.drawable.app_icon)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .fitCenter()
                 .into(mImageView);
+//        ImageLoader.getInstance().displayImage(imageUrl, mImageView, HttpUtil.DefaultOptions);
 
         photoViewAttacher = new PhotoViewAttacher(mImageView);
         photoViewAttacher.setOnLongClickListener(new View.OnLongClickListener() {

@@ -12,12 +12,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.ComUserPostInfo;
 import com.example.dm.myapplication.com.ComImagePagerActivity;
 import com.example.dm.myapplication.customviews.ninegridview.NineGridView;
-import com.example.dm.myapplication.utiltools.HttpUtil;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,8 +82,11 @@ public class ComAppAdapter extends BaseAdapter {
 
         ComUserPostInfo mComUserPostInfo = getItem(position);
         if (mList != null && mList.size() > 0) {
-            ImageLoader.getInstance().displayImage(mComUserPostInfo.getUserHeadImgUrl(),
-                    holder.userHeadImageImv, HttpUtil.DefaultOptions);
+            Glide.with(parent.getContext())
+                    .load(mComUserPostInfo.getUserHeadImgUrl())
+                    .dontAnimate()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(holder.userHeadImageImv);
             holder.userNickNameTv.setText(mComUserPostInfo.getUserNickNameStr());
             holder.userTimeTv.setText(mComUserPostInfo.getUserTimeStr());
             holder.userContentTv.setText(mComUserPostInfo.getUserContentStr());
@@ -155,12 +158,9 @@ public class ComAppAdapter extends BaseAdapter {
     public void addDataInTop(ComUserPostInfo comUserPostInfo) {
         if (mList == null) {
             mList = new ArrayList<>();
-        } else if (mList.isEmpty()) {
-            mList.add(comUserPostInfo);
-        } else {
-            mList.add(0, comUserPostInfo);
         }
 
+        mList.add(0, comUserPostInfo);
         notifyDataSetChanged();
     }
 

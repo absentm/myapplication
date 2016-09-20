@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.dm.myapplication.R;
-import com.example.dm.myapplication.utiltools.HttpUtil;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -56,7 +56,11 @@ public class ComPhotoGridAdapter extends BaseAdapter {
             viewHolder = (MyGridViewHolder) convertView.getTag();
         }
         String url = getItem(position);
-        ImageLoader.getInstance().displayImage(url, viewHolder.imageView, HttpUtil.DefaultOptions);
+
+        Glide.with(parent.getContext())
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(viewHolder.imageView);
 
         return convertView;
     }

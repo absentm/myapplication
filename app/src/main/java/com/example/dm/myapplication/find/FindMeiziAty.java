@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.find.FindMeizhiImageAdapter.OnRecyclerViewItemClickListener;
@@ -133,7 +132,6 @@ public class FindMeiziAty extends AppCompatActivity implements FindImageUrlLoade
         mFindMeizhiImageAdapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, String data) {
-                Toast.makeText(FindMeiziAty.this, data, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
                 bundle.putString("photoUrl", data);

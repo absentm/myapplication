@@ -1,5 +1,7 @@
 package com.example.dm.myapplication.utiltools;
 
+import android.os.Environment;
+
 /**
  * AbsentMConstants
  * Created by dm on 16-9-13.
@@ -16,4 +18,7 @@ public class AbsentMConstants {
 
     // 保存的二维码背景色
     public static final String BACK_COLOR = "background_color";
+
+    // 话题图片临时上传路径
+    public static final String TEMP_IMAGES_UPLOAD_DIR = Environment.getExternalStorageDirectory() + "/AbsentM/tempImagesDir/";
 }

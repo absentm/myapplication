@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.dm.myapplication.R;
 
 import java.util.List;
@@ -52,12 +53,10 @@ public class FindMeizhiImageAdapter extends
         // load images
         Glide.with(context)
                 .load(imgUrlList.get(position))
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade()
                 .into(holder.imageView);
-
-//        ImageLoader慢
-//        ImageLoader.getInstance().displayImage(imgUrlList.get(position),
-//                holder.imageView, HttpUtil.DefaultOptions);
 
         //将数据保存在itemView的Tag中，以便点击时进行获取
         holder.itemView.setTag(imgUrlList.get(position));

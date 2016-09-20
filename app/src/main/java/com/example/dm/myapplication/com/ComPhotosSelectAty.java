@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.dm.myapplication.R;
@@ -23,7 +23,7 @@ import java.util.List;
  * Created by dm on 16-8-30.
  */
 public class ComPhotosSelectAty extends BaseGalleryActivity implements View.OnClickListener {
-    private ImageView titleBackImv;
+    private ImageButton titleBackImv;
     private TextView titleTextTv;
 
     private TextView mTextViewOpenAlbum;
@@ -48,7 +48,7 @@ public class ComPhotosSelectAty extends BaseGalleryActivity implements View.OnCl
     }
 
     private void initView() {
-        titleBackImv = (ImageView) findViewById(R.id.title_imv);
+        titleBackImv = (ImageButton) findViewById(R.id.title_imv);
         titleTextTv = (TextView) findViewById(R.id.title_text_tv);
 
         titleBackImv.setOnClickListener(new View.OnClickListener() {

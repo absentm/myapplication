@@ -134,9 +134,16 @@ public class ImageDetailFragment extends Fragment {
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 progressBar.setVisibility(View.GONE);
                 mAttacher.update();
-
             }
         });
+
+//        Glide.with(ImageDetailFragment.this)
+//                .load(mImageUrl)
+//                .error(R.drawable.app_icon)
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .into(mImageView);
+//        mAttacher.update();
+
     }
 
     @Override
