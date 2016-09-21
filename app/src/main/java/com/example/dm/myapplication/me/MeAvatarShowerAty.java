@@ -10,12 +10,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.AppUser;
 import com.example.dm.myapplication.utiltools.FileUtil;
-import com.example.dm.myapplication.utiltools.HttpUtil;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageSize;
 
 import cn.bmob.v3.BmobUser;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -52,13 +51,14 @@ public class MeAvatarShowerAty extends Activity {
     private void eventDeal() {
         AppUser appUser = BmobUser.getCurrentUser(AppUser.class);
         String avatarUrl = appUser.getUserAvatarUrl();
-        ImageSize targetSize = new ImageSize(300, 300);
-        Bitmap bitmap = ImageLoader.getInstance().loadImageSync(avatarUrl, targetSize,
-                HttpUtil.DefaultOptions);
-        avatarImv.setImageBitmap(bitmap);
+
+        Glide.with(MeAvatarShowerAty.this)
+                .load(avatarUrl)
+                .error(R.drawable.app_icon)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(avatarImv);
 
         photoViewAttacher = new PhotoViewAttacher(avatarImv);
-
         photoViewAttacher.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -82,8 +82,9 @@ public class MeAvatarShowerAty extends Activity {
                 case 0:
                     Bitmap bitmap = photoViewAttacher.getVisibleRectangleBitmap();
                     String savePath = FileUtil.saveBitmapToJpg(MeAvatarShowerAty.this, bitmap);
-                    Toast.makeText(MeAvatarShowerAty.this, "头像保存至: " +
-                            savePath, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MeAvatarShowerAty.this,
+                            "照片已保存（手机相册 -> AbsentM）",
+                            Toast.LENGTH_LONG).show();
                     break;
             }
         }

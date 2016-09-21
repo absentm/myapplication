@@ -1,32 +1,21 @@
 package com.example.dm.myapplication.customviews.xlistview.adapter;
 
 
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.MediaScannerConnection;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.dm.myapplication.R;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import com.example.dm.myapplication.utiltools.FileUtil;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -41,7 +30,6 @@ public class ImageDetailFragment extends Fragment {
 
     private String mImageUrl;
     private ImageView mImageView;
-    private ProgressBar progressBar;
 
     private PhotoViewAttacher mAttacher;
 
@@ -92,7 +80,6 @@ public class ImageDetailFragment extends Fragment {
             }
         });
 
-        progressBar = (ProgressBar) v.findViewById(R.id.loading);
         return v;
     }
 
@@ -100,49 +87,12 @@ public class ImageDetailFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ImageLoader.getInstance().displayImage(mImageUrl, mImageView, new SimpleImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String imageUri, View view) {
-                progressBar.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                String message = null;
-                switch (failReason.getType()) {
-                    case IO_ERROR:
-                        message = "下载错误";
-                        break;
-                    case DECODING_ERROR:
-                        message = "图片无法显示";
-                        break;
-                    case NETWORK_DENIED:
-                        message = "网络有问题，无法下载";
-                        break;
-                    case OUT_OF_MEMORY:
-                        message = "图片太大无法显示";
-                        break;
-                    case UNKNOWN:
-                        message = "未知的错误";
-                        break;
-                }
-                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                progressBar.setVisibility(View.GONE);
-                mAttacher.update();
-            }
-        });
-
-//        Glide.with(ImageDetailFragment.this)
-//                .load(mImageUrl)
-//                .error(R.drawable.app_icon)
-//                .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                .into(mImageView);
-//        mAttacher.update();
+        Glide.with(ImageDetailFragment.this)
+                .load(mImageUrl)
+                .error(R.drawable.app_icon)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(mImageView);
+        mAttacher.update();
 
     }
 
@@ -156,142 +106,12 @@ public class ImageDetailFragment extends Fragment {
 
             switch (dialogItemStr) {
                 case "保存到手机":
-                    String imgPath = saveImageViewToAlbum(getActivity(), mImageView, ".jpg", "AbsentM", "forum_");
-                    Log.i(TAG, "IIIIIII= " + imgPath);
+                    Bitmap bitmap = mAttacher.getVisibleRectangleBitmap();
+                    FileUtil.saveBitmapToJpg(getActivity(), bitmap);
                     Toast.makeText(getActivity(), "照片已保存（手机相册 -> AbsentM）", Toast.LENGTH_LONG).show();
-
                     break;
             }
         }
-    }
-
-    /**
-     * 将ImageView控件中的照片保存到系统相册中
-     *
-     * @param context           上下文环境
-     * @param imageView         ImageView实例
-     * @param fileFormatName    保存图片的格式
-     * @param saveDirectiryName 保存图片的目录
-     * @param filePreName       保存图片的前缀名称
-     * @return 保存的路径
-     */
-    private String saveImageViewToAlbum(Context context, ImageView imageView, String fileFormatName, String saveDirectiryName, String filePreName) {
-        BitmapDrawable bmpDrawable = (BitmapDrawable) imageView.getDrawable();
-        Bitmap bmp = bmpDrawable.getBitmap();
-
-        String sdStatus = Environment.getExternalStorageState();
-        if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) {
-            Log.i(TAG, "SD *****>> SD卡不存在");
-        } else {
-            Log.i(TAG, "SD *****>> SD卡 存在");
-        }
-
-        // 创建图片保存目录
-        File faceImgDir = new File(Environment.getExternalStorageDirectory(), saveDirectiryName);
-        if (!faceImgDir.exists()) {
-            faceImgDir.mkdir();
-        }
-
-        // 以系统时间命名文件
-        String faceImgName = filePreName + String.valueOf(System.currentTimeMillis()) + fileFormatName;
-        File file = new File(faceImgDir, faceImgName);
-
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-
-            if (fileFormatName.equals(".jpg")) {
-                bmp.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-            } else if (fileFormatName.equals(".png")) {
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-            }
-
-            fileOutputStream.flush();
-            fileOutputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // 保存后要扫描一下文件，及时更新到系统目录（一定要加绝对路径，这样才能更新）
-        MediaScannerConnection.scanFile(context,
-                new String[]{Environment.getExternalStorageDirectory() + File.separator + saveDirectiryName + File.separator + faceImgName}, null, null);
-
-        return (Environment.getExternalStorageDirectory() + File.separator + saveDirectiryName + File.separator + faceImgName);
-    }
-
-    /**
-     * 直接保存到系统相册（红米2）
-     *
-     * @param context 上下文环境
-     * @param bitMap  bitmap对象
-     */
-    private void saveImageToSysAlbum(Context context, Bitmap bitMap) {
-        String imgUrl;
-        String sdStatus = Environment.getExternalStorageState();
-        if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) {
-            Log.i(TAG, "SD *****>> SD卡不存在");
-        } else {
-            Log.i(TAG, "SD *****>> SD卡 存在");
-        }
-
-        if (bitMap != null) {
-            try {
-                ContentResolver cr = context.getContentResolver();
-                imgUrl = MediaStore.Images.Media.insertImage(cr, bitMap, String.valueOf(System.currentTimeMillis()), "");
-
-                Log.i(TAG, "saveImageToSysAlbum + " + imgUrl);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        Log.i(TAG, "?????? = " + Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM).getPath());
-
-        MediaScannerConnection.scanFile(context,
-                new String[]{Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_DCIM).getPath() + "/"}, null, null);
-    }
-
-
-    /**
-     * 保存到指定目录，但能立即更新到系统相册中（红米2）
-     *
-     * @param context    上下文环境
-     * @param faceBitmap 位图资源
-     * @return 保存图片的路径
-     */
-    private String saveBitmapToJpg(Context context, Bitmap faceBitmap) {
-        String sdStatus = Environment.getExternalStorageState();
-        if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) {
-            Log.i(TAG, "SD *****>> SD卡不存在");
-        } else {
-            Log.i(TAG, "SD *****>> SD卡 存在");
-        }
-
-        // 创建图片保存目录
-        File faceImgDir = new File(Environment.getExternalStorageDirectory(), "AbsentM");
-        if (!faceImgDir.exists()) {
-            faceImgDir.mkdir();
-        }
-
-        // 以系统时间命名文件
-        String faceImgName = "forum-" + String.valueOf(System.currentTimeMillis()) + ".jpg";
-        File file = new File(faceImgDir, faceImgName);
-
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            faceBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-            fileOutputStream.flush();
-            fileOutputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // 保存后要扫描一下文件，及时更新到系统目录（一定要加绝对路径，这样才能更新）
-        MediaScannerConnection.scanFile(context,
-                new String[]{Environment.getExternalStorageDirectory() + File.separator + "AbsentM" + File.separator + faceImgName}, null, null);
-
-        return (Environment.getExternalStorageDirectory() + File.separator + "AbsentM" + File.separator + faceImgName);
     }
 
 }

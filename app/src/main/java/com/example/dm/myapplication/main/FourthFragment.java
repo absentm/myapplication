@@ -12,14 +12,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.AppUser;
 import com.example.dm.myapplication.me.MeFavouritrActivity;
 import com.example.dm.myapplication.me.MeFeedbackAty;
 import com.example.dm.myapplication.me.MeInfoDetailActivity;
 import com.example.dm.myapplication.me.MeSettingsAty;
-import com.example.dm.myapplication.utiltools.HttpUtil;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.BmobUpdateListener;
@@ -86,8 +86,12 @@ public class FourthFragment extends Fragment {
             if ("".equals(appUser.getUserAvatarUrl()) || null == appUser.getUserAvatarUrl()) {
                 meAvatarImv.setImageResource(R.drawable.app_icon);
             } else {
-                ImageLoader.getInstance().displayImage(appUser.getUserAvatarUrl(), meAvatarImv,
-                        HttpUtil.DefaultOptions);
+                Glide.with(FourthFragment.this)
+                        .load(appUser.getUserAvatarUrl())
+                        .error(R.drawable.app_icon)
+                        .centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(meAvatarImv);
             }
         }
 
@@ -211,7 +215,13 @@ public class FourthFragment extends Fragment {
             Log.i(LOG, "Four, avatarUrl = " + avatarUrl);
             meNickNameTv.setText(nicknameStr);
             meMessageTv.setText(messageStr);
-            ImageLoader.getInstance().displayImage(avatarUrl, meAvatarImv, HttpUtil.DefaultOptions);
+
+            Glide.with(FourthFragment.this)
+                    .load(avatarUrl)
+                    .error(R.drawable.app_icon)
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(meAvatarImv);
         }
     }
 }

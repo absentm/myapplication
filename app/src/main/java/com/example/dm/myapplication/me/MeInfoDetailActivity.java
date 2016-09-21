@@ -19,12 +19,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.AppUser;
 import com.example.dm.myapplication.customviews.CustomAvatarDialog;
 import com.example.dm.myapplication.utiltools.FileUtil;
-import com.example.dm.myapplication.utiltools.HttpUtil;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 import java.util.Calendar;
@@ -70,7 +70,7 @@ public class MeInfoDetailActivity extends Activity {
     private RelativeLayout meDetailtBirthRout;
     private TextView meDetailtBirthTv;
     private String changedBirthStr;
-    private Calendar calendar;
+    private Calendar calendar = Calendar.getInstance();
     private int currentYear;
     private int currentMonth;
     private int currentDay;
@@ -179,8 +179,12 @@ public class MeInfoDetailActivity extends Activity {
             if ("".equals(appUser.getUserAvatarUrl()) || null == appUser.getUserAvatarUrl()) {
                 meDetailtAvatarImv.setImageResource(R.drawable.app_icon);
             } else {
-                ImageLoader.getInstance().displayImage(appUser.getUserAvatarUrl(),
-                        meDetailtAvatarImv, HttpUtil.DefaultOptions);
+                Glide.with(MeInfoDetailActivity.this)
+                        .load(appUser.getUserAvatarUrl())
+                        .error(R.drawable.app_icon)
+                        .centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(meDetailtAvatarImv);
             }
 
             Log.i(LOG, ">>> appUser.getUserSex(): " + appUser.getUserSex());
@@ -541,7 +545,7 @@ public class MeInfoDetailActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        
+
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_NICKNAME_1:

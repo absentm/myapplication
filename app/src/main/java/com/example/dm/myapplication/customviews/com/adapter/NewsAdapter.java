@@ -13,26 +13,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.News;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
 /**
+ * NewsAdapter
  * Created by DUAN on 2016/5/15.
  */
 public class NewsAdapter extends ArrayAdapter<News> {
     private LayoutInflater mInflater;
     private int resource;
-    private ImageLoader imageLoader = ImageLoader.getInstance();
-    private DisplayImageOptions options = new DisplayImageOptions.Builder()
-            .showImageOnLoading(R.drawable.app_icon)
-            .showImageOnFail(R.drawable.app_icon)
-            .showImageForEmptyUri(R.drawable.app_icon)
-            .cacheInMemory(true)
-            .cacheOnDisk(true)
-            .considerExifParams(true)
-            .build();
 
     public NewsAdapter(Context context, int resource) {
         super(context, resource);

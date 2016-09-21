@@ -84,6 +84,7 @@ public class ComAppAdapter extends BaseAdapter {
         if (mList != null && mList.size() > 0) {
             Glide.with(parent.getContext())
                     .load(mComUserPostInfo.getUserHeadImgUrl())
+                    .error(R.drawable.app_icon)
                     .dontAnimate()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.userHeadImageImv);

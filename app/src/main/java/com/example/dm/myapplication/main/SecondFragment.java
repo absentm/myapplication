@@ -305,6 +305,7 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
             }, 500);
         } else {
             onLoad();
+            SystemUtils.noNetworkAlert(getActivity());
         }
 
     }
@@ -364,9 +365,14 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
         }
     }
 
+    // 考虑使用广播 + service动态监听wifi状态，生成数据
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         isConnected = SystemUtils.checkNetworkConnection(getActivity());
+
+        if (isConnected && mList.isEmpty()) {
+            generateData();
+        }
     }
 }
