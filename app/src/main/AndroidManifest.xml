@@ -86,6 +86,7 @@
         <activity android:name=".find.zxing.activity.CaptureActivity"/>
         <activity android:name=".find.FindScanResultAty"/>
         <activity android:name=".find.FindGenerateCodeAty"/>
+        <activity android:name=".find.FindNotesAct"/>
 
         <activity android:name=".com.ComImagePagerActivity"/>
         <activity android:name=".com.ComPostTopicActivity"/>
