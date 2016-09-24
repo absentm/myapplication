@@ -150,7 +150,7 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
         postInfoBmobQuery.setLimit(QUERY_ITEM_LIMITS);  // 设定返回的查询条数
         // 设定查询缓存策略-CACHE_ELSE_NETWORK: 先从缓存读取数据, 如果没有, 再从网络获取.
         postInfoBmobQuery.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);
-        postInfoBmobQuery.setMaxCacheAge(TimeUnit.DAYS.toMillis(1));    //此表示缓存一天
+        postInfoBmobQuery.setMaxCacheAge(TimeUnit.DAYS.toMillis(7));    //此表示缓存一天
         postInfoBmobQuery.findObjects(new FindListener<ComUserPostInfo>() {
             @Override
             public void done(List<ComUserPostInfo> list, BmobException e) {
@@ -214,7 +214,7 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
         postInfoBmobQuery.setLimit(QUERY_ITEM_LIMITS);  // 设定返回的查询条数
         // 设定查询缓存策略-NETWORK_ELSE_CACHE: 先从网络读取数据, 如果没有, 再从缓存获取.
         postInfoBmobQuery.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
-        postInfoBmobQuery.setMaxCacheAge(TimeUnit.DAYS.toMillis(1));    //此表示缓存一天
+        postInfoBmobQuery.setMaxCacheAge(TimeUnit.DAYS.toMillis(7));    //此表示缓存一天
         postInfoBmobQuery.findObjects(new FindListener<ComUserPostInfo>() {
             @Override
             public void done(List<ComUserPostInfo> list, BmobException e) {
@@ -260,7 +260,7 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
         postInfoBmobQuery.setLimit(QUERY_ITEM_LIMITS);  // 设定返回的查询条数
         // 设定查询缓存策略-CACHE_ELSE_NETWORK: 先从网络读取数据, 如果没有, 再从缓存获取.
         postInfoBmobQuery.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);
-        postInfoBmobQuery.setMaxCacheAge(TimeUnit.DAYS.toMillis(1));    //此表示缓存一天
+        postInfoBmobQuery.setMaxCacheAge(TimeUnit.DAYS.toMillis(7));    //此表示缓存一天
         postInfoBmobQuery.findObjects(new FindListener<ComUserPostInfo>() {
             @Override
             public void done(List<ComUserPostInfo> list, BmobException e) {

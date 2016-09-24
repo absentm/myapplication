@@ -1,60 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="1dp"
+    android:orientation="horizontal">
 
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp">
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="36dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/item_teal_select_no_bord_corner">
+
+            <TextView
+                android:id="@+id/item_notes_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:maxWidth="280dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:text="我的心情"
+                android:textColor="@color/gray700"
+                android:textSize="17sp"/>
+
+            <TextView
+                android:id="@+id/item_notes_content_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_notes_title_tv"
+                android:layout_marginLeft="16dp"
+                android:lineSpacingExtra="4dp"
+                android:lineSpacingMultiplier="1.1"
+                android:maxLines="2"
+                android:maxWidth="280dp"
+                android:paddingLeft="8dp"
+                android:text="今天，注定是一个不平凡的日子，繁花似锦却多处了几分伤秋；我念念去，却得不到一丝的......"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/item_notes_time_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_notes_content_tv"
+                android:layout_marginLeft="16dp"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:text="2016-09-24 18:26 星期日"
+                android:textSize="15sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_chevron_right_grey600_24dp"/>
+        </RelativeLayout>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="8dp"
-            android:background="@drawable/find_line_point"/>
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/find_line_point"/>
 
-        <TextView
-            android:id="@+id/txt_date_time"
+        <ImageView
+            android:id="@+id/item_notes_line"
+            android:layout_width="0.1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="20.5dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/teal"/>
+
+        <ImageView
+            android:id="@+id/item_last_point_imv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:text="hehheh"
-            android:textColor="#FC6802"/>
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/find_line_point"
+            android:visibility="gone"/>
+
     </RelativeLayout>
-
-    <View
-        android:id="@+id/v_line"
-        android:layout_width="2dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:background="#FC6802"/>
-
-    <ImageView
-        android:id="@+id/img"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_below="@id/rl_title"
-        android:layout_marginLeft="3dp"
-        android:layout_toRightOf="@id/v_line"
-        android:padding="8dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/app_icon"/>
-
-    <TextView
-        android:id="@+id/txt_date_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rl_title"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@id/img"
-        android:maxLines="3"
-        android:paddingBottom="10dp"
-        android:paddingTop="15dp"
-        android:text="lalalalallaalalalal"
-        android:textColor="#5296C5"/>
-</RelativeLayout>
+</LinearLayout>

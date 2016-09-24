@@ -107,7 +107,6 @@ public class FirstFragment extends Fragment {
                         @Override
                         public void afterTaskFinish() {
                             refreshLayout.setRefreshing(false);
-//                Toast.makeText(MainActivity.this, "Refresh success", Toast.LENGTH_SHORT).show();
                         }
                     }).execute();
                 } else {

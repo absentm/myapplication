@@ -87,6 +87,8 @@
         <activity android:name=".find.FindScanResultAty"/>
         <activity android:name=".find.FindGenerateCodeAty"/>
         <activity android:name=".find.FindNotesAct"/>
+        <activity android:name=".find.FindNoteDetailAty"/>
+        <activity android:name=".find.FindAddNoteAty"/>
 
         <activity android:name=".com.ComImagePagerActivity"/>
         <activity android:name=".com.ComPostTopicActivity"/>
