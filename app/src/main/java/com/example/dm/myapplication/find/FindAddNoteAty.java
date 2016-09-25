@@ -95,18 +95,17 @@ public class FindAddNoteAty extends Activity {
         titleAddOkIbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!mNoteContentEt.getText().toString().trim().isEmpty()) {
-                    isConnected = SystemUtils.checkNetworkConnection(FindAddNoteAty.this);
-                    mNoteContentStr = mNoteTitleEt.getText().toString().trim();
+                isConnected = SystemUtils.checkNetworkConnection(FindAddNoteAty.this);
 
-                    if (mNoteTitleEt.getText().toString().trim().isEmpty()) {
-                        if (mNoteTitleEt.getText().toString().trim().length() >= MAX) {
-                            mNoteTitleStr = mNoteContentStr.substring(MIN, MAX);
-                        } else {
-                            mNoteTimeStr = mNoteContentStr;
-                        }
+                if (!mNoteContentEt.getText().toString().trim().isEmpty()) {
+                    mNoteContentStr = mNoteContentEt.getText().toString().trim();
+                    mNoteTitleStr = mNoteTitleEt.getText().toString().trim();
+
+                    if (mNoteTitleStr.isEmpty() && (mNoteContentStr.length() >= MAX)) {
+                        mNoteTitleStr = mNoteContentStr.substring(MIN, MAX - 1);
+
                     } else {
-                        mNoteTitleStr = mNoteTitleEt.getText().toString().trim();
+                        mNoteTitleStr = mNoteContentStr;
                     }
 
                     mNoteId = DateUtil.getCurrentTimeMills();

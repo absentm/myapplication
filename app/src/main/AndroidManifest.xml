@@ -86,7 +86,7 @@
         <activity android:name=".find.zxing.activity.CaptureActivity"/>
         <activity android:name=".find.FindScanResultAty"/>
         <activity android:name=".find.FindGenerateCodeAty"/>
-        <activity android:name=".find.FindNotesAct"/>
+        <activity android:name=".find.FindNotesAty"/>
         <activity android:name=".find.FindNoteDetailAty"/>
         <activity android:name=".find.FindAddNoteAty"/>
 

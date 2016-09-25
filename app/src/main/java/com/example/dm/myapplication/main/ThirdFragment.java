@@ -14,7 +14,7 @@ import com.example.dm.myapplication.customviews.ninegridview.NineGridViewAdapter
 import com.example.dm.myapplication.find.FindHowOldAct;
 import com.example.dm.myapplication.find.FindMapAroundAty;
 import com.example.dm.myapplication.find.FindMeiziAty;
-import com.example.dm.myapplication.find.FindNotesAct;
+import com.example.dm.myapplication.find.FindNotesAty;
 import com.example.dm.myapplication.find.FindWeatherAty;
 import com.example.dm.myapplication.find.zxing.activity.CaptureActivity;
 
@@ -54,7 +54,7 @@ public class ThirdFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        startActivity(new Intent(getActivity(), FindNotesAct.class));
+                        startActivity(new Intent(getActivity(), FindNotesAty.class));
                         break;
                     case 1:
                         startActivity(new Intent(getActivity(), FindHowOldAct.class));

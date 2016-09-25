@@ -296,13 +296,13 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
     @Override
     public void onRefresh() {
         if (isConnected) {
-            handler.postDelayed(new Runnable() {
+            handler.post(new Runnable() {
                 @Override
                 public void run() {
                     generateRefleshData();
                     onLoad();
                 }
-            }, 500);
+            });
         } else {
             onLoad();
             SystemUtils.noNetworkAlert(getActivity());
@@ -313,13 +313,13 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
     @Override
     public void onLoadMore() {
         if (isConnected) {
-            handler.postDelayed(new Runnable() {
+            handler.post(new Runnable() {
                 @Override
                 public void run() {
                     generateLoadMoreData();
                     onLoad();
                 }
-            }, 500);
+            });
         } else {
             onLoad();
             SystemUtils.noNetworkAlert(getActivity());

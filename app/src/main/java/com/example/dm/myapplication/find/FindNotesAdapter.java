@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.dm.myapplication.R;
@@ -35,7 +34,7 @@ public class FindNotesAdapter
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
 
     // define interface
-    public static interface OnRecyclerViewItemClickListener {
+    public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, NotesBean data);
     }
 
@@ -43,7 +42,7 @@ public class FindNotesAdapter
     private OnRecyclerViewItemLongClickListener mOnItemLongClickListener = null;
 
     // define interface
-    public static interface OnRecyclerViewItemLongClickListener {
+    public interface OnRecyclerViewItemLongClickListener {
         void onItemLongClick(View view, NotesBean data);
     }
 
@@ -61,11 +60,9 @@ public class FindNotesAdapter
     @Override
     public void onBindViewHolder(FindNotesAdapter.ItemNoteHolder holder, int position) {
         // 时间轴竖线的layout
-        holder.lineView.setImageResource(R.drawable.find_note_line);
         holder.noteTitleTv.setText(mDatas.get(position).getNoteTitle());
         holder.noteContentTv.setText(mDatas.get(position).getNoteContent());
         holder.noteTimeTv.setText(mDatas.get(position).getNoteTime());
-        holder.pointImv.setVisibility(View.GONE);
 
         // 将数据保存在itemView的Tag中，以便点击时进行获取
         holder.itemView.setTag(mDatas.get(position));
@@ -88,8 +85,8 @@ public class FindNotesAdapter
     public boolean onLongClick(View view) {
         if (mOnItemLongClickListener != null) {
             mOnItemLongClickListener.onItemLongClick(view, (NotesBean) view.getTag());
-            return true;
         }
+
         return false;
     }
 
@@ -111,21 +108,16 @@ public class FindNotesAdapter
     }
 
     public static class ItemNoteHolder extends RecyclerView.ViewHolder {
-        ImageView lineView;
         TextView noteTitleTv;
         TextView noteContentTv;
         TextView noteTimeTv;
-        ImageView pointImv;
 
         public ItemNoteHolder(View view) {
             super(view);
-            lineView = (ImageView) view.findViewById(R.id.item_notes_line);
             noteTitleTv = (TextView) view.findViewById(R.id.item_notes_title_tv);
             noteContentTv = (TextView) view.findViewById(R.id.item_notes_content_tv);
             noteTimeTv = (TextView) view.findViewById(R.id.item_notes_time_tv);
-            pointImv = (ImageView) view.findViewById(R.id.item_last_point_imv);
         }
     }
-
 
 }
