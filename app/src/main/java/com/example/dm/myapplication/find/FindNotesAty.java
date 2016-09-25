@@ -15,9 +15,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.dm.myapplication.R;
-import com.example.dm.myapplication.beans.AppUser;
 import com.example.dm.myapplication.beans.NotesBean;
-import com.example.dm.myapplication.main.LoginActivity;
 import com.example.dm.myapplication.utiltools.SystemUtils;
 
 import java.util.ArrayList;
@@ -30,6 +28,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 import static com.example.dm.myapplication.R.id.title_add_ibtn;
 
@@ -44,6 +43,7 @@ public class FindNotesAty extends Activity implements
 
     private static final String TAG = "FindNotesAty";
     private static final int REQUEST_CODE_ADD_1 = 1;
+    private static final int REQUEST_CODE_CHANGE_2 = 2;
     private ImageButton titleBackImv;
     private ImageButton mAddNoteIbtn;
 
@@ -54,8 +54,6 @@ public class FindNotesAty extends Activity implements
     private FindNotesAdapter mFindNotesAdapter;
 
     private boolean isConnect;
-    private AppUser mAppUser;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +66,6 @@ public class FindNotesAty extends Activity implements
 
     private void initView() {
         isConnect = SystemUtils.checkNetworkConnection(FindNotesAty.this);
-
-        mAppUser = BmobUser.getCurrentUser(AppUser.class);
-        if (mAppUser == null) {
-            startActivity(new Intent(this, LoginActivity.class));
-        }
-
-        Log.i(TAG, "mAppUser.getUsername() >> " + mAppUser.getUsername());
 
         titleBackImv = (ImageButton) findViewById(R.id.notes_back_imv);
         mAddNoteIbtn = (ImageButton) findViewById(title_add_ibtn);
@@ -126,6 +117,7 @@ public class FindNotesAty extends Activity implements
             @Override
             public void onRefresh() {
                 if (isConnect = SystemUtils.checkNetworkConnection(FindNotesAty.this)) {
+                    mDatas.clear();
                     generateDatas();
                 } else {
                     SystemUtils.noNetworkAlert(FindNotesAty.this);
@@ -136,11 +128,14 @@ public class FindNotesAty extends Activity implements
     }
 
     private void generateDatas() {
+        String currentUserNameStr = (String) BmobUser.getObjectByKey("username");
+        Log.i(TAG, "currentUserNameStr >> " + currentUserNameStr);
+
         BmobQuery<NotesBean> query1 = new BmobQuery<>();
         query1.addWhereLessThanOrEqualTo("createdAt", new BmobDate(new Date()));
 
         BmobQuery<NotesBean> query2 = new BmobQuery<>();
-        query2.addWhereEqualTo("userNameStr", mAppUser.getUsername());
+        query2.addWhereEqualTo("userNameStr", currentUserNameStr);
 
         List<BmobQuery<NotesBean>> andQuerys = new ArrayList<>();
         andQuerys.add(query1);
@@ -155,7 +150,7 @@ public class FindNotesAty extends Activity implements
         notesInfoBmobQuery.findObjects(new FindListener<NotesBean>() {
             @Override
             public void done(List<NotesBean> list, BmobException e) {
-                if (!list.isEmpty() && (list.size() != mDatas.size())) {
+                if (!list.isEmpty()) {
                     for (NotesBean notesBean : list) {
                         mDatas.add(notesBean);
                     }
@@ -164,16 +159,12 @@ public class FindNotesAty extends Activity implements
                         mFindNotesAdapter.notifyDataSetChanged();
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
-                } else if (list.isEmpty()) {
+                } else {
                     Toast.makeText(FindNotesAty.this, "暂无数据", Toast.LENGTH_SHORT).show();
-                    mSwipeRefreshLayout.setRefreshing(false);
-                } else if (list.size() == mDatas.size()) {
-                    Toast.makeText(FindNotesAty.this, "没有更多内容了", Toast.LENGTH_SHORT).show();
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
             }
         });
-
     }
 
     @Override
@@ -183,7 +174,7 @@ public class FindNotesAty extends Activity implements
         bundle.putSerializable("noteInfos", data);
         intent.setClass(FindNotesAty.this, FindNoteDetailAty.class);
         intent.putExtras(bundle);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE_CHANGE_2);
     }
 
     @Override
@@ -201,9 +192,22 @@ public class FindNotesAty extends Activity implements
         negativeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDatas.remove(data);
-                mFindNotesAdapter.notifyDataSetChanged();
-                materialDialog.dismiss();
+                data.delete(new UpdateListener() {
+                    @Override
+                    public void done(BmobException e) {
+                        if (e == null) {
+                            mDatas.remove(data);
+                            mFindNotesAdapter.notifyDataSetChanged();
+                            materialDialog.dismiss();
+                        } else {
+                            materialDialog.dismiss();
+                            Toast.makeText(FindNotesAty.this,
+                                    "error! " + e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
             }
         });
 
@@ -232,19 +236,30 @@ public class FindNotesAty extends Activity implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (data != null && resultCode == -1) {
-            NotesBean notesBean = (NotesBean) data.getSerializableExtra("newNoteInfos");
+        NotesBean newNotesBean = (NotesBean) data.getSerializableExtra("newNoteInfos");
+        NotesBean updatyeNoteBean = (NotesBean) data.getSerializableExtra("updateNoteInfos");
 
+        if (resultCode == -1) {
             switch (requestCode) {
                 case REQUEST_CODE_ADD_1:
                     if (mDatas.isEmpty()) {
-                        mDatas.add(notesBean);
+                        mDatas.add(newNotesBean);
                         mFindNotesAdapter = new FindNotesAdapter(this, mDatas);
                         mRecyclerView.setAdapter(mFindNotesAdapter);
-//                        mFindNotesAdapter.notifyDataSetChanged();
                     } else {
-                        mFindNotesAdapter.addDataInTop(notesBean);
+                        mFindNotesAdapter.addDataInTop(newNotesBean);
                     }
+
+                    break;
+                case REQUEST_CODE_CHANGE_2:
+                    for (NotesBean notesBean : mDatas) {
+                        if (notesBean.getNoteId() == updatyeNoteBean.getNoteId()) {
+                            notesBean.setNoteTime(updatyeNoteBean.getNoteTime());
+                            notesBean.setNoteTitle(updatyeNoteBean.getNoteTitle());
+                            notesBean.setNoteContent(updatyeNoteBean.getNoteContent());
+                        }
+                    }
+                    mFindNotesAdapter.notifyDataSetChanged();
 
                     break;
             }

@@ -41,4 +41,10 @@
         <item>恢复默认</item>
     </string-array>
 
+    <string-array name="note_detail_value">
+        <item>复制全文</item>
+        <item>字数统计</item>
+    </string-array>
+
+
 </resources>

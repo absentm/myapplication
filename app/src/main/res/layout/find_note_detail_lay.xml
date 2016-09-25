@@ -9,33 +9,99 @@
         android:id="@+id/title_rout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@color/teal"
-        android:orientation="horizontal">
+        android:background="@color/teal">
 
-        <ImageButton
-            android:id="@+id/notes_back_imv"
-            android:layout_width="56dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:background="@drawable/item_teal_selector_no_bord"
-            android:src="@drawable/ic_navigate_before_white_24dp"/>
+            android:orientation="horizontal">
 
-        <TextView
+            <ImageButton
+                android:id="@+id/title_back_ibtn"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/item_teal_selector_no_bord"
+                android:src="@drawable/ic_navigate_before_white_24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:text="笔记详情"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="笔记详情"
-            android:textColor="@color/white"
-            android:textSize="16sp"/>
-
-        <ImageButton
-            android:id="@+id/title_add_ibtn"
-            android:layout_width="56dp"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/item_teal_selector_no_bord"
-            android:src="@drawable/ic_delete_white_24dp"/>
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/title_share_ibtn"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/item_teal_selector_no_bord"
+                android:src="@drawable/ic_share_white_18dp"/>
+
+            <ImageButton
+                android:id="@+id/title_edit_ibtn"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:background="@drawable/item_teal_selector_no_bord"
+                android:src="@drawable/ic_mode_edit_white_18dp"/>
+
+            <ImageButton
+                android:id="@+id/title_more_ibtn"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/item_teal_selector_no_bord"
+                android:src="@drawable/ic_more_vert_white_18dp"/>
+        </LinearLayout>
+
     </RelativeLayout>
+
+    <EditText
+        android:id="@+id/find_edit_note_title_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@null"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:hint="请输入标题"
+        android:maxLines="1"
+        android:textColorHint="@color/black_trans30"
+        android:textSize="16sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.01dp"
+        android:background="@color/teal"/>
+
+    <EditText
+        android:id="@+id/find_edit_note_content_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@null"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:hint="请输入内容"
+        android:lineSpacingExtra="1.5dp"
+        android:lineSpacingMultiplier="1.1"
+        android:textColor="@color/black_trans60"
+        android:textColorHint="@color/black_trans30"
+        android:textSize="15sp"/>
 
 </LinearLayout>
