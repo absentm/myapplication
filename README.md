@@ -35,7 +35,6 @@ Hello MyApplication
 
 ## 参考资料
 
-> * ImageLoader框架: https://github.com/nostra13/Android-Universal-Image-Loader
 > * PhotoView框架: https://github.com/chrisbanes/PhotoView
 > * 图片多选框架: https://github.com/sd6352051/android-image-picker
 > * EventBus框架: https://github.com/greenrobot/EventBus
