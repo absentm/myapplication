@@ -150,7 +150,7 @@ public class FindNoteDetailAty extends Activity implements View.OnClickListener 
                     Intent intent = new Intent();
                     intent.putExtra("updateNoteInfos", notesBean);
                     FindNoteDetailAty.this.setResult(RESULT_OK, intent);
-                    finish();
+                    FindNoteDetailAty.this.finish();
                 }
             }
         });

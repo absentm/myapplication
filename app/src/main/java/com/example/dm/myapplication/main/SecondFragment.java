@@ -144,7 +144,7 @@ public class SecondFragment extends Fragment implements XListView.IXListViewList
      */
     private void generateData() {
         Log.i("LOG", "mDate in generateData >>> " + mDate);
-        BmobQuery<ComUserPostInfo> postInfoBmobQuery = new BmobQuery<>();
+        BmobQuery<ComUserPostInfo> postInfoBmobQuery = new BmobQuery<ComUserPostInfo>();
         postInfoBmobQuery.addWhereLessThanOrEqualTo("createdAt", new BmobDate(mDate));
         postInfoBmobQuery.order("-createdAt");  // 按时间降序排列
         postInfoBmobQuery.setLimit(QUERY_ITEM_LIMITS);  // 设定返回的查询条数

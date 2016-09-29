@@ -37,18 +37,11 @@
             android:src="@drawable/ic_add_white_18dp"/>
     </RelativeLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/find_notes_swiperefreshlayout"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/find_notes_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/title_rout">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/find_notes_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/black_trans10"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title_rout"
+        android:background="@color/black_trans10"/>
 
 </RelativeLayout>

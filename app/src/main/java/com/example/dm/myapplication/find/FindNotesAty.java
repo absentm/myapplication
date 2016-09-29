@@ -3,7 +3,6 @@ package com.example.dm.myapplication.find;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,11 +48,11 @@ public class FindNotesAty extends Activity implements
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private List<NotesBean> mDatas = new ArrayList<>();
     private FindNotesAdapter mFindNotesAdapter;
 
     private boolean isConnect;
+    private MaterialDialog mMaterialDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +70,6 @@ public class FindNotesAty extends Activity implements
         mAddNoteIbtn = (ImageButton) findViewById(title_add_ibtn);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.find_notes_recyclerview);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.find_notes_swiperefreshlayout);
-        mSwipeRefreshLayout.setColorSchemeResources(
-                R.color.colorAccent,
-                R.color.colorPrimary,
-                R.color.teal);
 
         mFindNotesAdapter = new FindNotesAdapter(FindNotesAty.this, mDatas);
         //垂直的，listView的布局方式
@@ -86,23 +80,17 @@ public class FindNotesAty extends Activity implements
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());//默认动画
         mRecyclerView.setHasFixedSize(true);//效率最高
 
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(true);
-            }
-        });
-
         if (isConnect) {
+            mMaterialDialog = new MaterialDialog.Builder(FindNotesAty.this)
+                    .content("Please waiting...")
+                    .progress(true, 0)
+                    .progressIndeterminateStyle(false)
+                    .cancelable(false)
+                    .show();
+
             generateDatas();
         } else {
-            mSwipeRefreshLayout.postOnAnimationDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                    SystemUtils.noNetworkAlert(FindNotesAty.this);
-                }
-            }, 3000);
+            SystemUtils.noNetworkAlert(FindNotesAty.this);
         }
 
     }
@@ -112,19 +100,6 @@ public class FindNotesAty extends Activity implements
         mFindNotesAdapter.setOnItemLongClickListener(this);
         titleBackImv.setOnClickListener(this);
         mAddNoteIbtn.setOnClickListener(this);
-
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (isConnect = SystemUtils.checkNetworkConnection(FindNotesAty.this)) {
-                    mDatas.clear();
-                    generateDatas();
-                } else {
-                    SystemUtils.noNetworkAlert(FindNotesAty.this);
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            }
-        });
     }
 
     private void generateDatas() {
@@ -156,12 +131,11 @@ public class FindNotesAty extends Activity implements
                     }
 
                     if (!mDatas.isEmpty()) {
+                        mMaterialDialog.dismiss();
                         mFindNotesAdapter.notifyDataSetChanged();
-                        mSwipeRefreshLayout.setRefreshing(false);
                     }
                 } else {
                     Toast.makeText(FindNotesAty.this, "暂无数据", Toast.LENGTH_SHORT).show();
-                    mSwipeRefreshLayout.setRefreshing(false);
                 }
             }
         });
@@ -236,12 +210,11 @@ public class FindNotesAty extends Activity implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        NotesBean newNotesBean = (NotesBean) data.getSerializableExtra("newNoteInfos");
-        NotesBean updatyeNoteBean = (NotesBean) data.getSerializableExtra("updateNoteInfos");
+        switch (requestCode) {
+            case REQUEST_CODE_ADD_1:
+                if (resultCode == RESULT_OK) {
+                    NotesBean newNotesBean = (NotesBean) data.getSerializableExtra("newNoteInfos");
 
-        if (resultCode == -1) {
-            switch (requestCode) {
-                case REQUEST_CODE_ADD_1:
                     if (mDatas.isEmpty()) {
                         mDatas.add(newNotesBean);
                         mFindNotesAdapter = new FindNotesAdapter(this, mDatas);
@@ -249,9 +222,13 @@ public class FindNotesAty extends Activity implements
                     } else {
                         mFindNotesAdapter.addDataInTop(newNotesBean);
                     }
+                }
 
-                    break;
-                case REQUEST_CODE_CHANGE_2:
+                break;
+            case REQUEST_CODE_CHANGE_2:
+                if (resultCode == RESULT_OK) {
+                    NotesBean updatyeNoteBean = (NotesBean) data.getSerializableExtra("updateNoteInfos");
+
                     for (NotesBean notesBean : mDatas) {
                         if (notesBean.getNoteId() == updatyeNoteBean.getNoteId()) {
                             notesBean.setNoteTime(updatyeNoteBean.getNoteTime());
@@ -260,10 +237,9 @@ public class FindNotesAty extends Activity implements
                         }
                     }
                     mFindNotesAdapter.notifyDataSetChanged();
+                }
 
-                    break;
-            }
+                break;
         }
     }
-
 }
