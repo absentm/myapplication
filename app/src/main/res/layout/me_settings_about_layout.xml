@@ -38,7 +38,7 @@
         android:layout_below="@+id/me_settings_appname"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="3dp"
-        android:text="V 0.1.0"
+        android:text="V 0.1.1"
         android:textColor="@color/gray700"
         android:textSize="14sp"/>
 

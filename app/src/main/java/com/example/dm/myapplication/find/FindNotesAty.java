@@ -29,8 +29,6 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-import static com.example.dm.myapplication.R.id.title_add_ibtn;
-
 /**
  * FindNotesAty
  * Created by dm on 16-9-23.
@@ -67,7 +65,7 @@ public class FindNotesAty extends Activity implements
         isConnect = SystemUtils.checkNetworkConnection(FindNotesAty.this);
 
         titleBackImv = (ImageButton) findViewById(R.id.notes_back_imv);
-        mAddNoteIbtn = (ImageButton) findViewById(title_add_ibtn);
+        mAddNoteIbtn = (ImageButton) findViewById(R.id.title_add_ibtn);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.find_notes_recyclerview);
 
