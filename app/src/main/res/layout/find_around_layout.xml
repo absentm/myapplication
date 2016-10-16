@@ -39,13 +39,26 @@
         android:layout_below="@+id/around_title_rout"
         />
 
-    <ImageView
-        android:id="@+id/find_map_float_imv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <!--<ImageView-->
+    <!--android:id="@+id/find_map_float_imv"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_marginBottom="35dp"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--android:src="@drawable/ic_location_searching_grey600_48dp"/>-->
+
+    <Button
+        android:id="@+id/find_map_float_btn"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="35dp"
-        android:layout_marginLeft="8dp"
-        android:src="@drawable/ic_location_searching_grey600_48dp"/>
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/item_teal_selector_no_bord"
+        android:text="+"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        />
 
 </RelativeLayout>

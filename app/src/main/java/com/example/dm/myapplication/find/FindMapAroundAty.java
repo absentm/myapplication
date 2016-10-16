@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +38,7 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
     private boolean isConnected;
 
     private ImageView titleLeftImv;
-    private ImageView mMapListImv;
+    private Button mMapFloatBtn;
 
     // 显示地图需要的变量
     private MapView mapView;        //地图控件
@@ -72,7 +73,7 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
 
         titleLeftImv = (ImageView) findViewById(R.id.around_title_left_imv);
         TextView titleCenterTv = (TextView) findViewById(R.id.around_title_center_tv);
-        mMapListImv = (ImageView) findViewById(R.id.find_map_float_imv);
+        mMapFloatBtn = (Button) findViewById(R.id.find_map_float_btn);
 
         //设置显示定位按钮 并且可以点击
         UiSettings settings = aMap.getUiSettings();
@@ -132,7 +133,7 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
             }
         });
 
-        mMapListImv.setOnClickListener(new View.OnClickListener() {
+        mMapFloatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new MaterialDialog.Builder(FindMapAroundAty.this)
@@ -140,15 +141,19 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
                         .items(R.array.map_list_values)
                         .itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
-                            public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
-                                Toast.makeText(FindMapAroundAty.this, text, Toast.LENGTH_SHORT).show();
+                            public void onSelection(MaterialDialog dialog,
+                                                    View itemView,
+                                                    int position,
+                                                    CharSequence text) {
+                                Toast.makeText(FindMapAroundAty.this,
+                                        text,
+                                        Toast.LENGTH_SHORT).show();
                             }
                         }).show();
             }
+
         });
-
     }
-
 
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
