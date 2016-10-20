@@ -73,7 +73,6 @@ public class FindMeiziAty extends AppCompatActivity implements FindImageUrlLoade
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,
                 R.color.colorPrimary,
                 R.color.teal);
-
     }
 
     private void eventsDeal() {

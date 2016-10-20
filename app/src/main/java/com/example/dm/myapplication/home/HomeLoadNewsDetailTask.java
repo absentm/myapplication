@@ -12,6 +12,7 @@ import org.json.JSONException;
 import java.io.IOException;
 
 /**
+ * HomeLoadNewsDetailTask
  * Created by DUAN on 2016/5/24.
  */
 public class HomeLoadNewsDetailTask extends AsyncTask<Integer, Void, HomeNewsDetailBeans> {
@@ -42,6 +43,7 @@ public class HomeLoadNewsDetailTask extends AsyncTask<Integer, Void, HomeNewsDet
         } else {
             headerImage = mHomeNewsDetailBeans.getImage();
         }
+
         StringBuilder sb = new StringBuilder();
         sb.append("<div class=\"img-wrap\">")
                 .append("<h1 class=\"headline-title\">")

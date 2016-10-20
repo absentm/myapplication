@@ -3,6 +3,7 @@ package com.example.dm.myapplication.beans;
 import java.util.ArrayList;
 
 /**
+ * HomeNewsDetailBeans
  * Created by DUAN on 2016/5/24.
  */
 public class HomeNewsDetailBeans {

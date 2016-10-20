@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * DailyNewsDB
  * Created by DUAN on 2016/5/24.
  */
 public class DailyNewsDB {
@@ -78,6 +79,5 @@ public class DailyNewsDB {
             db.close();
         }
     }
-
 
 }

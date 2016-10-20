@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * JsonHelper
  * Created by DUAN on 2016/5/24.
  */
 public class JsonHelper {

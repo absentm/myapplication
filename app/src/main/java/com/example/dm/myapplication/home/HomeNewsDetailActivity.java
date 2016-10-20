@@ -14,6 +14,7 @@ import com.example.dm.myapplication.beans.News;
 import com.example.dm.myapplication.utiltools.SystemUtils;
 
 /**
+ * HomeNewsDetailActivity
  * Created by DUAN on 2016/5/24.
  */
 public class HomeNewsDetailActivity extends Activity {

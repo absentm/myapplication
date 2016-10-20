@@ -46,7 +46,6 @@ public class FirstActivity extends Activity {
         animationSet.addAnimation(alphaAnimation);
         animationSet.addAnimation(scaleAnimation);
 
-
         launchTv.startAnimation(animationSet);
         animationSet.setAnimationListener(new Animation.AnimationListener() {
             @Override
