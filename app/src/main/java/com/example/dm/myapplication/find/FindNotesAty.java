@@ -133,6 +133,7 @@ public class FindNotesAty extends Activity implements
                         mFindNotesAdapter.notifyDataSetChanged();
                     }
                 } else {
+                    mMaterialDialog.dismiss();
                     Toast.makeText(FindNotesAty.this, "暂无数据", Toast.LENGTH_SHORT).show();
                 }
             }

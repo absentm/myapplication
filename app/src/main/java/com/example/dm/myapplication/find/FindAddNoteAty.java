@@ -101,8 +101,12 @@ public class FindAddNoteAty extends Activity {
                     mNoteContentStr = mNoteContentEt.getText().toString().trim();
                     mNoteTitleStr = mNoteTitleEt.getText().toString().trim();
 
-                    if (mNoteTitleStr.isEmpty() && (mNoteContentStr.length() >= MAX)) {
-                        mNoteTitleStr = mNoteContentStr.substring(MIN, MAX - 1);
+                    if (mNoteTitleStr.isEmpty()) {
+                        if (mNoteContentStr.length() >= MAX) {
+                            mNoteTitleStr = mNoteContentStr.substring(MIN, MAX - 1);
+                        } else {
+                            mNoteTitleStr = mNoteContentStr;
+                        }
                     }
 
                     mNoteId = DateUtil.getCurrentTimeMills();
