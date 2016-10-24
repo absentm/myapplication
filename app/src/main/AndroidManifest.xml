@@ -45,6 +45,7 @@
         <activity
             android:name=".main.FirstActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -55,44 +56,107 @@
 
         <activity
             android:name="cn.bmob.v3.update.UpdateDialogActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
 
-        <activity android:name=".main.MainActivity"/>
-        <activity android:name=".main.LoginActivity"/>
-        <activity android:name=".main.RegisterActivity"/>
-        <activity android:name=".main.ResetPasswordActivity"/>
+        <activity
+            android:name=".main.MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".main.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".main.RegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".main.ResetPasswordActivity"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".me.MeInfoDetailActivity"/>
-        <activity android:name=".me.MeEditorNicknameAty"/>
-        <activity android:name=".me.MeEditorMessageAty"/>
-        <activity android:name=".me.MeEditorSchoolAty"/>
-        <activity android:name=".me.MeEditorJobAty"/>
-        <activity android:name=".me.MeSettingsAty"/>
-        <activity android:name=".me.MeEditorAreaAty"/>
-        <activity android:name=".me.area.activity.BaseActivity"/>
-        <activity android:name=".me.MeFeedbackAty"/>
-        <activity android:name=".me.MeAvatarShowerAty"/>
-        <activity android:name=".me.MeSetingsAboutAty"/>
-        <activity android:name=".me.MeFavouritrActivity"/>
+        <activity
+            android:name=".me.MeInfoDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.MeEditorNicknameAty"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.MeEditorMessageAty"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.MeEditorSchoolAty"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.MeEditorJobAty"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.MeSettingsAty"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.MeEditorAreaAty"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.area.activity.BaseActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.MeFeedbackAty"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.MeAvatarShowerAty"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.MeSetingsAboutAty"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".me.MeFavouritrActivity"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".home.HomeNewsDetailActivity"/>
+        <activity
+            android:name=".home.HomeNewsDetailActivity"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".find.FindHowOldAct"/>
-        <activity android:name=".find.FindMeiziAty"/>
-        <activity android:name=".find.FindPhotoDetailAty"/>
-        <activity android:name=".find.FindWeatherAty"/>
-        <activity android:name=".find.FindMapAroundAty"/>
-        <activity android:name=".find.zxing.activity.CaptureActivity"/>
-        <activity android:name=".find.FindScanResultAty"/>
-        <activity android:name=".find.FindGenerateCodeAty"/>
-        <activity android:name=".find.FindNotesAty"/>
-        <activity android:name=".find.FindNoteDetailAty"/>
-        <activity android:name=".find.FindAddNoteAty"/>
+        <activity
+            android:name=".find.FindHowOldAct"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".find.FindMeiziAty"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".find.FindPhotoDetailAty"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".find.FindWeatherAty"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".find.FindMapAroundAty"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".find.zxing.activity.CaptureActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".find.FindScanResultAty"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".find.FindGenerateCodeAty"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".find.FindNotesAty"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".find.FindNoteDetailAty"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".find.FindAddNoteAty"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".com.ComImagePagerActivity"/>
-        <activity android:name=".com.ComPostTopicActivity"/>
-        <activity android:name=".com.ComPhotosSelectAty"/>
+        <activity
+            android:name=".com.ComImagePagerActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".com.ComPostTopicActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".com.ComPhotosSelectAty"
+            android:screenOrientation="portrait"/>
 
     </application>
 

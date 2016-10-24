@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.example.dm.myapplication.R;
+import com.example.dm.myapplication.beans.AppUser;
 import com.example.dm.myapplication.customviews.ninegridview.NineGridView;
 import com.example.dm.myapplication.customviews.ninegridview.NineGridViewAdapter;
 import com.example.dm.myapplication.find.FindHowOldAct;
@@ -17,6 +19,8 @@ import com.example.dm.myapplication.find.FindMeiziAty;
 import com.example.dm.myapplication.find.FindNotesAty;
 import com.example.dm.myapplication.find.FindWeatherAty;
 import com.example.dm.myapplication.find.zxing.activity.CaptureActivity;
+
+import cn.bmob.v3.BmobUser;
 
 
 /**
@@ -50,12 +54,20 @@ public class ThirdFragment extends Fragment {
      * 事件处理: gridview item的点击事件
      */
     private void dealEvents() {
+        final AppUser currentAppUser = BmobUser.getCurrentUser(AppUser.class);
+
         nineGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        startActivity(new Intent(getActivity(), FindNotesAty.class));
+                        if (currentAppUser != null) {
+                            startActivity(new Intent(getActivity(), FindNotesAty.class));
+                        } else {
+                            Toast.makeText(getActivity(),
+                                    "请先登录！",
+                                    Toast.LENGTH_SHORT).show();
+                        }
 
                         break;
                     case 1:
