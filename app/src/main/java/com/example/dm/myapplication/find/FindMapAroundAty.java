@@ -1,6 +1,8 @@
 package com.example.dm.myapplication.find;
 
 import android.app.Activity;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,26 +21,39 @@ import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.LocationSource;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.UiSettings;
+import com.amap.api.maps2d.model.BitmapDescriptor;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.CircleOptions;
 import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.LatLngBounds;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.core.PoiItem;
+import com.amap.api.services.core.SuggestionCity;
+import com.amap.api.services.poisearch.PoiResult;
+import com.amap.api.services.poisearch.PoiSearch;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.utiltools.SystemUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * FindMapAroundAty
  * Created by dm on 16-9-9.
  */
-public class FindMapAroundAty extends Activity implements LocationSource, AMapLocationListener, AMap.OnMarkerClickListener {
+public class FindMapAroundAty extends Activity implements LocationSource,
+        AMapLocationListener, AMap.OnMarkerClickListener,
+        AMap.OnMapClickListener, PoiSearch.OnPoiSearchListener {
     private final static String LOG = "FindMapAroundAty";
     private boolean isConnected;
 
     private ImageView titleLeftImv;
     private Button mMapFloatBtn;
+    private TextView titleCenterTv;
 
     // 显示地图需要的变量
     private MapView mapView;        //地图控件
@@ -54,7 +69,25 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
     // 标识，用于判断是否只显示一次定位信息和用户重新定位
     private boolean isFirstLoc = true;
 
+    // 周边搜索初始化声明
+    private PoiResult poiResult; // poi返回的结果
+    private int currentPage = 0;// 当前页面，从0开始计数
+    private PoiSearch.Query query;// Poi查询条件类
+    private LatLonPoint lp;//
+    private Marker locationMarker; // 选择的点
+    private Marker detailMarker;
+    private Marker mlastMarker;
+    private PoiSearch poiSearch;
+    private MyPoiOverlay poiOverlay;// poi图层
+    private List<PoiItem> poiItems;// poi数据
+
+    // 获取定位信息
+    String mCity;
+    double mLatitude; //获取纬度
+    double mLongitude; //获取经度
+
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.find_around_layout);
@@ -70,9 +103,12 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
 
     private void initViews() {
         isConnected = SystemUtils.checkNetworkConnection(this);
+        if (!isConnected) {
+            SystemUtils.noNetworkAlert(FindMapAroundAty.this);
+        }
 
         titleLeftImv = (ImageView) findViewById(R.id.around_title_left_imv);
-        TextView titleCenterTv = (TextView) findViewById(R.id.around_title_center_tv);
+        titleCenterTv = (TextView) findViewById(R.id.around_title_center_tv);
         mMapFloatBtn = (Button) findViewById(R.id.find_map_float_btn);
 
         //设置显示定位按钮 并且可以点击
@@ -86,13 +122,7 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
         // 是否可触发定位并显示定位层
         aMap.setMyLocationEnabled(true);
         aMap.setOnMarkerClickListener(FindMapAroundAty.this);
-
-        //定位的小图标 默认是蓝点 这里自定义一团火，其实就是一张图片
-//        MyLocationStyle myLocationStyle = new MyLocationStyle();
-//        myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location_on_black_36dp));
-//        myLocationStyle.radiusFillColor(android.R.color.transparent);
-//        myLocationStyle.strokeColor(android.R.color.transparent);
-//        aMap.setMyLocationStyle(myLocationStyle);
+        aMap.setOnMapClickListener(this);
 
         //开始定位
         initLoc();
@@ -141,13 +171,10 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
                         .items(R.array.map_list_values)
                         .itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
-                            public void onSelection(MaterialDialog dialog,
-                                                    View itemView,
-                                                    int position,
-                                                    CharSequence text) {
-                                Toast.makeText(FindMapAroundAty.this,
-                                        text,
-                                        Toast.LENGTH_SHORT).show();
+                            public void onSelection(MaterialDialog dialog, View itemView,
+                                                    int position, CharSequence text) {
+                                Log.i(LOG, "22>>>>> " + mCity + ", " + mLongitude + ", " + mLatitude);
+                                doSearchQuery((String) text, mCity);
                             }
                         }).show();
             }
@@ -161,8 +188,8 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
             if (amapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
                 amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见官方定位类型表
-                amapLocation.getLatitude();//获取纬度
-                amapLocation.getLongitude();//获取经度
+                mLatitude = amapLocation.getLatitude();//获取纬度
+                mLongitude = amapLocation.getLongitude();//获取经度
                 amapLocation.getAccuracy();//获取精度信息
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date date = new Date(amapLocation.getTime());
@@ -170,12 +197,16 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
                 amapLocation.getAddress();//地址，如果option中设置isNeedAddress为false，则没有此结果，网络定位结果中会有地址信息，GPS定位不返回地址信息。
                 amapLocation.getCountry();//国家信息
                 amapLocation.getProvince();//省信息
-                amapLocation.getCity();//城市信息
+                mCity = amapLocation.getCity();//城市信息
                 amapLocation.getDistrict();//城区信息
                 amapLocation.getStreet();//街道信息
                 amapLocation.getStreetNum();//街道门牌号信息
                 amapLocation.getCityCode();//城市编码
                 amapLocation.getAdCode();//地区编码
+
+                titleCenterTv.setText(amapLocation.getCity());
+                lp = new LatLonPoint(mLongitude, mLatitude);
+                Log.i(LOG, ">>>>> " + mCity + ", " + mLongitude + ", " + mLatitude);
 
                 // 如果不设置标志位，此时再拖动地图时，它会不断将地图移动到当前的位置
                 if (isFirstLoc) {
@@ -187,9 +218,7 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
                     mListener.onLocationChanged(amapLocation);
                     //添加图钉
                     mMarker = aMap.addMarker(getMarkerOptions(amapLocation));
-                    //获取定位信息
-                    StringBuffer buffer = new StringBuffer();
-                    buffer.append(amapLocation.getCountry() + "" + amapLocation.getProvince() + "" + amapLocation.getCity() + "" + amapLocation.getProvince() + "" + amapLocation.getDistrict() + "" + amapLocation.getStreet() + "" + amapLocation.getStreetNum());
+
                     isFirstLoc = false;
                 }
 
@@ -213,7 +242,9 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
         //位置
         options.position(new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude()));
         StringBuffer buffer = new StringBuffer();
-        buffer.append(amapLocation.getCountry() + "" + amapLocation.getProvince() + "" + amapLocation.getCity() + "" + amapLocation.getDistrict() + "" + amapLocation.getStreet() + "" + amapLocation.getStreetNum());
+        buffer.append(amapLocation.getCountry() + "" + amapLocation.getProvince() + "" +
+                amapLocation.getCity() + "" + amapLocation.getDistrict() + "" +
+                amapLocation.getStreet() + "" + amapLocation.getStreetNum());
         //标题
         options.title(buffer.toString());
         //子标题
@@ -223,6 +254,27 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
 
         return options;
 
+    }
+
+    /**
+     * 开始进行poi搜索
+     */
+    /**
+     * 开始进行poi搜索
+     */
+    protected void doSearchQuery(String keyWord, String city) {
+        currentPage = 0;
+        query = new PoiSearch.Query(keyWord, "", city);// 第一个参数表示搜索字符串，第二个参数表示poi搜索类型，第三个参数表示poi搜索区域（空字符串代表全国）
+        query.setPageSize(20);// 设置每页最多返回多少条poiitem
+        query.setPageNum(currentPage);// 设置查第一页
+
+        if (lp != null) {
+            poiSearch = new PoiSearch(this, query);
+            poiSearch.setOnPoiSearchListener(this);
+            poiSearch.setBound(new PoiSearch.SearchBound(lp, 5000, true));//
+            // 设置搜索区域为以lp点为圆心，其周围5000米范围
+            poiSearch.searchPOIAsyn();// 异步搜索
+        }
     }
 
 
@@ -277,4 +329,217 @@ public class FindMapAroundAty extends Activity implements LocationSource, AMapLo
         marker = mMarker;
         return false;
     }
+
+    @Override
+    public void onPoiSearched(PoiResult result, int rcode) {
+        if (rcode == 1000) {
+            if (result != null && result.getQuery() != null) {// 搜索poi的结果
+                if (result.getQuery().equals(query)) {// 是否是同一条
+                    poiResult = result;
+                    poiItems = poiResult.getPois();// 取得第一页的poiitem数据，页数从数字0开始
+                    List<SuggestionCity> suggestionCities = poiResult
+                            .getSearchSuggestionCitys();// 当搜索不到poiitem数据时，会返回含有搜索关键字的城市信息
+                    if (poiItems != null && poiItems.size() > 0) {
+                        //清除POI信息显示
+//                        whetherToShowDetailInfo(false);
+                        //并还原点击marker样式
+                        if (mlastMarker != null) {
+                            resetlastmarker();
+                        }
+                        //清理之前搜索结果的marker
+                        if (poiOverlay != null) {
+                            poiOverlay.removeFromMap();
+                        }
+                        aMap.clear();
+                        poiOverlay = new MyPoiOverlay(aMap, poiItems);
+                        poiOverlay.addToMap();
+                        poiOverlay.zoomToSpan();
+
+                        aMap.addMarker(new MarkerOptions()
+//                                .anchor(0.5f, 0.5f)
+                                .icon(BitmapDescriptorFactory
+                                        .fromBitmap(BitmapFactory.decodeResource(
+                                                getResources(), R.drawable.point4)))
+                                .position(new LatLng(lp.getLatitude(), lp.getLongitude())));
+
+                        aMap.addCircle(new CircleOptions()
+                                .center(new LatLng(lp.getLatitude(),
+                                        lp.getLongitude())).radius(5000)
+                                .strokeColor(Color.BLUE)
+                                .fillColor(Color.argb(50, 1, 1, 1))
+                                .strokeWidth(2));
+//                    } else if (suggestionCities != null
+//                            && suggestionCities.size() > 0) {
+//                        showSuggestCity(suggestionCities);
+                    } else {
+                        Toast.makeText(FindMapAroundAty.this,
+                                "No Result!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            } else {
+                Toast.makeText(FindMapAroundAty.this,
+                        "No Result!", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+
+    @Override
+    public void onPoiItemSearched(PoiItem poiItem, int i) {
+
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        if (mlastMarker != null) {
+            resetlastmarker();
+        }
+    }
+
+    // 将之前被点击的marker置为原来的状态
+    private void resetlastmarker() {
+        int index = poiOverlay.getPoiIndex(mlastMarker);
+        if (index < 10) {
+            mlastMarker.setIcon(BitmapDescriptorFactory
+                    .fromBitmap(BitmapFactory.decodeResource(
+                            getResources(),
+                            markers[index])));
+        } else {
+            mlastMarker.setIcon(BitmapDescriptorFactory.fromBitmap(
+                    BitmapFactory.decodeResource(getResources(), R.drawable.poi_marker_pressed)));
+        }
+        mlastMarker = null;
+
+    }
+
+    private class MyPoiOverlay {
+        private AMap mamap;
+        private List<PoiItem> mPois;
+        private ArrayList<Marker> mPoiMarks = new ArrayList<Marker>();
+
+        public MyPoiOverlay(AMap amap, List<PoiItem> pois) {
+            mamap = amap;
+            mPois = pois;
+        }
+
+        /**
+         * 添加Marker到地图中。
+         *
+         * @since V2.1.0
+         */
+        public void addToMap() {
+            for (int i = 0; i < mPois.size(); i++) {
+                Marker marker = mamap.addMarker(getMarkerOptions(i));
+                PoiItem item = mPois.get(i);
+                marker.setObject(item);
+                mPoiMarks.add(marker);
+            }
+        }
+
+        /**
+         * 去掉PoiOverlay上所有的Marker。
+         *
+         * @since V2.1.0
+         */
+        public void removeFromMap() {
+            for (Marker mark : mPoiMarks) {
+                mark.remove();
+            }
+        }
+
+        /**
+         * 移动镜头到当前的视角。
+         *
+         * @since V2.1.0
+         */
+        public void zoomToSpan() {
+            if (mPois != null && mPois.size() > 0) {
+                if (mamap == null)
+                    return;
+                LatLngBounds bounds = getLatLngBounds();
+                mamap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+            }
+        }
+
+        private LatLngBounds getLatLngBounds() {
+            LatLngBounds.Builder b = LatLngBounds.builder();
+            for (int i = 0; i < mPois.size(); i++) {
+                b.include(new LatLng(mPois.get(i).getLatLonPoint().getLatitude(),
+                        mPois.get(i).getLatLonPoint().getLongitude()));
+            }
+            return b.build();
+        }
+
+        private MarkerOptions getMarkerOptions(int index) {
+            return new MarkerOptions()
+                    .position(
+                            new LatLng(mPois.get(index).getLatLonPoint()
+                                    .getLatitude(), mPois.get(index)
+                                    .getLatLonPoint().getLongitude()))
+                    .title(getTitle(index)).snippet(getSnippet(index))
+                    .icon(getBitmapDescriptor(index));
+        }
+
+        protected String getTitle(int index) {
+            return mPois.get(index).getTitle();
+        }
+
+        protected String getSnippet(int index) {
+            return mPois.get(index).getSnippet();
+        }
+
+        /**
+         * 从marker中得到poi在list的位置。
+         *
+         * @param marker 一个标记的对象。
+         * @return 返回该marker对应的poi在list的位置。
+         * @since V2.1.0
+         */
+        public int getPoiIndex(Marker marker) {
+            for (int i = 0; i < mPoiMarks.size(); i++) {
+                if (mPoiMarks.get(i).equals(marker)) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        /**
+         * 返回第index的poi的信息。
+         *
+         * @param index 第几个poi。
+         * @return poi的信息。poi对象详见搜索服务模块的基础核心包（com.amap.api.services.core）中的类 <strong><a href="../../../../../../Search/com/amap/api/services/core/PoiItem.html" title="com.amap.api.services.core中的类">PoiItem</a></strong>。
+         * @since V2.1.0
+         */
+        public PoiItem getPoiItem(int index) {
+            if (index < 0 || index >= mPois.size()) {
+                return null;
+            }
+            return mPois.get(index);
+        }
+
+        protected BitmapDescriptor getBitmapDescriptor(int arg0) {
+            if (arg0 < 10) {
+                BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(
+                        BitmapFactory.decodeResource(getResources(), markers[arg0]));
+                return icon;
+            } else {
+                BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(
+                        BitmapFactory.decodeResource(getResources(), R.drawable.poi_marker_pressed));
+                return icon;
+            }
+        }
+    }
+
+    private int[] markers = {R.drawable.poi_marker_1,
+            R.drawable.poi_marker_2,
+            R.drawable.poi_marker_3,
+            R.drawable.poi_marker_4,
+            R.drawable.poi_marker_5,
+            R.drawable.poi_marker_6,
+            R.drawable.poi_marker_7,
+            R.drawable.poi_marker_8,
+            R.drawable.poi_marker_9,
+            R.drawable.poi_marker_10
+    };
 }
