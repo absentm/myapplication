@@ -31,7 +31,7 @@
             android:textSize="16sp"/>
     </RelativeLayout>
 
-    <ImageView
+    <uk.co.senab.photoview.PhotoView
         android:id="@+id/find_photo_imv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

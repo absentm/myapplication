@@ -60,7 +60,6 @@ public class FindPhotoDetailAty extends Activity {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .fitCenter()
                 .into(mImageView);
-//        ImageLoader.getInstance().displayImage(imageUrl, mImageView, HttpUtil.DefaultOptions);
 
         photoViewAttacher = new PhotoViewAttacher(mImageView);
         photoViewAttacher.setOnLongClickListener(new View.OnLongClickListener() {
