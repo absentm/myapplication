@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/title_rout"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/teal"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/title_video_left_imv"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:background="@drawable/item_teal_selector_no_bord"
+            android:src="@drawable/ic_navigate_before_white_24dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:text="午休视频"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/find_videos_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title_rout"
+        android:background="@color/black_trans10"/>
+
+</LinearLayout>

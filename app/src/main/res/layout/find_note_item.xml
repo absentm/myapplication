@@ -3,9 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:foreground="?android:attr/selectableItemBackground"
     android:layout_marginLeft="4dp"
-    android:layout_marginRight="4dp">
+    android:layout_marginRight="4dp"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -41,8 +41,8 @@
             android:maxLines="2"
             android:maxWidth="280dp"
             android:paddingLeft="8dp"
-            android:textColor="@color/black_trans40"
             android:text="今天，注定是一个不平凡的日子，繁花似锦却多处了几分伤秋；我念念去，却得不到一丝的......"
+            android:textColor="@color/black_trans40"
             android:textSize="14sp"/>
 
         <TextView

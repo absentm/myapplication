@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static com.example.dm.myapplication.utiltools.StringUtils.DEFAULT_DATETIME_PATTERN;
 
@@ -147,5 +148,15 @@ public class DateUtil {
             w = 0;
 
         return weekDays[w];
+    }
+
+    public static String utc2LocalTime(String timeStr) throws ParseException {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        df.setTimeZone(TimeZone.getDefault());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        Date date = new Date(df.parse(timeStr).toString());
+
+        return sdf.format(date);
     }
 }

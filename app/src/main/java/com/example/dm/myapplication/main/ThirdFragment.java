@@ -17,6 +17,7 @@ import com.example.dm.myapplication.find.FindHowOldAct;
 import com.example.dm.myapplication.find.FindMapAroundAty;
 import com.example.dm.myapplication.find.FindMeiziAty;
 import com.example.dm.myapplication.find.FindNotesAty;
+import com.example.dm.myapplication.find.FindVideoAty;
 import com.example.dm.myapplication.find.FindWeatherAty;
 import com.example.dm.myapplication.find.zxing.activity.CaptureActivity;
 
@@ -83,6 +84,7 @@ public class ThirdFragment extends Fragment {
                         startActivity(new Intent(getActivity(), CaptureActivity.class));
                         break;
                     case 5:
+                        startActivity(new Intent(getActivity(), FindVideoAty.class));
                         break;
                     case 6:
                         startActivity(new Intent(getActivity(), FindWeatherAty.class));
