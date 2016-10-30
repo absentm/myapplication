@@ -25,9 +25,6 @@ public class FindVideoAdapter extends RecyclerView.Adapter<FindVideoAdapter.Item
     private Context context;
     private List<VideoResultsBean> mDatas;
 
-    public FindVideoAdapter() {
-    }
-
     public FindVideoAdapter(Context context, List<VideoResultsBean> datas) {
         this.context = context;
         mDatas = datas;
@@ -53,7 +50,7 @@ public class FindVideoAdapter extends RecyclerView.Adapter<FindVideoAdapter.Item
     @Override
     public void onBindViewHolder(FindVideoAdapter.ItemVideoHolder holder, int position) {
         holder.videoDescTv.setText(mDatas.get(position).getDesc());
-        holder.videoWhoTv.setText(new StringBuffer().append("by ").append(mDatas.get(position).getWho()).toString());
+        holder.videoWhoTv.setText(new StringBuilder().append("by ").append(mDatas.get(position).getWho()).toString());
         try {
             holder.videoTimeTv.setText(DateUtil.utc2LocalTime(mDatas.get(position).getPublishedAt()));
         } catch (ParseException e) {
@@ -93,5 +90,4 @@ public class FindVideoAdapter extends RecyclerView.Adapter<FindVideoAdapter.Item
             videoTimeTv = (TextView) view.findViewById(R.id.item_video_time_tv);
         }
     }
-
 }

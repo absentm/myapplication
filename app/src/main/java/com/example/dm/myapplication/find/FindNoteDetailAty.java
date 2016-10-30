@@ -46,9 +46,7 @@ public class FindNoteDetailAty extends Activity implements View.OnClickListener 
 
         initView();
         setUpListener();
-
         fillNoteDatas();
-
     }
 
     private void initView() {

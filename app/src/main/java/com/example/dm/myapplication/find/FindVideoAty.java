@@ -1,6 +1,7 @@
 package com.example.dm.myapplication.find;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,8 +28,9 @@ import java.util.List;
  * FindVideoAty
  * Created by dm on 16-10-29.
  */
-public class FindVideoAty extends Activity implements View.OnClickListener,
-        FindVideoAdapter.OnVideoItemClickListener {
+public class FindVideoAty extends Activity implements
+        FindVideoAdapter.OnVideoItemClickListener,
+        View.OnClickListener {
     private ImageButton titleBackImv;
 
     private RecyclerView mRecyclerView;
@@ -52,8 +54,14 @@ public class FindVideoAty extends Activity implements View.OnClickListener,
                 mDatas = mVideosBean.getResults();
 
                 mFindVideoAdapter = new FindVideoAdapter(FindVideoAty.this, mDatas);
+                mLayoutManager = new LinearLayoutManager(FindVideoAty.this,
+                        LinearLayoutManager.VERTICAL, false);
                 mRecyclerView.setAdapter(mFindVideoAdapter);
-                mFindVideoAdapter.notifyDataSetChanged();
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mRecyclerView.setItemAnimator(new DefaultItemAnimator());//默认动画
+                mRecyclerView.setHasFixedSize(true);//效率最高
+                mFindVideoAdapter.setOnItemClickListener(FindVideoAty.this);
+
                 mMaterialDialog.dismiss();
             } else {
                 mMaterialDialog.dismiss();
@@ -77,15 +85,6 @@ public class FindVideoAty extends Activity implements View.OnClickListener,
         titleBackImv = (ImageButton) findViewById(R.id.title_video_left_imv);
         mRecyclerView = (RecyclerView) findViewById(R.id.find_videos_recyclerview);
         titleBackImv.setOnClickListener(FindVideoAty.this);
-
-        mFindVideoAdapter = new FindVideoAdapter(FindVideoAty.this, mDatas);
-        //垂直的，listView的布局方式
-        // LinearLayoutManager第三个参数设置为true, 反转显示列表, 从底部出现
-        mLayoutManager = new LinearLayoutManager(FindVideoAty.this, LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setAdapter(mFindVideoAdapter);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());//默认动画
-        mRecyclerView.setHasFixedSize(true);//效率最高
 
         if (isConnect) {
             mMaterialDialog = new MaterialDialog.Builder(FindVideoAty.this)
@@ -121,15 +120,16 @@ public class FindVideoAty extends Activity implements View.OnClickListener,
             case R.id.title_video_left_imv:
                 FindVideoAty.this.finish();
                 break;
-            default:
-                break;
-
         }
-
     }
 
     @Override
     public void onVideoItemClick(View view, VideoResultsBean data) {
-
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("videoItemInfos", data);
+        intent.setClass(FindVideoAty.this, FindVideoDetailAty.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

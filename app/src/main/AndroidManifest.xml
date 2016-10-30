@@ -160,6 +160,10 @@
         <activity
             android:name=".find.FindVideoAty"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".find.FindVideoDetailAty"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>

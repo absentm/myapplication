@@ -152,7 +152,7 @@ public class DateUtil {
 
     public static String utc2LocalTime(String timeStr) throws ParseException {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        df.setTimeZone(TimeZone.getDefault());
+        df.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         Date date = new Date(df.parse(timeStr).toString());
