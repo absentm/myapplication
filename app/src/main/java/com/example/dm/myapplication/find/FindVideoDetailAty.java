@@ -5,9 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.VideoBeans.VideoResultsBean;
 import com.example.dm.myapplication.utiltools.DateUtil;
@@ -21,11 +26,13 @@ import java.text.ParseException;
 public class FindVideoDetailAty extends Activity implements View.OnClickListener {
     private ImageButton titleBackIBtn;
 
+    private WebView mWebView;
     private TextView mVideoDescTv;
     private TextView mVideoPublishedAtTv;
     private TextView mVideoCreateAtTv;
     private TextView mVideoSourceTv;
     private TextView mVideoWhoTv;
+    private NumberProgressBar mNumberProgressBar;
 
     private VideoResultsBean mVideoResultsBean;
     private String mVideoItemDescStr;
@@ -52,6 +59,8 @@ public class FindVideoDetailAty extends Activity implements View.OnClickListener
 
     private void initView() {
         titleBackIBtn = (ImageButton) findViewById(R.id.video_detail_back_imv);
+        mWebView = (WebView) findViewById(R.id.video_item_webview);
+        mNumberProgressBar = (NumberProgressBar) findViewById(R.id.progressbar);
         mVideoDescTv = (TextView) findViewById(R.id.video_detail_desc_tv);
         mVideoPublishedAtTv = (TextView) findViewById(R.id.video_detail_publish_time_tv);
         mVideoCreateAtTv = (TextView) findViewById(R.id.video_detail_create_time_tv);
@@ -85,6 +94,21 @@ public class FindVideoDetailAty extends Activity implements View.OnClickListener
         mVideoSourceTv.setText(mVideoItemSourceStr);
         mVideoWhoTv.setText(mVideoItemWhoStr);
 
+        WebSettings webSettings = mWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setAppCacheEnabled(true);
+        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        webSettings.setSupportZoom(false);
+        webSettings.setPluginState(WebSettings.PluginState.ON);
+
+        mWebView.setBackgroundColor(255); // 设置背景色
+        mWebView.getBackground().setAlpha(249); // 设置填充透明度 范围：0-255
+        mWebView.setWebChromeClient(new MyWebChromeClient());
+        mWebView.setWebViewClient(new MyWebViewClient());
+        mWebView.loadUrl(mVideoItemUrlStr);
+
     }
 
     @Override
@@ -95,6 +119,58 @@ public class FindVideoDetailAty extends Activity implements View.OnClickListener
                 break;
             default:
                 break;
+        }
+    }
+
+    private class MyWebChromeClient extends WebChromeClient {
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
+            super.onProgressChanged(view, newProgress);
+            mNumberProgressBar.setProgress(newProgress);
+            if (newProgress == 100) {
+                mNumberProgressBar.setVisibility(View.GONE);
+            } else {
+                mNumberProgressBar.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void onReceivedTitle(WebView view, String title) {
+            super.onReceivedTitle(view, title);
+        }
+    }
+
+    private class MyWebViewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            if (url != null) {
+                view.loadUrl(url);
+            }
+            return true;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mWebView != null) {
+            mWebView.destroy();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mWebView != null) {
+            mWebView.onPause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mWebView != null) {
+            mWebView.onResume();
         }
     }
 }
