@@ -16,6 +16,7 @@ import com.example.dm.myapplication.customviews.ninegridview.NineGridViewAdapter
 import com.example.dm.myapplication.find.FindHowOldAct;
 import com.example.dm.myapplication.find.FindMapAroundAty;
 import com.example.dm.myapplication.find.FindMeiziAty;
+import com.example.dm.myapplication.find.FindMusicAty;
 import com.example.dm.myapplication.find.FindNotesAty;
 import com.example.dm.myapplication.find.FindVideoAty;
 import com.example.dm.myapplication.find.FindWeatherAty;
@@ -93,6 +94,7 @@ public class ThirdFragment extends Fragment {
                         startActivity(new Intent(getActivity(), FindMapAroundAty.class));
                         break;
                     case 8:
+                        startActivity(new Intent(getActivity(), FindMusicAty.class));
                         break;
 
                 }

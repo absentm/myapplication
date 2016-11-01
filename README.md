@@ -42,4 +42,5 @@ Hello MyApplication
 > * Glide框架: https://github.com/bumptech/glide
 > * material-dialogs: https://github.com/afollestad/material-dialogs
 > * ZXingLib: https://github.com/xuyisheng/ZXingLib
+> * NumberProgressBar: https://github.com/daimajia/NumberProgressBar
 

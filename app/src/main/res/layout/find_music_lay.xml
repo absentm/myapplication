@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/title_rout"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/teal"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/title_music_left_imv"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:background="@drawable/item_teal_selector_no_bord"
+            android:src="@drawable/ic_navigate_before_white_24dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:text="本地音乐"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/find_musics_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_rout"
+        android:background="@color/black_trans10"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.01dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="56dp"
+        android:background="@color/black_trans15"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:clickable="true"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/find_music_album_imv"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/app_icon"/>
+
+        <TextView
+            android:id="@+id/item_music_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@+id/find_music_album_imv"
+            android:maxLines="1"
+            android:maxWidth="200dp"
+            android:text="传奇"
+            android:textColor="@color/black_trans70"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/item_music_artist_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/find_music_album_imv"
+            android:layout_below="@+id/item_music_title_tv"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@+id/find_music_album_imv"
+            android:text="王菲"
+            android:textSize="12sp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true">
+
+            <ImageButton
+                android:id="@+id/find_music_pre_imv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_weight="1.0"
+                android:background="@drawable/item_selector_no_border"
+                android:padding="8dp"
+                android:src="@drawable/ic_skip_previous_black_18dp"/>
+
+            <ImageButton
+                android:id="@+id/find_music_play_imv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_weight="1.0"
+                android:background="@drawable/item_selector_no_border"
+                android:padding="8dp"
+                android:src="@drawable/ic_play_circle_outline_black_18dp"/>
+
+            <ImageButton
+                android:id="@+id/find_music_next_imv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_weight="1.0"
+                android:background="@drawable/item_selector_no_border"
+                android:padding="8dp"
+                android:src="@drawable/ic_skip_next_black_18dp"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

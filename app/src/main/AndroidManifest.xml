@@ -164,6 +164,9 @@
         <activity
             android:name=".find.FindVideoDetailAty"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".find.FindMusicAty"
+            android:screenOrientation="portrait"/>
 
     </application>
 
