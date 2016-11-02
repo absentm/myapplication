@@ -32,7 +32,6 @@
 
     <com.daimajia.numberprogressbar.NumberProgressBar
         android:id="@+id/progressbar"
-        style="@style/NumberProgressBar_Default"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:progress_reached_bar_height="2dp"

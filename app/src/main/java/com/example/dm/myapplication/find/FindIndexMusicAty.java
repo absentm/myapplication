@@ -2,7 +2,6 @@ package com.example.dm.myapplication.find;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -32,7 +31,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
     private List<MusicEntity> mDatas;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.find_index_music_lay);
         mDatas = FileUtil.getLocalIndexMusics(FindIndexMusicAty.this.getContentResolver());
@@ -42,7 +41,6 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         eventDeal();
     }
 
-
     private void initView() {
         titleBackIBtn = (ImageButton) findViewById(R.id.title_music_left_imv);
         mProgressBar = (ProgressBar) findViewById(R.id.find_index_music_pbar);
@@ -50,14 +48,14 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         mProgressBar.setVisibility(View.VISIBLE);
 
         mFindIndexMusicAdapter = new FindIndexMusicAdapter(this);
+        mIndexableLayout.setAdapter(mFindIndexMusicAdapter);
         mFindIndexMusicAdapter.setDatas(mDatas, new IndexableAdapter.IndexCallback<MusicEntity>() {
             @Override
             public void onFinished(List<MusicEntity> datas) {
                 mProgressBar.setVisibility(View.GONE);
             }
         });
-        mIndexableLayout.setAdapter(mFindIndexMusicAdapter);
-        // indexableLayout.setOverlayStyle_MaterialDesign(R.color.colorAccent);
+//        mIndexableLayout.setOverlayStyle_MaterialDesign(R.color.colorAccent);
         // 快速排序。  排序规则设置为：只按首字母  （默认全拼音排序）  效率很高，是默认的10倍左右。  按需开启～
         mIndexableLayout.setFastCompare(true);
 
@@ -122,6 +120,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
             Toast.makeText(FindIndexMusicAty.this, "选中:" +
                     entity.getTitle() + "  当前位置:" + currentPosition +
                     "  原始所在数组位置:" + originalPosition, Toast.LENGTH_SHORT).show();
+
         } else {
             Toast.makeText(FindIndexMusicAty.this,
                     "选中Header:" + entity.getTitle() + "  当前位置:" + currentPosition, Toast.LENGTH_SHORT).show();

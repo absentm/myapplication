@@ -130,6 +130,18 @@
                 android:src="@drawable/ic_skip_next_black_18dp"/>
 
         </LinearLayout>
+
+        <com.daimajia.numberprogressbar.NumberProgressBar
+            android:id="@+id/find_music_numpbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:visibility="invisible"
+            app:progress_reached_bar_height="2dp"
+            app:progress_text_size="0sp"
+            app:progress_text_visibility="invisible"
+            app:progress_unreached_bar_height="2dp"/>
+
     </RelativeLayout>
 
     <ProgressBar

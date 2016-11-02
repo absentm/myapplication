@@ -43,4 +43,5 @@ Hello MyApplication
 > * material-dialogs: https://github.com/afollestad/material-dialogs
 > * ZXingLib: https://github.com/xuyisheng/ZXingLib
 > * NumberProgressBar: https://github.com/daimajia/NumberProgressBar
+> * IndexableRecyclerView: https://github.com/YoKeyword/IndexableRecyclerView
 
