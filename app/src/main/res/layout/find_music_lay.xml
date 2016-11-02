@@ -34,10 +34,12 @@
         android:id="@+id/find_musics_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/find_line_v"
         android:layout_below="@+id/title_rout"
         android:background="@color/black_trans10"/>
 
     <View
+        android:id="@+id/find_line_v"
         android:layout_width="match_parent"
         android:layout_height="0.01dp"
         android:layout_alignParentBottom="true"
@@ -45,11 +47,12 @@
         android:background="@color/black_trans15"/>
 
     <RelativeLayout
+        android:id="@+id/find_music_status_rout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
-        android:clickable="true"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:clickable="true">
 
         <ImageView
             android:id="@+id/find_music_album_imv"

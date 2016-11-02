@@ -168,6 +168,10 @@
             android:name=".find.FindMusicAty"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".find.FindIndexMusicAty"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>

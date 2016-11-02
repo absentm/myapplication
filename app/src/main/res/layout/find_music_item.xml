@@ -1,60 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:foreground="?android:attr/selectableItemBackground"
-    app:cardCornerRadius="0.5dp">
+    android:background="@drawable/item_selector_no_border">
 
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/item_music_title_tv"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp">
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="6dp"
+        android:maxLines="1"
+        android:maxWidth="260dp"
+        android:text="传奇"
+        android:textColor="@color/black_trans70"
+        android:textSize="16sp"/>
 
-        <TextView
-            android:id="@+id/item_music_title_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="4dp"
-            android:maxLines="1"
-            android:maxWidth="260dp"
-            android:text="传奇"
-            android:textColor="@color/black_trans70"
-            android:textSize="16sp"/>
+    <TextView
+        android:id="@+id/item_music_artist_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/item_music_title_tv"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="4dp"
+        android:text="王菲 - "
+        android:textSize="13sp"/>
 
-        <TextView
-            android:id="@+id/item_music_artist_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/item_music_title_tv"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="4dp"
-            android:text="王菲 - "
-            android:textSize="13sp"/>
+    <TextView
+        android:id="@+id/item_music_time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/item_music_artist_tv"
+        android:layout_toRightOf="@+id/item_music_artist_tv"
+        android:text="[ 03:40 ]"
+        android:textSize="13sp"/>
 
-        <TextView
-            android:id="@+id/item_music_time_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/item_music_artist_tv"
-            android:layout_toRightOf="@+id/item_music_artist_tv"
-            android:text="[ 03:40 ]"
-            android:textSize="13sp"/>
+    <ImageView
+        android:id="@+id/item_music_playing_imv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="4dp"
+        android:src="@drawable/ic_volume_up_black_18dp"
+        android:visibility="gone"/>
 
-        <ImageView
-            android:id="@+id/item_music_playing_imv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="4dp"
-            android:src="@drawable/ic_volume_up_black_18dp"
-            android:visibility="gone"/>
-    </RelativeLayout>
-</android.support.v7.widget.CardView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.01dp"
+        android:layout_below="@+id/item_music_artist_tv"
+        android:layout_marginTop="6dp"
+        android:background="@color/black_trans15"/>
+</RelativeLayout>
