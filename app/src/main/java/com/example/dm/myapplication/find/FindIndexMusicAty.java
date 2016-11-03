@@ -1,7 +1,11 @@
 package com.example.dm.myapplication.find;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -29,6 +33,8 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
     private IndexableLayout mIndexableLayout;
     private FindIndexMusicAdapter mFindIndexMusicAdapter;
     private List<MusicEntity> mDatas;
+
+    private FindMusicPlayService musicService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +101,8 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
 //
 //        // 添加 HeaderView DefaultHeaderAdapter接收一个IndexableAdapter, 使其布局以及点击事件和IndexableAdapter一致
 //        // 如果想自定义布局,点击事件, 可传入 new IndexableHeaderAdapter
+
+
     }
 
     @Override
@@ -120,7 +128,15 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
             Toast.makeText(FindIndexMusicAty.this, "选中:" +
                     entity.getTitle() + "  当前位置:" + currentPosition +
                     "  原始所在数组位置:" + originalPosition, Toast.LENGTH_SHORT).show();
-
+            Intent intent = new Intent();
+            intent.putExtra("url", entity.getUrl());
+            intent.putExtra("title", entity.getTitle());
+            intent.putExtra("artist", entity.getArtist());
+            intent.putExtra("album", entity.getAlbum());
+            intent.putExtra("album_id", entity.getAlbum_id());
+            intent.setClass(FindIndexMusicAty.this, FindMusicPlayService.class);
+            startService(intent);
+            bindService(intent, sc, BIND_AUTO_CREATE);
         } else {
             Toast.makeText(FindIndexMusicAty.this,
                     "选中Header:" + entity.getTitle() + "  当前位置:" + currentPosition, Toast.LENGTH_SHORT).show();
@@ -140,4 +156,16 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
                 "选中:" + indexTitle + "  当前位置:" + currentPosition,
                 Toast.LENGTH_SHORT).show();
     }
+
+    private ServiceConnection sc = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            musicService = ((FindMusicPlayService.MyBinder) iBinder).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            musicService = null;
+        }
+    };
 }

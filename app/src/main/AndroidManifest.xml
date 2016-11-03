@@ -172,6 +172,10 @@
             android:name=".find.FindIndexMusicAty"
             android:screenOrientation="portrait"/>
 
+        <service
+            android:name=".find.FindMusicPlayService"
+            android:exported="true"></service>
+
     </application>
 
 </manifest>

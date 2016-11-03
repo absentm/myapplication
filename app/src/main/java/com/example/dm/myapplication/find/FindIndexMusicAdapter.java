@@ -45,12 +45,14 @@ public class FindIndexMusicAdapter extends IndexableAdapter<MusicEntity> {
 
     @Override
     public void onBindContentViewHolder(RecyclerView.ViewHolder holder, MusicEntity entity) {
-        ContentVH vh = (ContentVH) holder;
+        final ContentVH vh = (ContentVH) holder;
         vh.musicTitleTv.setText(entity.getTitle());
         vh.musicArtistTv.setText(entity.getArtist() + " - ");
         vh.musicTimeTv.setText("[ " + formatTime(entity.getDuration()) + " ]");
         vh.musicPlayingImv.setVisibility(View.GONE);
+
         // 将数据保存在itemView的Tag中，以便点击时进行获取
+        vh.itemView.setTag(entity);
     }
 
     private class IndexVH extends RecyclerView.ViewHolder {

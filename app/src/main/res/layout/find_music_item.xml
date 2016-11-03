@@ -42,9 +42,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="4dp"
+        android:layout_marginRight="32dp"
         android:src="@drawable/ic_volume_up_black_18dp"
-        android:visibility="gone"/>
+        android:visibility="invisible"/>
 
     <View
         android:layout_width="match_parent"
