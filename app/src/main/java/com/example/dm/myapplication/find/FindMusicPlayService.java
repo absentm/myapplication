@@ -19,7 +19,7 @@ public class FindMusicPlayService extends Service {
     private String musicArtist;
     private long musicAlbum_id;
 
-    private MediaPlayer mMediaPlayer = new MediaPlayer();
+    public static MediaPlayer mMediaPlayer = new MediaPlayer();
     public final IBinder binder = new MyBinder();
 
     public class MyBinder extends Binder {
@@ -47,6 +47,7 @@ public class FindMusicPlayService extends Service {
         musicAlbum_id = intent.getLongExtra("album_id", 0);
 
         try {
+            mMediaPlayer.reset();
             mMediaPlayer.setDataSource(musicUrl);
             mMediaPlayer.prepare();
 
@@ -60,5 +61,13 @@ public class FindMusicPlayService extends Service {
         }
 
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    public void playOrPause() {
+        if (mMediaPlayer.isPlaying()) {
+            mMediaPlayer.pause();
+        } else {
+            mMediaPlayer.start();
+        }
     }
 }

@@ -117,7 +117,7 @@
                 android:layout_weight="1.0"
                 android:background="@drawable/item_selector_no_border"
                 android:padding="8dp"
-                android:src="@drawable/ic_play_circle_outline_black_18dp"/>
+                android:src="@drawable/ic_play_circle_outline_black_24dp"/>
 
             <ImageButton
                 android:id="@+id/find_music_next_imv"

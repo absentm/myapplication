@@ -174,7 +174,7 @@
 
         <service
             android:name=".find.FindMusicPlayService"
-            android:exported="true"></service>
+            android:exported="true"/>
 
     </application>
 
