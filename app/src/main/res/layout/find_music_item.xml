@@ -5,12 +5,22 @@
     android:layout_height="wrap_content"
     android:background="@drawable/item_selector_no_border">
 
+    <ImageView
+        android:id="@+id/item_music_playing_imv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/ic_volume_up_black_18dp"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/item_music_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="6dp"
+        android:layout_toRightOf="@+id/item_music_playing_imv"
         android:maxLines="1"
         android:maxWidth="260dp"
         android:text="传奇"
@@ -24,6 +34,7 @@
         android:layout_below="@+id/item_music_title_tv"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="4dp"
+        android:layout_toRightOf="@+id/item_music_playing_imv"
         android:text="王菲 - "
         android:textSize="13sp"/>
 
@@ -35,16 +46,6 @@
         android:layout_toRightOf="@+id/item_music_artist_tv"
         android:text="[ 03:40 ]"
         android:textSize="13sp"/>
-
-    <ImageView
-        android:id="@+id/item_music_playing_imv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="32dp"
-        android:src="@drawable/ic_volume_up_black_18dp"
-        android:visibility="invisible"/>
 
     <View
         android:layout_width="match_parent"

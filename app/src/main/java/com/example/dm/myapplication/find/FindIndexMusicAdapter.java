@@ -1,6 +1,7 @@
 package com.example.dm.myapplication.find;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,12 +48,18 @@ public class FindIndexMusicAdapter extends IndexableAdapter<MusicEntity> {
     public void onBindContentViewHolder(RecyclerView.ViewHolder holder, MusicEntity entity) {
         final ContentVH vh = (ContentVH) holder;
         vh.musicTitleTv.setText(entity.getTitle());
-        vh.musicArtistTv.setText(entity.getArtist() + " - ");
+        vh.musicTitleTv.setTextColor(Color.parseColor("#b3000000"));
+
+        vh.musicArtistTv.setText(String.format("%s - ", entity.getArtist()));
+        vh.musicArtistTv.setTextColor(Color.parseColor("#b3000000"));
+
         vh.musicTimeTv.setText("[ " + formatTime(entity.getDuration()) + " ]");
+        vh.musicTimeTv.setTextColor(Color.parseColor("#b3000000"));
+
         vh.musicPlayingImv.setVisibility(View.GONE);
 
         // 将数据保存在itemView的Tag中，以便点击时进行获取
-        vh.itemView.setTag(entity);
+        vh.itemView.setTag(holder);
     }
 
     private class IndexVH extends RecyclerView.ViewHolder {
@@ -64,7 +71,7 @@ public class FindIndexMusicAdapter extends IndexableAdapter<MusicEntity> {
         }
     }
 
-    private class ContentVH extends RecyclerView.ViewHolder {
+    public static class ContentVH extends RecyclerView.ViewHolder {
         ImageView musicPlayingImv;
         TextView musicTitleTv;
         TextView musicArtistTv;

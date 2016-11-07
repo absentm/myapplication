@@ -23,6 +23,7 @@ import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.MusicEntity;
 import com.example.dm.myapplication.utiltools.FileUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.yokeyword.indexablerv.IndexableAdapter;
@@ -37,6 +38,8 @@ import static com.example.dm.myapplication.find.FindMusicPlayService.mMediaPlaye
 public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         IndexableAdapter.OnItemContentClickListener<MusicEntity>,
         IndexableAdapter.OnItemTitleClickListener {
+
+    List<FindIndexMusicAdapter.ContentVH> listViewHolder = new ArrayList<>();
 
     private ImageButton titleBackIBtn;
     private ProgressBar mProgressBar;
@@ -109,32 +112,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
     }
 
     private void eventDeal() {
-//        // set Listener
-//        mFindIndexMusicAdapter.setOnItemContentClickListener(new IndexableAdapter.OnItemContentClickListener<MusicEntity>() {
-//            @Override
-//            public void onItemClick(View v, int originalPosition, int currentPosition, MusicEntity entity) {
-//                if (originalPosition >= 0) {
-//                    Toast.makeText(FindIndexMusicAty.this, "选中:" +
-//                            entity.getTitle() + "  当前位置:" + currentPosition +
-//                            "  原始所在数组位置:" + originalPosition, Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(FindIndexMusicAty.this,
-//                            "选中Header:" + entity.getTitle() + "  当前位置:" + currentPosition, Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-//
-//        mFindIndexMusicAdapter.setOnItemTitleClickListener(new IndexableAdapter.OnItemTitleClickListener() {
-//            @Override
-//            public void onItemClick(View v, int currentPosition, String indexTitle) {
-//                Toast.makeText(FindIndexMusicAty.this,
-//                        "选中:" + indexTitle + "  当前位置:" + currentPosition,
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        // 添加 HeaderView DefaultHeaderAdapter接收一个IndexableAdapter, 使其布局以及点击事件和IndexableAdapter一致
-//        // 如果想自定义布局,点击事件, 可传入 new IndexableHeaderAdapter
+
     }
 
     @Override
@@ -169,10 +147,33 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
             Toast.makeText(FindIndexMusicAty.this, "选中:" +
                     entity.getTitle() + "  当前位置:" + currentPosition +
                     "  原始所在数组位置:" + originalPosition, Toast.LENGTH_SHORT).show();
+
+            // 复位其他被点选过的Item，重置为正常
+            for (int i = 0; i < listViewHolder.size(); i++) {
+                listViewHolder.get(i).musicPlayingImv.setVisibility(View.GONE);
+                listViewHolder.get(i).musicArtistTv.
+                        setTextColor(getResources().getColor(R.color.black_trans70));
+                listViewHolder.get(i).musicTitleTv.
+                        setTextColor(getResources().getColor(R.color.black_trans70));
+                listViewHolder.get(i).musicTimeTv.
+                        setTextColor(getResources().getColor(R.color.black_trans70));
+            }
+
+            // item view的获取方法1
+            FindIndexMusicAdapter.ContentVH contentVH = (FindIndexMusicAdapter.ContentVH)
+                    mIndexableLayout.getRecyclerView().getChildViewHolder(v);
+            // item view的获取方法2
+//            FindIndexMusicAdapter.ContentVH contentVH = (FindIndexMusicAdapter.ContentVH) v.getTag();
+            contentVH.musicPlayingImv.setVisibility(View.VISIBLE);
+            contentVH.musicArtistTv.setTextColor(getResources().getColor(R.color.teal));
+            contentVH.musicTitleTv.setTextColor(getResources().getColor(R.color.teal));
+            contentVH.musicTimeTv.setTextColor(getResources().getColor(R.color.teal));
+            listViewHolder.clear();
+            listViewHolder.add(contentVH);
+
             currMusicTitle = entity.getTitle();
             currMusicArtist = entity.getArtist();
             currMusicAlbum_id = entity.getAlbum_id();
-
             Glide.with(FindIndexMusicAty.this)
                     .load(getCoverUri(FindIndexMusicAty.this, currMusicAlbum_id))
                     .placeholder(R.drawable.app_icon)

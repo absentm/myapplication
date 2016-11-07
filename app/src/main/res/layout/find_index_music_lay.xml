@@ -76,8 +76,11 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="8dp"
             android:layout_toRightOf="@+id/find_music_album_imv"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
             android:maxLines="1"
-            android:maxWidth="200dp"
             android:text="传奇"
             android:textColor="@color/black_trans70"
             android:textSize="16sp"/>
