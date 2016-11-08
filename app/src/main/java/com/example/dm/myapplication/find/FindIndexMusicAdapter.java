@@ -47,14 +47,16 @@ public class FindIndexMusicAdapter extends IndexableAdapter<MusicEntity> {
     @Override
     public void onBindContentViewHolder(RecyclerView.ViewHolder holder, MusicEntity entity) {
         final ContentVH vh = (ContentVH) holder;
+        int textColor = Color.parseColor("#b3000000");
+
         vh.musicTitleTv.setText(entity.getTitle());
-        vh.musicTitleTv.setTextColor(Color.parseColor("#b3000000"));
+        vh.musicTitleTv.setTextColor(textColor);
 
         vh.musicArtistTv.setText(String.format("%s - ", entity.getArtist()));
-        vh.musicArtistTv.setTextColor(Color.parseColor("#b3000000"));
+        vh.musicArtistTv.setTextColor(textColor);
 
         vh.musicTimeTv.setText("[ " + formatTime(entity.getDuration()) + " ]");
-        vh.musicTimeTv.setTextColor(Color.parseColor("#b3000000"));
+        vh.musicTimeTv.setTextColor(textColor);
 
         vh.musicPlayingImv.setVisibility(View.GONE);
 
