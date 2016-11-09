@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.MusicEntity;
+import com.example.dm.myapplication.customviews.MarqueeTextView;
 import com.example.dm.myapplication.utiltools.FileUtil;
 
 import java.util.ArrayList;
@@ -38,15 +39,14 @@ import static com.example.dm.myapplication.find.FindMusicPlayService.mMediaPlaye
  * Created by dm on 16-11-2.
  */
 public class FindIndexMusicAty extends Activity implements View.OnClickListener,
-        IndexableAdapter.OnItemContentClickListener<MusicEntity>,
-        IndexableAdapter.OnItemTitleClickListener {
+        IndexableAdapter.OnItemContentClickListener<MusicEntity> {
 
     private List<FindIndexMusicAdapter.ContentVH> listViewHolder = new ArrayList<>();
 
     private ImageButton titleBackIBtn;
     private ProgressBar mProgressBar;
     private ImageView mCurrMusicAlbumImv;
-    private TextView mCurrMusicTitleTv;
+    private MarqueeTextView mCurrMusicTitleTv;
     private TextView mCurrMusicArtistTv;
     private ImageButton mCurrMusicPlayOrPauseIBtn;
 
@@ -85,7 +85,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         titleBackIBtn = (ImageButton) findViewById(R.id.title_music_left_imv);
         mProgressBar = (ProgressBar) findViewById(R.id.find_index_music_pbar);
         mCurrMusicAlbumImv = (ImageView) findViewById(R.id.find_music_album_imv);
-        mCurrMusicTitleTv = (TextView) findViewById(R.id.item_music_title_tv);
+        mCurrMusicTitleTv = (MarqueeTextView) findViewById(R.id.item_music_title_tv);
         mCurrMusicArtistTv = (TextView) findViewById(R.id.item_music_artist_tv);
         mCurrMusicPlayOrPauseIBtn = (ImageButton) findViewById(R.id.find_music_play_imv);
 
@@ -110,7 +110,6 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         titleBackIBtn.setOnClickListener(FindIndexMusicAty.this);
         mCurrMusicPlayOrPauseIBtn.setOnClickListener(FindIndexMusicAty.this);
         mFindIndexMusicAdapter.setOnItemContentClickListener(FindIndexMusicAty.this);
-        mFindIndexMusicAdapter.setOnItemTitleClickListener(FindIndexMusicAty.this);
     }
 
     private void eventDeal() {
@@ -202,20 +201,6 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
             Toast.makeText(FindIndexMusicAty.this,
                     "选中Header:" + entity.getTitle() + "  当前位置:" + currentPosition, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    /**
-     * item 标题点击事件
-     *
-     * @param v
-     * @param currentPosition
-     * @param indexTitle
-     */
-    @Override
-    public void onItemClick(View v, int currentPosition, String indexTitle) {
-        Toast.makeText(FindIndexMusicAty.this,
-                "选中:" + indexTitle + "  当前位置:" + currentPosition,
-                Toast.LENGTH_SHORT).show();
     }
 
     private ServiceConnection sc = new ServiceConnection() {

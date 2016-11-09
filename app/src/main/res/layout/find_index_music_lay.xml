@@ -69,7 +69,7 @@
             android:layout_marginTop="8dp"
             android:src="@drawable/app_icon"/>
 
-        <TextView
+        <com.example.dm.myapplication.customviews.MarqueeTextView
             android:id="@+id/item_music_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -77,8 +77,6 @@
             android:layout_marginTop="8dp"
             android:layout_toRightOf="@+id/find_music_album_imv"
             android:ellipsize="marquee"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:marqueeRepeatLimit="marquee_forever"
             android:maxLines="1"
             android:text="传奇"
