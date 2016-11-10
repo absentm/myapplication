@@ -17,7 +17,7 @@ import com.example.dm.myapplication.R;
 public class NineGridViewAdapter extends BaseAdapter {
     private Context mContext;
 
-    public String[] img_text = {"云笔记", "How old", "云同步", "览图",
+    public String[] img_text = {"云笔记", "How old", "干货", "览图",
             "扫一扫", "视频", "天气", "周边", "音乐",};
 
     public int[] imgs = {R.drawable.ic_mode_edit_grey600_36dp,

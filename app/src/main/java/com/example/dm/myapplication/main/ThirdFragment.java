@@ -7,17 +7,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.AppUser;
 import com.example.dm.myapplication.customviews.ninegridview.NineGridView;
 import com.example.dm.myapplication.customviews.ninegridview.NineGridViewAdapter;
+import com.example.dm.myapplication.find.FindGankAty;
 import com.example.dm.myapplication.find.FindHowOldAct;
 import com.example.dm.myapplication.find.FindIndexMusicAty;
 import com.example.dm.myapplication.find.FindMapAroundAty;
 import com.example.dm.myapplication.find.FindMeiziAty;
 import com.example.dm.myapplication.find.FindNotesAty;
+import com.example.dm.myapplication.find.FindSearchAty;
 import com.example.dm.myapplication.find.FindVideoAty;
 import com.example.dm.myapplication.find.FindWeatherAty;
 import com.example.dm.myapplication.find.zxing.activity.CaptureActivity;
@@ -29,14 +33,16 @@ import cn.bmob.v3.BmobUser;
  * Created by dm on 16-3-29.
  * 第三个页面
  */
-public class ThirdFragment extends Fragment {
+public class ThirdFragment extends Fragment implements View.OnClickListener {
+    private ImageButton titleSearchIbtn;
     private NineGridView nineGridView;
     private View view;
+    private MaterialDialog mMaterialDialog;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fg3, container, false);
-
 
         initView();     // 初始化界面控件
         dealEvents();   // 事件处理: gridview item的点击事件
@@ -47,9 +53,10 @@ public class ThirdFragment extends Fragment {
      * 初始化界面控件
      */
     private void initView() {
+        titleSearchIbtn = (ImageButton) view.findViewById(R.id.title_find_search_ibtn);
+        titleSearchIbtn.setOnClickListener(ThirdFragment.this);
         nineGridView = (NineGridView) view.findViewById(R.id.find_nine_gridview);
         nineGridView.setAdapter(new NineGridViewAdapter(getActivity()));
-
     }
 
     /**
@@ -76,7 +83,7 @@ public class ThirdFragment extends Fragment {
                         startActivity(new Intent(getActivity(), FindHowOldAct.class));
                         break;
                     case 2:
-
+                        startActivity(new Intent(getActivity(), FindGankAty.class));
                         break;
                     case 3:
                         startActivity(new Intent(getActivity(), FindMeiziAty.class));
@@ -94,13 +101,20 @@ public class ThirdFragment extends Fragment {
                         startActivity(new Intent(getActivity(), FindMapAroundAty.class));
                         break;
                     case 8:
-//                        startActivity(new Intent(getActivity(), FindMusicAty.class));
                         startActivity(new Intent(getActivity(), FindIndexMusicAty.class));
                         break;
-
                 }
             }
         });
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.title_find_search_ibtn:
+                startActivity(new Intent(getActivity(), FindSearchAty.class));
+                break;
+
+        }
+    }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/ghostwhite"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/ghostwhite"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/title_rout"
@@ -18,7 +18,15 @@
             android:layout_centerInParent="true"
             android:text="发  现"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
+
+        <ImageButton
+            android:id="@+id/title_find_search_ibtn"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/item_teal_selector_no_bord"
+            android:src="@drawable/ic_search_white_24dp"/>
     </RelativeLayout>
 
     <com.example.dm.myapplication.customviews.ReboundScrollView
@@ -35,7 +43,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="186dp"
-                android:background="@drawable/find_imv" />
+                android:background="@drawable/find_imv"/>
 
             <com.example.dm.myapplication.customviews.ninegridview.NineGridView
                 android:id="@+id/find_nine_gridview"
@@ -46,7 +54,7 @@
                 android:numColumns="3"
                 android:scrollbars="none"
                 android:stretchMode="columnWidth"
-                android:verticalSpacing="0dp" />
+                android:verticalSpacing="0dp"/>
         </LinearLayout>
     </com.example.dm.myapplication.customviews.ReboundScrollView>
 </LinearLayout>

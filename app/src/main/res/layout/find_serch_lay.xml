@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/title_rout"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/teal"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/find_search_back_ibtn"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/item_teal_selector_no_bord"
+            android:src="@drawable/ic_navigate_before_white_24dp"/>
+
+        <EditText
+            android:id="@+id/find_search_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="2dp"
+            android:layout_toLeftOf="@+id/find_search_ibtn"
+            android:layout_toRightOf="@+id/find_search_back_ibtn"
+            android:background="@null"
+            android:hint="搜索干货"
+            android:maxLines="1"
+            android:textColor="@color/black_trans90"
+            android:textColorHint="@color/black_trans40"
+            android:textSize="15sp"/>
+
+        <View
+            android:id="@+id/find_search_view"
+            android:layout_width="match_parent"
+            android:layout_height="0.4dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="5dp"
+            android:layout_toLeftOf="@+id/find_search_ibtn"
+            android:layout_toRightOf="@+id/find_search_back_ibtn"
+            android:background="@color/black_trans90"/>
+
+        <ImageButton
+            android:id="@+id/find_search_ibtn"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/item_teal_selector_no_bord"
+            android:src="@drawable/ic_search_white_24dp"/>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/find_search_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title_rout"
+        android:background="@color/black_trans10"/>
+</LinearLayout>
