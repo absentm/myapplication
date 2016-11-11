@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -86,6 +87,8 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         mProgressBar = (ProgressBar) findViewById(R.id.find_index_music_pbar);
         mCurrMusicAlbumImv = (ImageView) findViewById(R.id.find_music_album_imv);
         mCurrMusicTitleTv = (MarqueeTextView) findViewById(R.id.item_music_title_tv);
+        mCurrMusicTitleTv.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        mCurrMusicTitleTv.setSingleLine(true);
         mCurrMusicArtistTv = (TextView) findViewById(R.id.item_music_artist_tv);
         mCurrMusicPlayOrPauseIBtn = (ImageButton) findViewById(R.id.find_music_play_imv);
 

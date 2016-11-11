@@ -14,43 +14,18 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
         android:text="*"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black_trans60"/>
 
     <TextView
-        android:id="@+id/item_search_desc_tv"
+        android:id="@+id/item_search_content_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="16dp"
         android:layout_toRightOf="@+id/item_search_dot_tv"
-        android:text="apk瘦身之取出R.class"
-        android:textColor="@color/black_trans70"
-        android:textSize="13sp"/>
+        android:text="apk瘦身之取出R.class (Android via.daimajia)"
+        android:textColor="@color/black"
+        android:textSize="14sp"/>
 
-    <TextView
-        android:id="@+id/item_search_type_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/item_search_desc_tv"
-        android:text=" (Android "
-        android:textColor="@color/black_trans40"
-        android:textSize="12sp"/>
-
-    <TextView
-        android:id="@+id/item_search_who_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/item_search_type_tv"
-        android:text="via.diamajia)"
-        android:textColor="@color/black_trans40"
-        android:textSize="12sp"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.01dp"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/item_search_who_tv"
-        android:background="@color/black_trans15"/>
 </RelativeLayout>

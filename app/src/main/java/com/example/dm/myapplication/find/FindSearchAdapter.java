@@ -1,7 +1,11 @@
 package com.example.dm.myapplication.find;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.TextAppearanceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,10 +51,25 @@ public class FindSearchAdapter
 
     @Override
     public void onBindViewHolder(FindSearchAdapter.ItemHolder holder, int position) {
-        // 时间轴竖线的layout
-        holder.searchResultDescTv.setText(mDatas.get(position).getDesc() + " " + "(");
-        holder.searchResultTypeTv.setText(String.format("%s", mDatas.get(position).getType()));
-        holder.searchResultWhoTv.setText("via." + mDatas.get(position).getWho() + ")");
+//        String typeAndWhoStr = "<font color=\"#666666\"> ( "
+//                + mDatas.get(position).getType()
+//                + " via." + mDatas.get(position).getWho() + ")  </font>";
+
+        int textColor = Color.parseColor("#4d000000");
+
+        String textStr = mDatas.get(position).getDesc() + " ("
+                + " via. " + mDatas.get(position).getWho() + ")";
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(textStr);
+//        spannableStringBuilder.setSpan(new ForegroundColorSpan(textColor),
+//                textStr.lastIndexOf("("), textStr.lastIndexOf(")") + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableStringBuilder.setSpan(new TextAppearanceSpan(context, R.style.text_span_style),
+                textStr.lastIndexOf("("), textStr.lastIndexOf(")") + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        holder.searchResultContentTv.setText(spannableStringBuilder);
+
+//        holder.searchResultContentTv.setText(mDatas.get(position).getDesc() + " ("
+//                + mDatas.get(position).getType()
+//                + " via." + mDatas.get(position).getWho() + ")");
 
         // 将数据保存在itemView的Tag中，以便点击时进行获取
         holder.itemView.setTag(mDatas.get(position));
@@ -74,15 +93,11 @@ public class FindSearchAdapter
     }
 
     public static class ItemHolder extends RecyclerView.ViewHolder {
-        TextView searchResultDescTv;
-        TextView searchResultTypeTv;
-        TextView searchResultWhoTv;
+        TextView searchResultContentTv;
 
         public ItemHolder(View view) {
             super(view);
-            searchResultDescTv = (TextView) view.findViewById(R.id.item_search_desc_tv);
-            searchResultTypeTv = (TextView) view.findViewById(R.id.item_search_type_tv);
-            searchResultWhoTv = (TextView) view.findViewById(R.id.item_search_who_tv);
+            searchResultContentTv = (TextView) view.findViewById(R.id.item_search_content_tv);
         }
     }
 

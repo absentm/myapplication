@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/title_rout"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/teal"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/title_gank_detail_back_ibtn"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:background="@drawable/item_teal_selector_no_bord"
+            android:src="@drawable/ic_navigate_before_white_24dp"/>
+
+        <com.example.dm.myapplication.customviews.MarqueeTextView
+            android:id="@+id/title_detail_gank_class_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@+id/title_gank_detail_back_ibtn"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:maxLines="1"
+            android:text="干货详情"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
+
+        <ImageButton
+            android:id="@+id/title_detail_gank_share_ibtn"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/item_teal_selector_no_bord"
+            android:src="@drawable/ic_share_white_18dp"/>
+    </RelativeLayout>
+
+    <com.daimajia.numberprogressbar.NumberProgressBar
+        android:id="@+id/find_gank_detail_numpbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_rout"
+        app:progress_reached_bar_height="2dp"
+        app:progress_text_size="0sp"
+        app:progress_text_visibility="invisible"
+        app:progress_unreached_bar_height="2dp"/>
+
+    <WebView
+        android:id="@+id/find_gank_detail_wv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/find_gank_detail_numpbar"/>
+
+
+</RelativeLayout>

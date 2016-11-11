@@ -66,7 +66,7 @@ public class FindSearchAty extends Activity
                 break;
             case find_search_ibtn:
                 mSearchContentStr = mSearchContentEt.getText().toString().trim();
-
+                break;
         }
     }
 }

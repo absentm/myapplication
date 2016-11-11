@@ -83,7 +83,13 @@ public class HttpUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return buffer.toString();  //返回获取的json字符串
+
+        //返回获取的json字符串
+        if (buffer != null) {
+            return buffer.toString();  //返回获取的json字符串
+        } else {
+            return "";
+        }
     }
 
     public static String getVideoJsonStr() throws UnsupportedEncodingException {
@@ -114,11 +120,18 @@ public class HttpUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return buffer.toString();  //返回获取的json字符串
+
+        //返回获取的json字符串
+        if (buffer != null) {
+            return buffer.toString();  //返回获取的json字符串
+        } else {
+            return "";
+        }
     }
 
-    public static String getSearchJsonStr() throws UnsupportedEncodingException {
-        String requestUrl = "http://gank.io/api/data/%E4%BC%91%E6%81%AF%E8%A7%86%E9%A2%91/10/1";
+    public static String getGankJsonStr(String gankClassStr) throws UnsupportedEncodingException {
+        String requestUrl = "http://gank.io/api/search/query/listview/category/"
+                + URLEncoder.encode(gankClassStr, "utf-8") + "/count/20/page/1 ";
         StringBuffer buffer = null;
         try {
             // 建立连接
@@ -145,6 +158,11 @@ public class HttpUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return buffer.toString();  //返回获取的json字符串
+
+        if (buffer != null) {
+            return buffer.toString();  //返回获取的json字符串
+        } else {
+            return "";
+        }
     }
 }

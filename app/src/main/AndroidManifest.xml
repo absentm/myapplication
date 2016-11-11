@@ -179,6 +179,10 @@
             android:name=".find.FindGankAty"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".find.FindGankDetailAty"
+            android:screenOrientation="portrait"/>
+
         <service
             android:name=".find.FindMusicPlayService"
             android:exported="true"/>

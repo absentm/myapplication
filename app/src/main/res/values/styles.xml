@@ -50,4 +50,9 @@
         <item name="android:textOn">""</item>
     </style>
 
+    <style name="text_span_style">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/black_trans30</item>
+    </style>
+
 </resources>
