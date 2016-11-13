@@ -94,6 +94,7 @@ public class FindGankDetailAty extends Activity implements View.OnClickListener 
         @Override
         public void onReceivedTitle(WebView view, String title) {
             super.onReceivedTitle(view, title);
+            mMarqueeTextView.setText(title);
         }
     }
 
@@ -117,7 +118,7 @@ public class FindGankDetailAty extends Activity implements View.OnClickListener 
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
                 shareIntent.putExtra(Intent.EXTRA_TEXT,
-                        "来自[AbsentM-干货分享]:\n" + mGankDescStr + "\n" + mGankUrlStr);
+                        "来自[AbsentM-干货分享]: " + mGankDescStr + " " + mGankUrlStr);
                 shareIntent.setType("text/plain");
                 //设置分享列表的标题，并且每次都显示分享列表
                 startActivity(Intent.createChooser(shareIntent, "分享到"));

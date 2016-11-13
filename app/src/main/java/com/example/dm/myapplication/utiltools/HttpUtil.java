@@ -131,7 +131,7 @@ public class HttpUtil {
 
     public static String getGankJsonStr(String gankClassStr) throws UnsupportedEncodingException {
         String requestUrl = "http://gank.io/api/search/query/listview/category/"
-                + URLEncoder.encode(gankClassStr, "utf-8") + "/count/20/page/1 ";
+                + URLEncoder.encode(gankClassStr, "utf-8") + "/count/30/page/1 ";
         StringBuffer buffer = null;
         try {
             // 建立连接
