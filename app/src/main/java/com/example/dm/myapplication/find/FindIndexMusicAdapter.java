@@ -48,17 +48,24 @@ public class FindIndexMusicAdapter extends IndexableAdapter<MusicEntity> {
     public void onBindContentViewHolder(RecyclerView.ViewHolder holder, MusicEntity entity) {
         final ContentVH vh = (ContentVH) holder;
         int textColor = Color.parseColor("#b3000000");
+        int textColorChange = Color.parseColor("#008080");
 
         vh.musicTitleTv.setText(entity.getTitle());
-        vh.musicTitleTv.setTextColor(textColor);
-
         vh.musicArtistTv.setText(String.format("%s - ", entity.getArtist()));
-        vh.musicArtistTv.setTextColor(textColor);
-
         vh.musicTimeTv.setText("[ " + formatTime(entity.getDuration()) + " ]");
-        vh.musicTimeTv.setTextColor(textColor);
 
-        vh.musicPlayingImv.setVisibility(View.GONE);
+        if (entity.isSelected()) {
+            vh.musicTitleTv.setTextColor(textColorChange);
+            vh.musicArtistTv.setTextColor(textColorChange);
+            vh.musicTimeTv.setTextColor(textColorChange);
+            vh.musicPlayingImv.setVisibility(View.VISIBLE);
+        } else {
+            vh.musicTitleTv.setTextColor(textColor);
+            vh.musicArtistTv.setTextColor(textColor);
+            vh.musicTimeTv.setTextColor(textColor);
+            vh.musicPlayingImv.setVisibility(View.GONE);
+        }
+
 
         // 将数据保存在itemView的Tag中，以便点击时进行获取
         vh.itemView.setTag(holder);

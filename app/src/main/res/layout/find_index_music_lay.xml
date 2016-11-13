@@ -79,7 +79,7 @@
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
             android:maxLines="1"
-            android:text="传奇"
+            android:text="无"
             android:textColor="@color/black_trans70"
             android:textSize="16sp"/>
 
@@ -92,7 +92,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="2dp"
             android:layout_toRightOf="@+id/find_music_album_imv"
-            android:text="王菲"
+            android:text="无"
             android:textSize="12sp"/>
 
         <LinearLayout

@@ -57,32 +57,28 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
 
     private FindMusicPlayService musicService;
 
-    public static String currMusicTitle;
-    public static String currMusicArtist;
-    public static long currMusicAlbum_id;
-
+    public static String lastMusicUrl;
+    public static String lastMusicAlbum;
     public static String lastMusicTitle;
     public static String lastMusicArtist;
     public static long lastMusicAlbum_id;
 
-    private int isFirstCreateFlag = 0;
+    private boolean isFirstPlay;
+    private boolean isPause;
+    private int position = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.find_index_music_lay);
-        mDatas = FileUtil.getLocalIndexMusics(FindIndexMusicAty.this.getContentResolver());
 
         initView();
         setUpListener();
-        eventDeal();
-
-        if (isFirstCreateFlag != 0) {
-            getLastMusicInfos();
-        }
     }
 
     private void initView() {
+        mDatas = FileUtil.getLocalIndexMusics(FindIndexMusicAty.this.getContentResolver());
+
         titleBackIBtn = (ImageButton) findViewById(R.id.title_music_left_imv);
         mProgressBar = (ProgressBar) findViewById(R.id.find_index_music_pbar);
         mCurrMusicAlbumImv = (ImageView) findViewById(R.id.find_music_album_imv);
@@ -107,6 +103,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         // 快速排序。  排序规则设置为：只按首字母  （默认全拼音排序）  效率很高，是默认的10倍左右。  按需开启～
         mIndexableLayout.setFastCompare(true);
 
+        initFirstRunEvent();
     }
 
     private void setUpListener() {
@@ -115,8 +112,28 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         mFindIndexMusicAdapter.setOnItemContentClickListener(FindIndexMusicAty.this);
     }
 
-    private void eventDeal() {
+    private void initFirstRunEvent() {
+        SharedPreferences sharedPreferences =
+                FindIndexMusicAty.this.getSharedPreferences("shareInfo", MODE_PRIVATE);
+        isFirstPlay = sharedPreferences.getBoolean("isFirstRun", true);
 
+        if (mDatas.isEmpty()) {
+            Toast.makeText(FindIndexMusicAty.this,
+                    "本地暂无音乐，先去下载吧！", Toast.LENGTH_SHORT).show();
+        } else {
+            if (isFirstPlay) {   // 第一次播放初始化
+                Glide.with(FindIndexMusicAty.this)
+                        .load(getCoverUri(FindIndexMusicAty.this, mDatas.get(0).getAlbum_id()))
+                        .placeholder(R.drawable.app_icon)
+                        .error(R.drawable.app_icon)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(mCurrMusicAlbumImv);
+                mCurrMusicTitleTv.setText(mDatas.get(0).getTitle());
+                mCurrMusicArtistTv.setText(mDatas.get(0).getArtist());
+            } else {
+                getLastMusicInfos();
+            }
+        }
     }
 
     @Override
@@ -126,14 +143,53 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
                 FindIndexMusicAty.this.finish();
                 break;
             case R.id.find_music_play_imv:
-                if (mMediaPlayer.isPlaying()) {
-                    mMediaPlayer.pause();
-                    mCurrMusicPlayOrPauseIBtn
-                            .setImageResource(R.drawable.ic_play_circle_outline_black_24dp);
-                } else if (isFirstCreateFlag != 0) {
-                    mMediaPlayer.start();
-                    mCurrMusicPlayOrPauseIBtn
-                            .setImageResource(R.drawable.ic_pause_circle_outline_black_24dp);
+                if (isFirstPlay) {
+                    Intent intent = new Intent();
+                    intent.putExtra("url", mDatas.get(0).getUrl());
+                    intent.putExtra("title", mDatas.get(0).getTitle());
+                    intent.putExtra("artist", mDatas.get(0).getArtist());
+                    intent.putExtra("album", mDatas.get(0).getAlbum());
+                    intent.putExtra("album_id", mDatas.get(0).getAlbum_id());
+                    intent.setClass(FindIndexMusicAty.this, FindMusicPlayService.class);
+                    startService(intent);
+                    bindService(intent, sc, BIND_AUTO_CREATE);
+                    mCurrMusicPlayOrPauseIBtn.setImageResource(
+                            R.drawable.ic_pause_circle_outline_black_24dp);
+
+                    // 保存第一次播放信息
+                    lastMusicTitle = mDatas.get(0).getTitle();
+                    lastMusicArtist = mDatas.get(0).getArtist();
+                    lastMusicAlbum_id = mDatas.get(0).getAlbum_id();
+                    lastMusicUrl = mDatas.get(0).getUrl();
+                    lastMusicAlbum = mDatas.get(0).getAlbum();
+
+                    saveLastMusicInfos();
+                    setFirstPlayFalse();
+                    isFirstPlay = false;
+                } else {
+                    if (mMediaPlayer.isPlaying()) {
+                        mMediaPlayer.pause();
+                        mCurrMusicPlayOrPauseIBtn
+                                .setImageResource(R.drawable.ic_play_circle_outline_black_24dp);
+                        isPause = true;
+                    } else if (isPause) {
+                        mMediaPlayer.start();
+                        mCurrMusicPlayOrPauseIBtn
+                                .setImageResource(R.drawable.ic_pause_circle_outline_black_24dp);
+                        isPause = false;
+                    } else {
+                        Intent intent = new Intent();
+                        intent.putExtra("url", lastMusicUrl);
+                        intent.putExtra("title", lastMusicTitle);
+                        intent.putExtra("artist", lastMusicArtist);
+                        intent.putExtra("album", lastMusicAlbum);
+                        intent.putExtra("album_id", lastMusicAlbum_id);
+                        intent.setClass(FindIndexMusicAty.this, FindMusicPlayService.class);
+                        startService(intent);
+                        bindService(intent, sc, BIND_AUTO_CREATE);
+                        mCurrMusicPlayOrPauseIBtn
+                                .setImageResource(R.drawable.ic_pause_circle_outline_black_24dp);
+                    }
                 }
                 break;
         }
@@ -149,61 +205,67 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
      */
     @Override
     public void onItemClick(View v, int originalPosition, int currentPosition, MusicEntity entity) {
-        if (originalPosition >= 0) {
-            int textColorNorm = Color.parseColor("#b3000000");
-            int textColorChange = Color.parseColor("#008080");
+        int textColorNorm = Color.parseColor("#b3000000");
+        int textColorChange = Color.parseColor("#008080");
 
-            // 复位其他被点选过的Item，重置为正常
-            for (int i = 0; i < listViewHolder.size(); i++) {
-                listViewHolder.get(i).musicPlayingImv.setVisibility(View.GONE);
-                listViewHolder.get(i).musicArtistTv.setTextColor(textColorNorm);
-                listViewHolder.get(i).musicTitleTv.setTextColor(textColorNorm);
-                listViewHolder.get(i).musicTimeTv.setTextColor(textColorNorm);
-            }
-
-            // item view的获取方法1
-//            FindIndexMusicAdapter.ContentVH contentVH = (FindIndexMusicAdapter.ContentVH)
-//                    mIndexableLayout.getRecyclerView().getChildViewHolder(v);
-            // item view的获取方法2
-            FindIndexMusicAdapter.ContentVH contentVH = (FindIndexMusicAdapter.ContentVH) v.getTag();
-            contentVH.musicPlayingImv.setVisibility(View.VISIBLE);
-            contentVH.musicArtistTv.setTextColor(textColorChange);
-            contentVH.musicTitleTv.setTextColor(textColorChange);
-            contentVH.musicTimeTv.setTextColor(textColorChange);
-            listViewHolder.clear();
-            listViewHolder.add(contentVH);
-
-            currMusicTitle = entity.getTitle();
-            currMusicArtist = entity.getArtist();
-            currMusicAlbum_id = entity.getAlbum_id();
-            Glide.with(FindIndexMusicAty.this)
-                    .load(getCoverUri(FindIndexMusicAty.this, currMusicAlbum_id))
-                    .placeholder(R.drawable.app_icon)
-                    .error(R.drawable.app_icon)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(mCurrMusicAlbumImv);
-
-            mCurrMusicTitleTv.setText(currMusicTitle);
-            mCurrMusicArtistTv.setText(currMusicArtist);
-            mCurrMusicPlayOrPauseIBtn.setImageResource(R.drawable.ic_pause_circle_outline_black_24dp);
-
-            saveLastMusicInfos();
-
-            Intent intent = new Intent();
-            intent.putExtra("url", entity.getUrl());
-            intent.putExtra("title", entity.getTitle());
-            intent.putExtra("artist", entity.getArtist());
-            intent.putExtra("album", entity.getAlbum());
-            intent.putExtra("album_id", entity.getAlbum_id());
-            intent.setClass(FindIndexMusicAty.this, FindMusicPlayService.class);
-            startService(intent);
-            bindService(intent, sc, BIND_AUTO_CREATE);
-
-            isFirstCreateFlag = 1;
-        } else {
-            Toast.makeText(FindIndexMusicAty.this,
-                    "选中Header:" + entity.getTitle() + "  当前位置:" + currentPosition, Toast.LENGTH_SHORT).show();
+        // 复位其他被点选过的Item，重置为正常
+        for (int i = 0; i < listViewHolder.size(); i++) {
+            listViewHolder.get(i).musicPlayingImv.setVisibility(View.GONE);
+            listViewHolder.get(i).musicArtistTv.setTextColor(textColorNorm);
+            listViewHolder.get(i).musicTitleTv.setTextColor(textColorNorm);
+            listViewHolder.get(i).musicTimeTv.setTextColor(textColorNorm);
         }
+
+        // 防止点选item状态被复用回收，标记并重置为正常
+        for (int i = 0; i < mDatas.size(); i++) {
+            mDatas.get(i).setSelected(false);
+        }
+
+        // item view的获取方法1
+        // FindIndexMusicAdapter.ContentVH contentVH
+        // = (FindIndexMusicAdapter.ContentVH)
+        // mIndexableLayout.getRecyclerView().getChildViewHolder(v);
+        // item view的获取方法2
+        FindIndexMusicAdapter.ContentVH contentVH = (FindIndexMusicAdapter.ContentVH) v.getTag();
+        contentVH.musicPlayingImv.setVisibility(View.VISIBLE);
+        contentVH.musicArtistTv.setTextColor(textColorChange);
+        contentVH.musicTitleTv.setTextColor(textColorChange);
+        contentVH.musicTimeTv.setTextColor(textColorChange);
+        listViewHolder.clear();
+        listViewHolder.add(contentVH);
+
+        // 初始化当前播放状态栏
+        entity.setSelected(true);
+        lastMusicTitle = entity.getTitle();
+        lastMusicArtist = entity.getArtist();
+        lastMusicAlbum_id = entity.getAlbum_id();
+        lastMusicUrl = entity.getUrl();
+        lastMusicAlbum = entity.getAlbum();
+
+        Glide.with(FindIndexMusicAty.this)
+                .load(getCoverUri(FindIndexMusicAty.this, lastMusicAlbum_id))
+                .placeholder(R.drawable.app_icon)
+                .error(R.drawable.app_icon)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(mCurrMusicAlbumImv);
+        mCurrMusicTitleTv.setText(lastMusicTitle);
+        mCurrMusicArtistTv.setText(lastMusicArtist);
+        mCurrMusicPlayOrPauseIBtn.setImageResource(R.drawable.ic_pause_circle_outline_black_24dp);
+
+        // 保存点击item后的音乐状态信息
+        saveLastMusicInfos();
+        setFirstPlayFalse();
+
+        // 启动音乐播放
+        Intent intent = new Intent();
+        intent.putExtra("url", entity.getUrl());
+        intent.putExtra("title", entity.getTitle());
+        intent.putExtra("artist", entity.getArtist());
+        intent.putExtra("album", entity.getAlbum());
+        intent.putExtra("album_id", entity.getAlbum_id());
+        intent.setClass(FindIndexMusicAty.this, FindMusicPlayService.class);
+        startService(intent);
+        bindService(intent, sc, BIND_AUTO_CREATE);
     }
 
     private ServiceConnection sc = new ServiceConnection() {
@@ -238,19 +300,23 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
     private void saveLastMusicInfos() {
         SharedPreferences sharedPreferences = getSharedPreferences("lastMusicInfos", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("lastMusicTitle", currMusicTitle);
-        editor.putString("lastMusicArtist", currMusicArtist);
-        editor.putLong("lastMusicAlbum_id", currMusicAlbum_id);
+        editor.putString("lastMusicUrl", lastMusicUrl);
+        editor.putString("lastMusicAlbum", lastMusicAlbum);
+        editor.putString("lastMusicTitle", lastMusicTitle);
+        editor.putString("lastMusicArtist", lastMusicArtist);
+        editor.putLong("lastMusicAlbum_id", lastMusicAlbum_id);
         editor.apply();
 
-        Log.i("music", "currMusicTitle: " + currMusicTitle);
+        Log.i("music", "currMusicTitle: " + lastMusicTitle);
     }
 
     private void getLastMusicInfos() {
         SharedPreferences sharedPreferences = getSharedPreferences("lastMusicInfos", MODE_PRIVATE);
-        lastMusicTitle = sharedPreferences.getString("lastMusicTitle", "传奇");
-        lastMusicArtist = sharedPreferences.getString("lastMusicArtist", "王菲");
-        lastMusicAlbum_id = sharedPreferences.getLong("lastMusicAlbum_id", 236);
+        lastMusicTitle = sharedPreferences.getString("lastMusicTitle", mDatas.get(0).getTitle());
+        lastMusicArtist = sharedPreferences.getString("lastMusicArtist", mDatas.get(0).getArtist());
+        lastMusicAlbum_id = sharedPreferences.getLong("lastMusicAlbum_id", mDatas.get(0).getAlbum_id());
+        lastMusicUrl = sharedPreferences.getString("lastMusicUrl", mDatas.get(0).getUrl());
+        lastMusicAlbum = sharedPreferences.getString("lastMusicAlbum", mDatas.get(0).getAlbum());
 
         Log.i("music", "lastMusicTitle: " + lastMusicTitle);
 
@@ -270,6 +336,13 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
                 mCurrMusicPlayOrPauseIBtn.setImageResource(R.drawable.ic_play_circle_outline_black_24dp);
             }
         }
+    }
+
+    private void setFirstPlayFalse() {
+        SharedPreferences sharedPreferences = getSharedPreferences("shareInfo", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isFirstRun", false);
+        editor.apply();
     }
 
     @Override

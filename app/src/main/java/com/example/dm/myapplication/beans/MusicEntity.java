@@ -20,6 +20,7 @@ public class MusicEntity implements Serializable, IndexableEntity {
     private String album;
     private int isMusic;
     private boolean isFavorite = false;
+    private boolean isSelected = false;
 
     private String pinyin;
 
@@ -104,6 +105,14 @@ public class MusicEntity implements Serializable, IndexableEntity {
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     public String getPinyin() {
