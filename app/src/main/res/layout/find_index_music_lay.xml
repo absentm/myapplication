@@ -101,17 +101,17 @@
             android:layout_alignParentRight="true">
 
             <ImageButton
-                android:id="@+id/find_music_pre_imv"
+                android:id="@+id/find_music_detail_ibtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_weight="1.0"
                 android:background="@drawable/item_selector_no_border"
                 android:padding="8dp"
-                android:src="@drawable/ic_skip_previous_black_18dp"/>
+                android:src="@drawable/ic_list_black_18dp"/>
 
             <ImageButton
-                android:id="@+id/find_music_play_imv"
+                android:id="@+id/find_music_play_ibtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
@@ -121,7 +121,7 @@
                 android:src="@drawable/ic_play_circle_outline_black_24dp"/>
 
             <ImageButton
-                android:id="@+id/find_music_next_imv"
+                android:id="@+id/find_music_next_ibtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
@@ -142,7 +142,6 @@
             app:progress_text_size="0sp"
             app:progress_text_visibility="invisible"
             app:progress_unreached_bar_height="2dp"/>
-
     </RelativeLayout>
 
     <ProgressBar

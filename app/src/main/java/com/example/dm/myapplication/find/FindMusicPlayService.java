@@ -63,11 +63,10 @@ public class FindMusicPlayService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    public void playOrPause() {
-        if (mMediaPlayer.isPlaying()) {
-            mMediaPlayer.pause();
-        } else {
-            mMediaPlayer.start();
-        }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMediaPlayer.release();
+        mMediaPlayer = null;
     }
 }

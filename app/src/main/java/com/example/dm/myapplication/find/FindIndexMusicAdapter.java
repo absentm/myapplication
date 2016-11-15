@@ -96,7 +96,7 @@ public class FindIndexMusicAdapter extends IndexableAdapter<MusicEntity> {
     }
 
     //将歌曲的时间转换为分秒的制度
-    private static String formatTime(Long time) {
+    public static String formatTime(Long time) {
         String min = time / (1000 * 60) + "";
         String sec = time % (1000 * 60) + "";
 

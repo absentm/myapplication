@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.dm.myapplication.R;
@@ -33,7 +34,9 @@ import java.util.List;
 import me.yokeyword.indexablerv.IndexableAdapter;
 import me.yokeyword.indexablerv.IndexableLayout;
 
+import static com.example.dm.myapplication.find.FindIndexMusicAdapter.formatTime;
 import static com.example.dm.myapplication.find.FindMusicPlayService.mMediaPlayer;
+import static com.example.dm.myapplication.utiltools.StringUtils.generateFileSize;
 
 /**
  * FindIndexMusicAty
@@ -50,6 +53,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
     private MarqueeTextView mCurrMusicTitleTv;
     private TextView mCurrMusicArtistTv;
     private ImageButton mCurrMusicPlayOrPauseIBtn;
+    private ImageButton mCurrMusicDetailIBtn;
 
     private IndexableLayout mIndexableLayout;
     private FindIndexMusicAdapter mFindIndexMusicAdapter;
@@ -62,6 +66,8 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
     public static String lastMusicTitle;
     public static String lastMusicArtist;
     public static long lastMusicAlbum_id;
+    public static long lastMusicSize;
+    public static long lastMusicDurition;
 
     private boolean isFirstPlay;
     private boolean isPause;
@@ -86,7 +92,8 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         mCurrMusicTitleTv.setEllipsize(TextUtils.TruncateAt.MARQUEE);
         mCurrMusicTitleTv.setSingleLine(true);
         mCurrMusicArtistTv = (TextView) findViewById(R.id.item_music_artist_tv);
-        mCurrMusicPlayOrPauseIBtn = (ImageButton) findViewById(R.id.find_music_play_imv);
+        mCurrMusicPlayOrPauseIBtn = (ImageButton) findViewById(R.id.find_music_play_ibtn);
+        mCurrMusicDetailIBtn = (ImageButton) findViewById(R.id.find_music_detail_ibtn);
 
         mIndexableLayout = (IndexableLayout) findViewById(R.id.find_music_indexableLayout);
         mProgressBar.setVisibility(View.VISIBLE);
@@ -109,6 +116,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
     private void setUpListener() {
         titleBackIBtn.setOnClickListener(FindIndexMusicAty.this);
         mCurrMusicPlayOrPauseIBtn.setOnClickListener(FindIndexMusicAty.this);
+        mCurrMusicDetailIBtn.setOnClickListener(FindIndexMusicAty.this);
         mFindIndexMusicAdapter.setOnItemContentClickListener(FindIndexMusicAty.this);
     }
 
@@ -142,7 +150,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
             case R.id.title_music_left_imv:
                 FindIndexMusicAty.this.finish();
                 break;
-            case R.id.find_music_play_imv:
+            case R.id.find_music_play_ibtn:
                 if (isFirstPlay) {
                     Intent intent = new Intent();
                     intent.putExtra("url", mDatas.get(0).getUrl());
@@ -162,6 +170,8 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
                     lastMusicAlbum_id = mDatas.get(0).getAlbum_id();
                     lastMusicUrl = mDatas.get(0).getUrl();
                     lastMusicAlbum = mDatas.get(0).getAlbum();
+                    lastMusicSize = mDatas.get(0).getSize();
+                    lastMusicDurition = mDatas.get(0).getDuration();
 
                     saveLastMusicInfos();
                     setFirstPlayFalse();
@@ -191,6 +201,9 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
                                 .setImageResource(R.drawable.ic_pause_circle_outline_black_24dp);
                     }
                 }
+                break;
+            case R.id.find_music_detail_ibtn:
+                getCurrentMusicInfos();
                 break;
         }
     }
@@ -241,6 +254,8 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         lastMusicAlbum_id = entity.getAlbum_id();
         lastMusicUrl = entity.getUrl();
         lastMusicAlbum = entity.getAlbum();
+        lastMusicSize = entity.getSize();
+        lastMusicDurition = entity.getDuration();
 
         Glide.with(FindIndexMusicAty.this)
                 .load(getCoverUri(FindIndexMusicAty.this, lastMusicAlbum_id))
@@ -305,6 +320,8 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         editor.putString("lastMusicTitle", lastMusicTitle);
         editor.putString("lastMusicArtist", lastMusicArtist);
         editor.putLong("lastMusicAlbum_id", lastMusicAlbum_id);
+        editor.putLong("lastMusicSize", lastMusicSize);
+        editor.putLong("lastMusicDurition", lastMusicDurition);
         editor.apply();
 
         Log.i("music", "currMusicTitle: " + lastMusicTitle);
@@ -343,6 +360,25 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isFirstRun", false);
         editor.apply();
+    }
+
+    private void getCurrentMusicInfos() {
+        SharedPreferences sharedPreferences = getSharedPreferences("lastMusicInfos", MODE_PRIVATE);
+        lastMusicTitle = sharedPreferences.getString("lastMusicTitle", mDatas.get(0).getTitle());
+        lastMusicArtist = sharedPreferences.getString("lastMusicArtist", mDatas.get(0).getArtist());
+        lastMusicAlbum_id = sharedPreferences.getLong("lastMusicAlbum_id", mDatas.get(0).getAlbum_id());
+        lastMusicUrl = sharedPreferences.getString("lastMusicUrl", mDatas.get(0).getUrl());
+        lastMusicAlbum = sharedPreferences.getString("lastMusicAlbum", mDatas.get(0).getAlbum());
+        lastMusicSize = sharedPreferences.getLong("lastMusicSize", mDatas.get(0).getSize());
+        lastMusicDurition = sharedPreferences.getLong("lastMusicDurition", mDatas.get(0).getDuration());
+
+        new MaterialDialog.Builder(FindIndexMusicAty.this)
+                .title(lastMusicTitle)
+                .content("歌手： " + lastMusicArtist + "\n\n"
+                        + "专辑： " + lastMusicAlbum + "\n\n"
+                        + "时长： " + formatTime(lastMusicDurition) + "\n\n"
+                        + "大小： " + generateFileSize(lastMusicSize))
+                .show();
     }
 
     @Override
