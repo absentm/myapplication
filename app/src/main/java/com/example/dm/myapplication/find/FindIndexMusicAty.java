@@ -8,6 +8,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -17,6 +18,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,12 +31,14 @@ import com.example.dm.myapplication.beans.MusicEntity;
 import com.example.dm.myapplication.customviews.MarqueeTextView;
 import com.example.dm.myapplication.utiltools.FileUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import me.yokeyword.indexablerv.IndexableAdapter;
 import me.yokeyword.indexablerv.IndexableLayout;
 
+import static com.example.dm.myapplication.R.id.find_music_next_ibtn;
 import static com.example.dm.myapplication.find.FindIndexMusicAdapter.formatTime;
 import static com.example.dm.myapplication.find.FindMusicPlayService.mMediaPlayer;
 import static com.example.dm.myapplication.utiltools.StringUtils.generateFileSize;
@@ -43,17 +48,23 @@ import static com.example.dm.myapplication.utiltools.StringUtils.generateFileSiz
  * Created by dm on 16-11-2.
  */
 public class FindIndexMusicAty extends Activity implements View.OnClickListener,
-        IndexableAdapter.OnItemContentClickListener<MusicEntity> {
+        IndexableAdapter.OnItemContentClickListener<MusicEntity>,
+        SeekBar.OnSeekBarChangeListener, MediaPlayer.OnSeekCompleteListener {
 
     private List<FindIndexMusicAdapter.ContentVH> listViewHolder = new ArrayList<>();
 
     private ImageButton titleBackIBtn;
     private ProgressBar mProgressBar;
+
     private ImageView mCurrMusicAlbumImv;
     private MarqueeTextView mCurrMusicTitleTv;
     private TextView mCurrMusicArtistTv;
     private ImageButton mCurrMusicPlayOrPauseIBtn;
     private ImageButton mCurrMusicDetailIBtn;
+    private ImageButton mCurrMusicNextIBtn;
+
+    private RelativeLayout mCurrMusicStatusRout;
+    private SeekBar mSeekBar;
 
     private IndexableLayout mIndexableLayout;
     private FindIndexMusicAdapter mFindIndexMusicAdapter;
@@ -68,10 +79,10 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
     public static long lastMusicAlbum_id;
     public static long lastMusicSize;
     public static long lastMusicDurition;
+    public static int position = 0;
 
     private boolean isFirstPlay;
     private boolean isPause;
-    private int position = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +98,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
 
         titleBackIBtn = (ImageButton) findViewById(R.id.title_music_left_imv);
         mProgressBar = (ProgressBar) findViewById(R.id.find_index_music_pbar);
+
         mCurrMusicAlbumImv = (ImageView) findViewById(R.id.find_music_album_imv);
         mCurrMusicTitleTv = (MarqueeTextView) findViewById(R.id.item_music_title_tv);
         mCurrMusicTitleTv.setEllipsize(TextUtils.TruncateAt.MARQUEE);
@@ -94,6 +106,12 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         mCurrMusicArtistTv = (TextView) findViewById(R.id.item_music_artist_tv);
         mCurrMusicPlayOrPauseIBtn = (ImageButton) findViewById(R.id.find_music_play_ibtn);
         mCurrMusicDetailIBtn = (ImageButton) findViewById(R.id.find_music_detail_ibtn);
+        mCurrMusicNextIBtn = (ImageButton) findViewById(find_music_next_ibtn);
+        mCurrMusicStatusRout = (RelativeLayout) findViewById(R.id.find_music_status_rout);
+
+        mSeekBar = (SeekBar) findViewById(R.id.find_music_seekbar);
+        mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
+        mSeekBar.setMax(mMediaPlayer.getDuration());
 
         mIndexableLayout = (IndexableLayout) findViewById(R.id.find_music_indexableLayout);
         mProgressBar.setVisibility(View.VISIBLE);
@@ -117,6 +135,8 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         titleBackIBtn.setOnClickListener(FindIndexMusicAty.this);
         mCurrMusicPlayOrPauseIBtn.setOnClickListener(FindIndexMusicAty.this);
         mCurrMusicDetailIBtn.setOnClickListener(FindIndexMusicAty.this);
+        mCurrMusicNextIBtn.setOnClickListener(FindIndexMusicAty.this);
+        mCurrMusicStatusRout.setOnClickListener(FindIndexMusicAty.this);
         mFindIndexMusicAdapter.setOnItemContentClickListener(FindIndexMusicAty.this);
     }
 
@@ -176,6 +196,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
                     saveLastMusicInfos();
                     setFirstPlayFalse();
                     isFirstPlay = false;
+                    position = 0;
                 } else {
                     if (mMediaPlayer.isPlaying()) {
                         mMediaPlayer.pause();
@@ -205,8 +226,38 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
             case R.id.find_music_detail_ibtn:
                 getCurrentMusicInfos();
                 break;
+            case find_music_next_ibtn:
+                if (position == mDatas.size()) {
+                    position = 0;
+                } else {
+                    ++position;
+                }
+
+                playNextMusic();
+                break;
+            case R.id.find_music_status_rout:
+//                startMusicForDetail();
+                Toast.makeText(FindIndexMusicAty.this, "heheh", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
+
+    private void playNextMusic() {
+        try {
+            mMediaPlayer.reset();
+            mMediaPlayer.setDataSource(mDatas.get(position).getUrl());
+            mMediaPlayer.prepare();
+
+            if (mMediaPlayer.isPlaying()) {
+                mMediaPlayer.pause();
+            } else {
+                mMediaPlayer.start();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * item内容 点击事件
@@ -268,8 +319,10 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         mCurrMusicPlayOrPauseIBtn.setImageResource(R.drawable.ic_pause_circle_outline_black_24dp);
 
         // 保存点击item后的音乐状态信息
+        position = originalPosition;
         saveLastMusicInfos();
         setFirstPlayFalse();
+
 
         // 启动音乐播放
         Intent intent = new Intent();
@@ -322,6 +375,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         editor.putLong("lastMusicAlbum_id", lastMusicAlbum_id);
         editor.putLong("lastMusicSize", lastMusicSize);
         editor.putLong("lastMusicDurition", lastMusicDurition);
+        editor.putInt("position", position);
         editor.apply();
 
         Log.i("music", "currMusicTitle: " + lastMusicTitle);
@@ -334,6 +388,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         lastMusicAlbum_id = sharedPreferences.getLong("lastMusicAlbum_id", mDatas.get(0).getAlbum_id());
         lastMusicUrl = sharedPreferences.getString("lastMusicUrl", mDatas.get(0).getUrl());
         lastMusicAlbum = sharedPreferences.getString("lastMusicAlbum", mDatas.get(0).getAlbum());
+        position = sharedPreferences.getInt("position", 0);
 
         Log.i("music", "lastMusicTitle: " + lastMusicTitle);
 
@@ -381,6 +436,21 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
                 .show();
     }
 
+    private void startMusicForDetail() {
+        SharedPreferences sharedPreferences = getSharedPreferences("lastMusicInfos", MODE_PRIVATE);
+        lastMusicTitle = sharedPreferences.getString("lastMusicTitle", mDatas.get(0).getTitle());
+        lastMusicArtist = sharedPreferences.getString("lastMusicArtist", mDatas.get(0).getArtist());
+        lastMusicAlbum_id = sharedPreferences.getLong("lastMusicAlbum_id", mDatas.get(0).getAlbum_id());
+        lastMusicUrl = sharedPreferences.getString("lastMusicUrl", mDatas.get(0).getUrl());
+        lastMusicAlbum = sharedPreferences.getString("lastMusicAlbum", mDatas.get(0).getAlbum());
+        lastMusicSize = sharedPreferences.getLong("lastMusicSize", mDatas.get(0).getSize());
+        lastMusicDurition = sharedPreferences.getLong("lastMusicDurition", mDatas.get(0).getDuration());
+
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -414,5 +484,25 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         super.onDestroy();
         saveLastMusicInfos();
         Log.i("music", "onDestroy >>>>> save");
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onSeekComplete(MediaPlayer mediaPlayer) {
+
     }
 }

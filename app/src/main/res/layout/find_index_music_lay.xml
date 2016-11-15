@@ -32,12 +32,19 @@
             android:textSize="16sp"/>
     </RelativeLayout>
 
+    <SeekBar
+        android:id="@+id/find_music_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_rout"
+        android:visibility="visible"/>
+
     <me.yokeyword.indexablerv.IndexableLayout
         android:id="@+id/find_music_indexableLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/find_line_v"
-        android:layout_below="@+id/title_rout"
+        android:layout_below="@+id/find_music_seekbar"
         app:indexBar_background="#08000000"
         app:indexBar_layout_width="24dp"
         app:indexBar_textColor="@android:color/black"
@@ -132,16 +139,7 @@
 
         </LinearLayout>
 
-        <com.daimajia.numberprogressbar.NumberProgressBar
-            android:id="@+id/find_music_numpbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:visibility="invisible"
-            app:progress_reached_bar_height="2dp"
-            app:progress_text_size="0sp"
-            app:progress_text_visibility="invisible"
-            app:progress_unreached_bar_height="2dp"/>
+
     </RelativeLayout>
 
     <ProgressBar

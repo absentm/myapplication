@@ -26,7 +26,6 @@
 
     <uses-permission android:name="android.permission.VIBRATE"/>
 
-
     <application
         android:name=".main.BasicApplication"
         android:allowBackup="true"
