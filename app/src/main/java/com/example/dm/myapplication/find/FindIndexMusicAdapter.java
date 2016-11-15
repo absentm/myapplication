@@ -66,7 +66,6 @@ public class FindIndexMusicAdapter extends IndexableAdapter<MusicEntity> {
             vh.musicPlayingImv.setVisibility(View.GONE);
         }
 
-
         // 将数据保存在itemView的Tag中，以便点击时进行获取
         vh.itemView.setTag(holder);
     }
