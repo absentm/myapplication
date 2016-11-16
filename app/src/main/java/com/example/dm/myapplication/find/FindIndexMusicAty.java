@@ -47,7 +47,7 @@ import static com.example.dm.myapplication.utiltools.StringUtils.generateFileSiz
  */
 public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         IndexableAdapter.OnItemContentClickListener<MusicEntity>,
-        SeekBar.OnSeekBarChangeListener, MediaPlayer.OnCompletionListener {
+        SeekBar.OnSeekBarChangeListener {
 
     private List<FindIndexMusicAdapter.ContentVH> listViewHolder = new ArrayList<>();
 
@@ -68,6 +68,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
 
     private FindMusicPlayService musicService;
 
+    public static long lastMusicId;
     public static String lastMusicUrl;
     public static String lastMusicAlbum;
     public static String lastMusicTitle;
@@ -131,7 +132,6 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         mCurrMusicPlayOrPauseIBtn.setOnClickListener(FindIndexMusicAty.this);
         mCurrMusicDetailIBtn.setOnClickListener(FindIndexMusicAty.this);
         mCurrMusicNextIBtn.setOnClickListener(FindIndexMusicAty.this);
-        mMediaPlayer.setOnCompletionListener(FindIndexMusicAty.this);
         mFindIndexMusicAdapter.setOnItemContentClickListener(FindIndexMusicAty.this);
     }
 
@@ -155,6 +155,12 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
                 mCurrMusicArtistTv.setText(mDatas.get(0).getArtist());
             } else {
                 getLastMusicInfos();
+                // 更新当前改变样式的Item, 防止点选item状态被复用回收，标记并重置为正常
+                for (int i = 0; i < mDatas.size(); i++) {
+                    mDatas.get(i).setSelected(false);
+                }
+                mDatas.get(position).setSelected(true);
+                mFindIndexMusicAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -167,6 +173,13 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
                 break;
             case R.id.find_music_play_ibtn:
                 if (isFirstPlay) {
+                    // 更新当前改变样式的Item, 防止点选item状态被复用回收，标记并重置为正常
+                    for (int i = 0; i < mDatas.size(); i++) {
+                        mDatas.get(i).setSelected(false);
+                    }
+                    mDatas.get(0).setSelected(true);
+                    mFindIndexMusicAdapter.notifyDataSetChanged();
+
                     Intent intent = new Intent();
                     intent.putExtra("url", mDatas.get(0).getUrl());
                     intent.putExtra("title", mDatas.get(0).getTitle());
@@ -176,10 +189,19 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
                     intent.setClass(FindIndexMusicAty.this, FindMusicPlayService.class);
                     startService(intent);
                     bindService(intent, sc, BIND_AUTO_CREATE);
+
+                    mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mediaPlayer) {
+                            playNextMusic();
+                        }
+                    });
+
                     mCurrMusicPlayOrPauseIBtn.setImageResource(
                             R.drawable.ic_pause_circle_outline_black_24dp);
 
                     // 保存第一次播放信息
+                    lastMusicId = mDatas.get(0).getId();
                     lastMusicTitle = mDatas.get(0).getTitle();
                     lastMusicArtist = mDatas.get(0).getArtist();
                     lastMusicAlbum_id = mDatas.get(0).getAlbum_id();
@@ -204,6 +226,15 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
                                 .setImageResource(R.drawable.ic_pause_circle_outline_black_24dp);
                         isPause = false;
                     } else {
+                        // 更新当前改变样式的Item, 防止点选item状态被复用回收，标记并重置为正常
+                        for (int i = 0; i < mDatas.size(); i++) {
+                            mDatas.get(i).setSelected(false);
+                            if (mDatas.get(i).getId() == lastMusicId) {
+                                mDatas.get(i).setSelected(true);
+                            }
+                        }
+                        mFindIndexMusicAdapter.notifyDataSetChanged();
+
                         Intent intent = new Intent();
                         intent.putExtra("url", lastMusicUrl);
                         intent.putExtra("title", lastMusicTitle);
@@ -215,6 +246,13 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
                         bindService(intent, sc, BIND_AUTO_CREATE);
                         mCurrMusicPlayOrPauseIBtn
                                 .setImageResource(R.drawable.ic_pause_circle_outline_black_24dp);
+
+                        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mediaPlayer) {
+                                playNextMusic();
+                            }
+                        });
                     }
                 }
                 break;
@@ -245,6 +283,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         mFindIndexMusicAdapter.notifyDataSetChanged();
 
         // 更新数据
+        lastMusicId = entity.getId();
         lastMusicTitle = entity.getTitle();
         lastMusicArtist = entity.getArtist();
         lastMusicAlbum_id = entity.getAlbum_id();
@@ -279,6 +318,13 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         intent.setClass(FindIndexMusicAty.this, FindMusicPlayService.class);
         startService(intent);
         bindService(intent, sc, BIND_AUTO_CREATE);
+
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                playNextMusic();
+            }
+        });
     }
 
     private ServiceConnection sc = new ServiceConnection() {
@@ -316,6 +362,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
     private void saveLastMusicInfos() {
         SharedPreferences sharedPreferences = getSharedPreferences("lastMusicInfos", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong("lastMusicId", lastMusicId);
         editor.putString("lastMusicUrl", lastMusicUrl);
         editor.putString("lastMusicAlbum", lastMusicAlbum);
         editor.putString("lastMusicTitle", lastMusicTitle);
@@ -334,6 +381,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
      */
     private void getLastMusicInfos() {
         SharedPreferences sharedPreferences = getSharedPreferences("lastMusicInfos", MODE_PRIVATE);
+        lastMusicId = sharedPreferences.getLong("lastMusicId", mDatas.get(0).getId());
         lastMusicTitle = sharedPreferences.getString("lastMusicTitle", mDatas.get(0).getTitle());
         lastMusicArtist = sharedPreferences.getString("lastMusicArtist", mDatas.get(0).getArtist());
         lastMusicAlbum_id = sharedPreferences.getLong("lastMusicAlbum_id", mDatas.get(0).getAlbum_id());
@@ -376,6 +424,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
      */
     private void getCurrentMusicInfos() {
         SharedPreferences sharedPreferences = getSharedPreferences("lastMusicInfos", MODE_PRIVATE);
+        lastMusicId = sharedPreferences.getLong("lastMusicId", mDatas.get(0).getId());
         lastMusicTitle = sharedPreferences.getString("lastMusicTitle", mDatas.get(0).getTitle());
         lastMusicArtist = sharedPreferences.getString("lastMusicArtist", mDatas.get(0).getArtist());
         lastMusicAlbum_id = sharedPreferences.getLong("lastMusicAlbum_id", mDatas.get(0).getAlbum_id());
@@ -404,6 +453,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         }
 
         // 保存一下当前播放的音乐信息
+        lastMusicId = mDatas.get(position).getId();
         lastMusicUrl = mDatas.get(position).getUrl();
         lastMusicAlbum = mDatas.get(position).getAlbum();
         lastMusicTitle = mDatas.get(position).getTitle();
@@ -456,14 +506,15 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
     }
 
     @Override
-    public void onCompletion(MediaPlayer mediaPlayer) {
-        playNextMusic();
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
         getLastMusicInfos();
+        // 更新当前改变样式的Item, 防止点选item状态被复用回收，标记并重置为正常
+        for (int i = 0; i < mDatas.size(); i++) {
+            mDatas.get(i).setSelected(false);
+        }
+        mDatas.get(position).setSelected(true);
+        mFindIndexMusicAdapter.notifyDataSetChanged();
         Log.i("music", "onStart >>>>> get");
     }
 
@@ -471,6 +522,12 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
     protected void onResume() {
         super.onResume();
         getLastMusicInfos();
+        // 更新当前改变样式的Item, 防止点选item状态被复用回收，标记并重置为正常
+        for (int i = 0; i < mDatas.size(); i++) {
+            mDatas.get(i).setSelected(false);
+        }
+        mDatas.get(position).setSelected(true);
+        mFindIndexMusicAdapter.notifyDataSetChanged();
         Log.i("music", "onResume >>>>> get");
     }
 
