@@ -31,6 +31,7 @@ public class FindMusicPlayService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
     }
 
     @Nullable
@@ -56,6 +57,7 @@ public class FindMusicPlayService extends Service {
             } else {
                 mMediaPlayer.start();
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

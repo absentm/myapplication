@@ -1,16 +1,15 @@
 package com.example.dm.myapplication.find;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -30,13 +29,11 @@ import com.example.dm.myapplication.customviews.MarqueeTextView;
 import com.example.dm.myapplication.utiltools.FileUtil;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import me.yokeyword.indexablerv.IndexableAdapter;
 import me.yokeyword.indexablerv.IndexableLayout;
 
-import static com.example.dm.myapplication.R.id.find_music_next_ibtn;
 import static com.example.dm.myapplication.find.FindIndexMusicAdapter.formatTime;
 import static com.example.dm.myapplication.find.FindMusicPlayService.mMediaPlayer;
 import static com.example.dm.myapplication.utiltools.StringUtils.generateFileSize;
@@ -48,8 +45,6 @@ import static com.example.dm.myapplication.utiltools.StringUtils.generateFileSiz
 public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         IndexableAdapter.OnItemContentClickListener<MusicEntity>,
         SeekBar.OnSeekBarChangeListener {
-
-    private List<FindIndexMusicAdapter.ContentVH> listViewHolder = new ArrayList<>();
 
     private ImageButton titleBackIBtn;
     private ProgressBar mProgressBar;
@@ -65,8 +60,6 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
     private IndexableLayout mIndexableLayout;
     private FindIndexMusicAdapter mFindIndexMusicAdapter;
     private List<MusicEntity> mDatas;
-
-    private FindMusicPlayService musicService;
 
     public static long lastMusicId;
     public static String lastMusicUrl;
@@ -103,7 +96,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         mCurrMusicArtistTv = (TextView) findViewById(R.id.item_music_artist_tv);
         mCurrMusicPlayOrPauseIBtn = (ImageButton) findViewById(R.id.find_music_play_ibtn);
         mCurrMusicDetailIBtn = (ImageButton) findViewById(R.id.find_music_detail_ibtn);
-        mCurrMusicNextIBtn = (ImageButton) findViewById(find_music_next_ibtn);
+        mCurrMusicNextIBtn = (ImageButton) findViewById(R.id.find_music_next_ibtn);
 
         mSeekBar = (SeekBar) findViewById(R.id.find_music_seekbar);
         mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
@@ -188,7 +181,6 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
                     intent.putExtra("album_id", mDatas.get(0).getAlbum_id());
                     intent.setClass(FindIndexMusicAty.this, FindMusicPlayService.class);
                     startService(intent);
-                    bindService(intent, sc, BIND_AUTO_CREATE);
 
                     mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
@@ -243,7 +235,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
                         intent.putExtra("album_id", lastMusicAlbum_id);
                         intent.setClass(FindIndexMusicAty.this, FindMusicPlayService.class);
                         startService(intent);
-                        bindService(intent, sc, BIND_AUTO_CREATE);
+
                         mCurrMusicPlayOrPauseIBtn
                                 .setImageResource(R.drawable.ic_pause_circle_outline_black_24dp);
 
@@ -259,7 +251,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
             case R.id.find_music_detail_ibtn:
                 getCurrentMusicInfos();
                 break;
-            case find_music_next_ibtn:
+            case R.id.find_music_next_ibtn:
                 playNextMusic();
                 break;
         }
@@ -317,7 +309,6 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         intent.putExtra("album_id", entity.getAlbum_id());
         intent.setClass(FindIndexMusicAty.this, FindMusicPlayService.class);
         startService(intent);
-        bindService(intent, sc, BIND_AUTO_CREATE);
 
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -326,18 +317,6 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
             }
         });
     }
-
-    private ServiceConnection sc = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            musicService = ((FindMusicPlayService.MyBinder) iBinder).getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            musicService = null;
-        }
-    };
 
     /**
      * 查询专辑封面图片uri
@@ -487,6 +466,35 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
             getLastMusicInfos();
         } catch (IOException e) {
             Log.i("music", e.getMessage());
+        }
+    }
+
+    /**
+     * 电话监听器类
+     */
+    public static class MobliePhoneStateListener extends PhoneStateListener {
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            switch (state) {
+                case TelephonyManager.CALL_STATE_IDLE: // 挂机状态
+                    if (mMediaPlayer.isPlaying()) {
+                        mMediaPlayer.pause();
+                    } else {
+                        mMediaPlayer.start();
+                    }
+                    break;
+                case TelephonyManager.CALL_STATE_OFFHOOK:   //通话状态
+                    if (mMediaPlayer.isPlaying()) {
+                        mMediaPlayer.pause();
+                    }
+                case TelephonyManager.CALL_STATE_RINGING:   //响铃状态
+                    if (mMediaPlayer.isPlaying()) {
+                        mMediaPlayer.pause();
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
