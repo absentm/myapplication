@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,8 +42,8 @@ import static com.example.dm.myapplication.utiltools.StringUtils.generateFileSiz
  * Created by dm on 16-11-2.
  */
 public class FindIndexMusicAty extends Activity implements View.OnClickListener,
-        IndexableAdapter.OnItemContentClickListener<MusicEntity>,
-        SeekBar.OnSeekBarChangeListener {
+        IndexableAdapter.OnItemContentClickListener<MusicEntity> {
+//        SeekBar.OnSeekBarChangeListener
 
     private ImageButton titleBackIBtn;
     private ProgressBar mProgressBar;
@@ -55,7 +54,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
     private ImageButton mCurrMusicPlayOrPauseIBtn;
     private ImageButton mCurrMusicDetailIBtn;
     private ImageButton mCurrMusicNextIBtn;
-    private SeekBar mSeekBar;
+//    private SeekBar mSeekBar;
 
     private IndexableLayout mIndexableLayout;
     private FindIndexMusicAdapter mFindIndexMusicAdapter;
@@ -98,9 +97,9 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         mCurrMusicDetailIBtn = (ImageButton) findViewById(R.id.find_music_detail_ibtn);
         mCurrMusicNextIBtn = (ImageButton) findViewById(R.id.find_music_next_ibtn);
 
-        mSeekBar = (SeekBar) findViewById(R.id.find_music_seekbar);
-        mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
-        mSeekBar.setMax(mMediaPlayer.getDuration());
+//        mSeekBar = (SeekBar) findViewById(R.id.find_music_seekbar);
+//        mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
+//        mSeekBar.setMax(mMediaPlayer.getDuration());
 
         mIndexableLayout = (IndexableLayout) findViewById(R.id.find_music_indexableLayout);
         mProgressBar.setVisibility(View.VISIBLE);
@@ -126,6 +125,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         mCurrMusicDetailIBtn.setOnClickListener(FindIndexMusicAty.this);
         mCurrMusicNextIBtn.setOnClickListener(FindIndexMusicAty.this);
         mFindIndexMusicAdapter.setOnItemContentClickListener(FindIndexMusicAty.this);
+//        mSeekBar.setOnSeekBarChangeListener(FindIndexMusicAty.this);
     }
 
     private void initFirstRunEvent() {
@@ -182,6 +182,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
                     intent.setClass(FindIndexMusicAty.this, FindMusicPlayService.class);
                     startService(intent);
 
+//                    mMediaPlayer.seekTo(0);
                     mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mediaPlayer) {
@@ -239,6 +240,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
                         mCurrMusicPlayOrPauseIBtn
                                 .setImageResource(R.drawable.ic_pause_circle_outline_black_24dp);
 
+//                        mMediaPlayer.seekTo(0);
                         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mediaPlayer) {
@@ -310,6 +312,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         intent.setClass(FindIndexMusicAty.this, FindMusicPlayService.class);
         startService(intent);
 
+//        mMediaPlayer.seekTo(0);
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
@@ -455,6 +458,7 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
             mMediaPlayer.reset();
             mMediaPlayer.setDataSource(mDatas.get(position).getUrl());
             mMediaPlayer.prepare();
+//            mMediaPlayer.seekTo(0);
 
             if (mMediaPlayer.isPlaying()) {
                 mMediaPlayer.pause();
@@ -498,20 +502,24 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         }
     }
 
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-
-    }
+//    @Override
+//    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//        if (fromUser) {  // 当进度条的值改变时，音乐播放器从新的位置开始播放
+//            mMediaPlayer.seekTo(seekBar.getProgress());
+//        }
+//
+//    }
+//
+//    @Override
+//    public void onStartTrackingTouch(SeekBar seekBar) {
+//        mMediaPlayer.pause();     //开始拖动进度条时，音乐暂停播放
+//    }
+//
+//    @Override
+//    public void onStopTrackingTouch(SeekBar seekBar) {
+//        mMediaPlayer.start();     //停止拖动进度条时，音乐开始播放
+//
+//    }
 
     @Override
     protected void onStart() {

@@ -32,19 +32,13 @@
             android:textSize="16sp"/>
     </RelativeLayout>
 
-    <SeekBar
-        android:id="@+id/find_music_seekbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/title_rout"
-        android:visibility="visible"/>
 
     <me.yokeyword.indexablerv.IndexableLayout
         android:id="@+id/find_music_indexableLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/find_line_v"
-        android:layout_below="@+id/find_music_seekbar"
+        android:layout_below="@+id/title_rout"
         app:indexBar_background="#08000000"
         app:indexBar_layout_width="24dp"
         app:indexBar_textColor="@android:color/black"
@@ -66,80 +60,87 @@
         android:background="@color/white"
         android:clickable="true">
 
-        <ImageView
-            android:id="@+id/find_music_album_imv"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/app_icon"/>
+        <RelativeLayout
+            android:id="@+id/find_music_up_block"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <com.example.dm.myapplication.customviews.MarqueeTextView
-            android:id="@+id/item_music_title_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="8dp"
-            android:layout_toRightOf="@+id/find_music_album_imv"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:maxLines="1"
-            android:text="无"
-            android:textColor="@color/black_trans70"
-            android:textSize="16sp"/>
+            <ImageView
+                android:id="@+id/find_music_album_imv"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/app_icon"/>
 
-        <TextView
-            android:id="@+id/item_music_artist_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/find_music_album_imv"
-            android:layout_below="@+id/item_music_title_tv"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="2dp"
-            android:layout_toRightOf="@+id/find_music_album_imv"
-            android:text="无"
-            android:textSize="12sp"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true">
-
-            <ImageButton
-                android:id="@+id/find_music_detail_ibtn"
+            <com.example.dm.myapplication.customviews.MarqueeTextView
+                android:id="@+id/item_music_title_tv"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_weight="1.0"
-                android:background="@drawable/item_selector_no_border"
-                android:padding="8dp"
-                android:src="@drawable/ic_list_black_18dp"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/find_music_album_imv"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:maxLines="1"
+                android:text="无"
+                android:textColor="@color/black_trans70"
+                android:textSize="16sp"/>
 
-            <ImageButton
-                android:id="@+id/find_music_play_ibtn"
+            <TextView
+                android:id="@+id/item_music_artist_tv"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_weight="1.0"
-                android:background="@drawable/item_selector_no_border"
-                android:padding="8dp"
-                android:src="@drawable/ic_play_circle_outline_black_24dp"/>
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/find_music_album_imv"
+                android:layout_below="@+id/item_music_title_tv"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_toRightOf="@+id/find_music_album_imv"
+                android:text="无"
+                android:textSize="12sp"/>
 
-            <ImageButton
-                android:id="@+id/find_music_next_ibtn"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_weight="1.0"
-                android:background="@drawable/item_selector_no_border"
-                android:padding="8dp"
-                android:src="@drawable/ic_skip_next_black_18dp"/>
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true">
 
-        </LinearLayout>
+                <ImageButton
+                    android:id="@+id/find_music_detail_ibtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/item_selector_no_border"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_list_black_18dp"/>
 
+                <ImageButton
+                    android:id="@+id/find_music_play_ibtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/item_selector_no_border"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_play_circle_outline_black_24dp"/>
 
+                <ImageButton
+                    android:id="@+id/find_music_next_ibtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/item_selector_no_border"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_skip_next_black_18dp"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!--<SeekBar-->
+        <!--android:id="@+id/find_music_seekbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:visibility="visible"/>-->
     </RelativeLayout>
 
     <ProgressBar

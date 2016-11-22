@@ -6,65 +6,201 @@
     android:background="@color/white100"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/me_settings_title"
-        layout="@layout/title_layout"/>
-
-    <com.example.dm.myapplication.customviews.RoundImageView
-        android:id="@+id/me_settings_image"
-        android:layout_width="88dp"
-        android:layout_height="88dp"
-        android:layout_below="@+id/me_settings_title"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="24dp"
-        android:src="@drawable/icon"/>
-
-    <TextView
-        android:id="@+id/me_settings_appname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/me_settings_image"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="4dp"
-        android:text="AbsentM"
-        android:textColor="@color/gray900"
-        android:textSize="18sp"/>
-
-    <TextView
-        android:id="@+id/me_settings_version"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/me_settings_appname"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="3dp"
-        android:text="V 0.1.1"
-        android:textColor="@color/gray700"
-        android:textSize="14sp"/>
-
-    <View
-        android:id="@+id/me_settings_line"
-        android:layout_width="match_parent"
-        android:layout_height="0.01dp"
-        android:layout_below="@+id/me_settings_version"
-        android:layout_marginTop="10dp"
-        android:background="@color/gray700"/>
-
     <RelativeLayout
+        android:id="@+id/me_settings_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/me_settings_line"
-        android:background="@color/white">
+        android:layout_height="56dp"
+        android:background="@color/teal"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/title_about_imv"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:background="@drawable/item_teal_selector_no_bord"
+            android:src="@drawable/ic_navigate_before_white_24dp"/>
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/title_center_text_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="关于"
+            android:textColor="@color/white"
+            android:textSize="16sp"/>
+
+        <ImageButton
+            android:id="@+id/title_about_right_ibtn"
+            android:layout_width="56dp"
             android:layout_height="match_parent"
-            android:layout_margin="8dp"
-            android:lineSpacingExtra="1.5dp"
-            android:lineSpacingMultiplier="1.2"
-            android:autoLink="web"
-            android:text="这是一款基于Android传统的MVC技术的个人APP， 包含四个主要页面：\n\n[1]. Home页面：数据来源知乎日报，自动解析；\n[2]. 社区页面：后端采用Bmob存储数据；\n[3]. 发现页面：使用一些第三方库实现一些小功能；\n[4]. 我的页面：实现一个完整的个人用户系统功能 。\n\n@AbsentM\nGithub：https://github.com/absentm\nBlogs：https://absentm.github.io\nEmail：absentm@163.com"
-            android:textColor="@color/gray800"
-            android:textSize="15sp"/>
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/item_teal_selector_no_bord"
+            android:src="@drawable/ic_share_white_24dp"/>
     </RelativeLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/me_settings_title"
+        android:background="@color/black_trans10">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/rlout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/teal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imageview"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/icon"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imageview"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="AbsentM - v 0.1.2"
+                    android:textColor="@color/white_trans90"
+                    android:textSize="18sp"/>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/textview1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlout"
+                android:layout_margin="8dp"
+                android:text="介绍与帮助"
+                android:textColor="@color/black_trans50"
+                android:textSize="15sp"/>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardview1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textview1"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:lineSpacingExtra="1.3sp"
+                    android:linksClickable="true"
+                    android:padding="16dp"
+                    android:text="@string/help_str"
+                    android:textColor="@color/black_trans70"
+                    android:textIsSelectable="true"
+                    android:textSize="13.5sp"/>
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:id="@+id/textview2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cardview1"
+                android:layout_margin="8dp"
+                android:text="开发人员"
+                android:textColor="@color/black_trans50"
+                android:textSize="15sp"/>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardview2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textview2"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/imageview2"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_margin="16dp"
+                        android:src="@drawable/app_icon"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/imageview2"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="AbsentM"
+                            android:textColor="@color/black_trans90"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:autoLink="web"
+                            android:text="Github: https://github.com/absentm"
+                            android:textColor="@color/black_trans70"
+                            android:textIsSelectable="true"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:autoLink="web"
+                            android:text="Blog: https://absentm.github.io/"
+                            android:textColor="@color/black_trans70"
+                            android:textIsSelectable="true"/>
+                    </LinearLayout>
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:id="@+id/textview5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cardview2"
+                android:layout_margin="8dp"
+                android:text="使用的开源库"
+                android:textColor="@color/black_trans50"
+                android:textSize="15sp"/>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardview3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textview5"
+                android:layout_marginBottom="32dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="1.3sp"
+                    android:linksClickable="true"
+                    android:padding="16dp"
+                    android:text="@string/used_libs_str"
+                    android:textColor="@color/black_trans70"
+                    android:textIsSelectable="true"
+                    android:textSize="13.5sp"/>
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>

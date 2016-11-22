@@ -37,6 +37,10 @@
     <string name="back">返回</string>
     <string name="restore">恢复默认</string>
     <string name="reset_logo_color">重置Logo、前景色、背景色？</string>
-
-
+    <string name="help_str">
+        一款基于Android传统的MVC技术的个人APP， 包含四个主要页面：\n\nHome页面：数据来源知乎日报，自动解析；\n社区页面：后端采用Bmob存储数据；\n发现页面：使用一些第三方库实现一些小功能；\n我的页面：实现一个完整的个人用户系统功能。\n\n代码已开源：https://github.com/absentm/myapplication
+    </string>
+    <string name="used_libs_str">
+        #特别感谢这些开源库的作者#\n\ncom.android.support:appcompat-v7:23.1.1\ncom.android.support:design:23.1.1\ncn.bmob.android:bmob-sdk:3.5.1\ncn.bmob.android:bmob-push:0.6\ncn.bmob.android:bmob-sms:1.0.1\ncom.github.chrisbanes:PhotoView:1.3.0\ncom.github.sd6352051:android-image-picker:v1.0.1\norg.greenrobot:eventbus:3.0.0\ncom.android.support:cardview-v7:23.+\ncom.afollestad.material-dialogs:commons:0.9.0.1\ncom.daimajia.numberprogressbar:library:1.2@aar\nme.yokeyword:indexablerecyclerview:1.0.5\nde.hdodenhof:circleimageview:2.1.0
+    </string>
 </resources>

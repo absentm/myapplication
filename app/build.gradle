@@ -8,8 +8,8 @@ android {
         applicationId "com.example.dm.myapplication"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 2
-        versionName "0.1.1"
+        versionCode 3
+        versionName "0.1.2"
     }
     buildTypes {
         release {
@@ -45,4 +45,5 @@ dependencies {
     compile files('libs/AMap_Search_V3.5.0_20160927.jar')
     compile 'com.daimajia.numberprogressbar:library:1.2@aar'
     compile 'me.yokeyword:indexablerecyclerview:1.0.5'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
 }
