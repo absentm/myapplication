@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/me_settings_title"
-        android:background="@color/black_trans10">
+        android:background="@color/whitesmoke">
 
         <RelativeLayout
             android:layout_width="match_parent"

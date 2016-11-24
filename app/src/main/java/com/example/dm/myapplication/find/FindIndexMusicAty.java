@@ -369,6 +369,8 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         lastMusicAlbum_id = sharedPreferences.getLong("lastMusicAlbum_id", mDatas.get(0).getAlbum_id());
         lastMusicUrl = sharedPreferences.getString("lastMusicUrl", mDatas.get(0).getUrl());
         lastMusicAlbum = sharedPreferences.getString("lastMusicAlbum", mDatas.get(0).getAlbum());
+        lastMusicSize = sharedPreferences.getLong("lastMusicSize", mDatas.get(0).getSize());
+        lastMusicDurition = sharedPreferences.getLong("lastMusicDurition", mDatas.get(0).getDuration());
         position = sharedPreferences.getInt("position", 0);
 
         Log.i("music", "lastMusicTitle: " + lastMusicTitle);
@@ -554,17 +556,17 @@ public class FindIndexMusicAty extends Activity implements View.OnClickListener,
         Log.i("music", "onPause >>>>> save");
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        saveLastMusicInfos();
-        Log.i("music", "onStop >>>>> save");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        saveLastMusicInfos();
-        Log.i("music", "onDestroy >>>>> save");
-    }
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        saveLastMusicInfos();
+//        Log.i("music", "onStop >>>>> save");
+//    }
+//
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        saveLastMusicInfos();
+//        Log.i("music", "onDestroy >>>>> save");
+//    }
 }

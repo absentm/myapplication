@@ -19,6 +19,8 @@ import com.example.dm.myapplication.utiltools.DateUtil;
 
 import java.text.ParseException;
 
+import static com.example.dm.myapplication.find.FindMusicPlayService.mMediaPlayer;
+
 /**
  * FindVideoDetailAty
  * Created by dm on 16-10-30.
@@ -49,6 +51,7 @@ public class FindVideoDetailAty extends Activity implements View.OnClickListener
 
         initView();
         setUpListener();
+
 
         try {
             fillVideoDatas();
@@ -126,18 +129,16 @@ public class FindVideoDetailAty extends Activity implements View.OnClickListener
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
+
+            mNumberProgressBar.setVisibility(View.VISIBLE);
             mNumberProgressBar.setProgress(newProgress);
-            if (newProgress == 100) {
-                mNumberProgressBar.setVisibility(View.GONE);
-            } else {
-                mNumberProgressBar.setVisibility(View.VISIBLE);
-            }
         }
 
         @Override
         public void onReceivedTitle(WebView view, String title) {
             super.onReceivedTitle(view, title);
         }
+
     }
 
     private class MyWebViewClient extends WebViewClient {
@@ -147,6 +148,18 @@ public class FindVideoDetailAty extends Activity implements View.OnClickListener
                 view.loadUrl(url);
             }
             return true;
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+
+            mNumberProgressBar.setVisibility(View.GONE);
+
+            // 判断是否存在音频播放
+            if (mMediaPlayer.isPlaying()) {
+                mMediaPlayer.pause();
+            }
         }
     }
 
