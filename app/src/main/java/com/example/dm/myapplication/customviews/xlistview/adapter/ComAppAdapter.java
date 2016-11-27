@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -80,7 +81,7 @@ public class ComAppAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        ComUserPostInfo mComUserPostInfo = getItem(position);
+        final ComUserPostInfo mComUserPostInfo = getItem(position);
         if (mList != null && mList.size() > 0) {
             Glide.with(parent.getContext())
                     .load(mComUserPostInfo.getUserHeadImgUrl())
@@ -119,6 +120,39 @@ public class ComAppAdapter extends BaseAdapter {
                             return false;
                         }
                     });
+
+            holder.userLikeLout.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(mContext,
+                                    "like",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
+
+            holder.userCommentLout.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(mContext,
+                                    "Comment",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
+
+            holder.userRepostLout.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(mContext,
+                                    "Repost",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
         }
 
         return convertView;
