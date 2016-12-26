@@ -109,7 +109,6 @@ public class FindGankAty extends Activity implements View.OnClickListener,
         mGankClassBtn.setOnClickListener(FindGankAty.this);
     }
 
-
     private void switchSelectedDatas(final String selectedStr) {
         new Thread(new Runnable() {
             @Override

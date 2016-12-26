@@ -165,4 +165,43 @@ public class HttpUtil {
             return "";
         }
     }
+
+    public static String getSearchJsonStr(String keywordStr) throws UnsupportedEncodingException {
+//        String requestUrl = "http://gank.io/api/search/query/listview/category/"
+//                + URLEncoder.encode(gankClassStr, "utf-8") + "/count/30/page/1 ";
+        String requestUrl = "http://gank.io/api/search/query/"
+                + URLEncoder.encode(keywordStr, "utf-8") + "/category/all/count/50/page/1";
+        StringBuffer buffer = null;
+        try {
+            // 建立连接
+            URL url = new URL(requestUrl);
+            HttpURLConnection httpUrlConn = (HttpURLConnection) url.openConnection();
+            httpUrlConn.setDoInput(true);
+            httpUrlConn.setRequestMethod("GET");
+            // 获取输入流
+            InputStream inputStream = httpUrlConn.getInputStream();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "utf-8");
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            // 读取返回结果
+            buffer = new StringBuffer();
+            String str = null;
+            while ((str = bufferedReader.readLine()) != null) {
+                buffer.append(str);
+            }
+
+            // 释放资源
+            bufferedReader.close();
+            inputStreamReader.close();
+            inputStream.close();
+            httpUrlConn.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (buffer != null) {
+            return buffer.toString();  //返回获取的json字符串
+        } else {
+            return "";
+        }
+    }
 }
