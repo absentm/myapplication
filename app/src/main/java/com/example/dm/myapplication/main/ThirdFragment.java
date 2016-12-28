@@ -25,6 +25,12 @@ import com.example.dm.myapplication.find.FindSearchAty;
 import com.example.dm.myapplication.find.FindVideoAty;
 import com.example.dm.myapplication.find.FindWeatherAty;
 import com.example.dm.myapplication.find.zxing.activity.CaptureActivity;
+import com.example.dm.myapplication.utiltools.GlideImageLoader;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.Transformer;
+
+import java.util.List;
 
 import cn.bmob.v3.BmobUser;
 
@@ -38,6 +44,8 @@ public class ThirdFragment extends Fragment implements View.OnClickListener {
     private NineGridView nineGridView;
     private View view;
     private MaterialDialog mMaterialDialog;
+    private List<String> mTitles;
+    private List<String> mImages;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -55,8 +63,20 @@ public class ThirdFragment extends Fragment implements View.OnClickListener {
     private void initView() {
         titleSearchIbtn = (ImageButton) view.findViewById(R.id.title_find_search_ibtn);
         titleSearchIbtn.setOnClickListener(ThirdFragment.this);
+
         nineGridView = (NineGridView) view.findViewById(R.id.find_nine_gridview);
         nineGridView.setAdapter(new NineGridViewAdapter(getActivity()));
+
+        Banner banner = (Banner) view.findViewById(R.id.banner);
+        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
+        banner.setBannerAnimation(Transformer.DepthPage);
+        banner.isAutoPlay(true);
+        banner.setDelayTime(2000);
+        banner.setIndicatorGravity(BannerConfig.CENTER);
+        banner.setBannerTitles(mTitles);
+        banner.setImageLoader(new GlideImageLoader());
+        banner.setImages(mImages);
+        banner.start();
     }
 
     /**

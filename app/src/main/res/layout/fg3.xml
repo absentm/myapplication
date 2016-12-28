@@ -40,10 +40,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="186dp"
-                android:background="@drawable/find_imv"/>
+            <com.youth.banner.Banner
+                android:id="@+id/banner"
+                android:layout_width="match_parent"
+                android:layout_height="186dp"/>
 
             <com.example.dm.myapplication.customviews.ninegridview.NineGridView
                 android:id="@+id/find_nine_gridview"
