@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:background="@color/ghostwhite"
               android:orientation="vertical">
 
@@ -43,6 +44,10 @@
             <com.youth.banner.Banner
                 android:id="@+id/banner"
                 android:layout_width="match_parent"
+                app:title_background="@color/black_trans40"
+                app:title_textcolor="@color/white100"
+                app:title_textsize="14sp"
+                app:indicator_drawable_selected="@color/teal"
                 android:layout_height="186dp"/>
 
             <com.example.dm.myapplication.customviews.ninegridview.NineGridView

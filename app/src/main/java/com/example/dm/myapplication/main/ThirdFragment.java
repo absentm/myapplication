@@ -10,7 +10,6 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.AppUser;
 import com.example.dm.myapplication.customviews.ninegridview.NineGridView;
@@ -29,7 +28,9 @@ import com.example.dm.myapplication.utiltools.GlideImageLoader;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
+import com.youth.banner.listener.OnBannerClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobUser;
@@ -39,13 +40,15 @@ import cn.bmob.v3.BmobUser;
  * Created by dm on 16-3-29.
  * 第三个页面
  */
-public class ThirdFragment extends Fragment implements View.OnClickListener {
+public class ThirdFragment extends Fragment
+        implements View.OnClickListener, OnBannerClickListener {
+
     private ImageButton titleSearchIbtn;
     private NineGridView nineGridView;
     private View view;
-    private MaterialDialog mMaterialDialog;
-    private List<String> mTitles;
-    private List<String> mImages;
+    private List<String> mTitles = new ArrayList<>();
+    private List<Integer> mImages = new ArrayList<>();
+    private Banner mBanner;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -61,22 +64,39 @@ public class ThirdFragment extends Fragment implements View.OnClickListener {
      * 初始化界面控件
      */
     private void initView() {
+        mImages.add(R.drawable.find_1);
+        mImages.add(R.drawable.find_2);
+        mImages.add(R.drawable.find_8);
+        mImages.add(R.drawable.find_4);
+        mImages.add(R.drawable.find_5);
+        mImages.add(R.drawable.find_6);
+        mImages.add(R.drawable.find_7);
+
+        mTitles.add("既见公子，云胡不喜？");
+        mTitles.add("我只想静静地，做个美男子。");
+        mTitles.add("曾经的曾经，只剩期望...");
+        mTitles.add("你那么美，爱我如何？");
+        mTitles.add("夜，夜，夜...");
+        mTitles.add("孩子，快点睡吧，明天还要抢票回家呢。");
+        mTitles.add("天边美丽的火烧云啊，我的生活放荡，像条狗，像条流浪狗...");
+
         titleSearchIbtn = (ImageButton) view.findViewById(R.id.title_find_search_ibtn);
         titleSearchIbtn.setOnClickListener(ThirdFragment.this);
 
         nineGridView = (NineGridView) view.findViewById(R.id.find_nine_gridview);
         nineGridView.setAdapter(new NineGridViewAdapter(getActivity()));
 
-        Banner banner = (Banner) view.findViewById(R.id.banner);
-        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
-        banner.setBannerAnimation(Transformer.DepthPage);
-        banner.isAutoPlay(true);
-        banner.setDelayTime(2000);
-        banner.setIndicatorGravity(BannerConfig.CENTER);
-        banner.setBannerTitles(mTitles);
-        banner.setImageLoader(new GlideImageLoader());
-        banner.setImages(mImages);
-        banner.start();
+        mBanner = (Banner) view.findViewById(R.id.banner);
+        mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
+        mBanner.setBannerAnimation(Transformer.Default);
+        mBanner.isAutoPlay(true);
+        mBanner.setDelayTime(3000);
+        mBanner.setIndicatorGravity(BannerConfig.CENTER);
+        mBanner.setBannerTitles(mTitles);
+        mBanner.setImageLoader(new GlideImageLoader());
+        mBanner.setImages(mImages);
+        mBanner.start();
+        mBanner.setOnBannerClickListener(this);
     }
 
     /**
@@ -136,5 +156,35 @@ public class ThirdFragment extends Fragment implements View.OnClickListener {
                 break;
 
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mBanner.startAutoPlay();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mBanner.stopAutoPlay();
+    }
+
+    @Override
+    public void OnBannerClick(int position) {
+        switch (position) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+                Toast.makeText(getActivity(),
+                        "别点了，我只想试试...",
+                        Toast.LENGTH_SHORT).show();
+                break;
+        }
+
     }
 }
