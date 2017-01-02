@@ -16,12 +16,15 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.dm.myapplication.R;
+import com.example.dm.myapplication.beans.AppUser;
 import com.example.dm.myapplication.beans.ComUserPostInfo;
 import com.example.dm.myapplication.com.ComImagePagerActivity;
 import com.example.dm.myapplication.customviews.ninegridview.NineGridView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.bmob.v3.BmobUser;
 
 /**
  * Created by dm on 16-4-24.
@@ -128,6 +131,15 @@ public class ComAppAdapter extends BaseAdapter {
                             Toast.makeText(mContext,
                                     "like",
                                     Toast.LENGTH_SHORT).show();
+                            final AppUser appUser = BmobUser.getCurrentUser(AppUser.class);
+                            if (appUser == null) {
+                                Toast.makeText(mContext,
+                                        "请先登陆！",
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+
+                            }
+
                         }
                     }
             );

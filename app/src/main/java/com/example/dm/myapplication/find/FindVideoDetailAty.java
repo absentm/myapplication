@@ -10,12 +10,10 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.VideoBeans.VideoResultsBean;
-import com.example.dm.myapplication.utiltools.DateUtil;
 
 import java.text.ParseException;
 
@@ -29,19 +27,19 @@ public class FindVideoDetailAty extends Activity implements View.OnClickListener
     private ImageButton titleBackIBtn;
 
     private WebView mWebView;
-    private TextView mVideoDescTv;
-    private TextView mVideoPublishedAtTv;
-    private TextView mVideoCreateAtTv;
-    private TextView mVideoSourceTv;
-    private TextView mVideoWhoTv;
+    //    private TextView mVideoDescTv;
+//    private TextView mVideoPublishedAtTv;
+//    private TextView mVideoCreateAtTv;
+//    private TextView mVideoSourceTv;
+//    private TextView mVideoWhoTv;
     private NumberProgressBar mNumberProgressBar;
 
     private VideoResultsBean mVideoResultsBean;
-    private String mVideoItemDescStr;
-    private String mVideoItemPublishAtStr;
-    private String mVideoItemCreateAtStr;
-    private String mVideoItemSourceStr;
-    private String mVideoItemWhoStr;
+    //    private String mVideoItemDescStr;
+//    private String mVideoItemPublishAtStr;
+//    private String mVideoItemCreateAtStr;
+//    private String mVideoItemSourceStr;
+//    private String mVideoItemWhoStr;
     private String mVideoItemUrlStr;
 
     @Override
@@ -64,11 +62,11 @@ public class FindVideoDetailAty extends Activity implements View.OnClickListener
         titleBackIBtn = (ImageButton) findViewById(R.id.video_detail_back_imv);
         mWebView = (WebView) findViewById(R.id.video_item_webview);
         mNumberProgressBar = (NumberProgressBar) findViewById(R.id.progressbar);
-        mVideoDescTv = (TextView) findViewById(R.id.video_detail_desc_tv);
-        mVideoPublishedAtTv = (TextView) findViewById(R.id.video_detail_publish_time_tv);
-        mVideoCreateAtTv = (TextView) findViewById(R.id.video_detail_create_time_tv);
-        mVideoSourceTv = (TextView) findViewById(R.id.video_detail_source_tv);
-        mVideoWhoTv = (TextView) findViewById(R.id.video_detail_who_tv);
+//        mVideoDescTv = (TextView) findViewById(R.id.video_detail_desc_tv);
+//        mVideoPublishedAtTv = (TextView) findViewById(R.id.video_detail_publish_time_tv);
+//        mVideoCreateAtTv = (TextView) findViewById(R.id.video_detail_create_time_tv);
+//        mVideoSourceTv = (TextView) findViewById(R.id.video_detail_source_tv);
+//        mVideoWhoTv = (TextView) findViewById(R.id.video_detail_who_tv);
     }
 
     private void setUpListener() {
@@ -83,19 +81,19 @@ public class FindVideoDetailAty extends Activity implements View.OnClickListener
         mVideoItemUrlStr = mVideoResultsBean.getUrl();
         Log.i("TAG", "mVideoItemUrlStr： " + mVideoItemUrlStr);
 
-        mVideoItemDescStr = "『" + mVideoResultsBean.getDesc() + "』";
-        mVideoItemPublishAtStr = "PublishedAt： " +
-                DateUtil.utc2LocalTime(mVideoResultsBean.getPublishedAt());
-        mVideoItemCreateAtStr = "CreatedAt： " +
-                DateUtil.utc2LocalTime(mVideoResultsBean.getCreatedAt());
-        mVideoItemSourceStr = "Source from： " + mVideoResultsBean.getSource();
-        mVideoItemWhoStr = "Shared by： " + mVideoResultsBean.getWho();
+//        mVideoItemDescStr = "『" + mVideoResultsBean.getDesc() + "』";
+//        mVideoItemPublishAtStr = "PublishedAt： " +
+//                DateUtil.utc2LocalTime(mVideoResultsBean.getPublishedAt());
+//        mVideoItemCreateAtStr = "CreatedAt： " +
+//                DateUtil.utc2LocalTime(mVideoResultsBean.getCreatedAt());
+//        mVideoItemSourceStr = "Source from： " + mVideoResultsBean.getSource();
+//        mVideoItemWhoStr = "Shared by： " + mVideoResultsBean.getWho();
 
-        mVideoDescTv.setText(mVideoItemDescStr);
-        mVideoPublishedAtTv.setText(mVideoItemPublishAtStr);
-        mVideoCreateAtTv.setText(mVideoItemCreateAtStr);
-        mVideoSourceTv.setText(mVideoItemSourceStr);
-        mVideoWhoTv.setText(mVideoItemWhoStr);
+//        mVideoDescTv.setText(mVideoItemDescStr);
+//        mVideoPublishedAtTv.setText(mVideoItemPublishAtStr);
+//        mVideoCreateAtTv.setText(mVideoItemCreateAtStr);
+//        mVideoSourceTv.setText(mVideoItemSourceStr);
+//        mVideoWhoTv.setText(mVideoItemWhoStr);
 
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
