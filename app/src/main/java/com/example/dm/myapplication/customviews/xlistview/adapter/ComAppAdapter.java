@@ -3,6 +3,7 @@ package com.example.dm.myapplication.customviews.xlistview.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
+
 
 /**
  * Created by dm on 16-4-24.
@@ -34,6 +38,7 @@ public class ComAppAdapter extends BaseAdapter {
 
     private List<ComUserPostInfo> mList;
     private Context mContext;
+
 
     public ComAppAdapter(Context _context) {
         this.mContext = _context;
@@ -59,8 +64,8 @@ public class ComAppAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(R.layout.com_grid_item, parent, false);
@@ -124,22 +129,64 @@ public class ComAppAdapter extends BaseAdapter {
                         }
                     });
 
+            final AppUser appUser = BmobUser.getCurrentUser(AppUser.class);
             holder.userLikeLout.setOnClickListener(
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Toast.makeText(mContext,
-                                    "like",
-                                    Toast.LENGTH_SHORT).show();
-                            final AppUser appUser = BmobUser.getCurrentUser(AppUser.class);
                             if (appUser == null) {
                                 Toast.makeText(mContext,
                                         "请先登陆！",
                                         Toast.LENGTH_SHORT).show();
                             } else {
+                                // like by myself
+//                                if (appUser.getUsername().equals(mComUserPostInfo.getUserNameStr())) {
+//
+//                                    Toast.makeText(mContext,
+//                                            "like by myself!",
+//                                            Toast.LENGTH_SHORT).show();
+//                                }
 
+                                if (!mComUserPostInfo.isLiked()) {
+                                    Toast.makeText(mContext,
+                                            "like",
+                                            Toast.LENGTH_SHORT).show();
+                                    mComUserPostInfo.setLiked(true);
+                                    mComUserPostInfo.increment("userLikeCounter");
+                                } else {
+                                    Toast.makeText(mContext,
+                                            "unlike",
+                                            Toast.LENGTH_SHORT).show();
+                                    mComUserPostInfo.setLiked(false);
+                                    mComUserPostInfo.increment("userLikeCounter", -1);
+                                }
+
+                                // 上传点赞数据
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mComUserPostInfo.update(new UpdateListener() {
+                                            @Override
+                                            public void done(BmobException e) {
+                                                if (e == null) {
+                                                    Toast.makeText(mContext,
+                                                            "数据上传成功...",
+                                                            Toast.LENGTH_SHORT).show();
+
+                                                    // 更新界面数据
+                                                    notifyDataSetChanged();
+
+                                                } else {
+                                                    Log.i("bmob", "失败：" +
+                                                            e.getMessage() +
+                                                            "," +
+                                                            e.getErrorCode());
+                                                }
+                                            }
+                                        });
+                                    }
+                                }).start();
                             }
-
                         }
                     }
             );
@@ -210,5 +257,4 @@ public class ComAppAdapter extends BaseAdapter {
         mList.add(0, comUserPostInfo);
         notifyDataSetChanged();
     }
-
 }

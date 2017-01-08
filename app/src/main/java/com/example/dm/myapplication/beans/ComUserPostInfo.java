@@ -23,6 +23,15 @@ public class ComUserPostInfo extends BmobObject implements Serializable {
     private Integer userRepostCounter;
     private Integer userCommentCounter;
     private Integer userLikeCounter;
+    private boolean isLiked = false;
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
+    }
 
     public ComUserPostInfo() {
     }
