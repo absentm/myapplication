@@ -6,12 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.beans.News;
 import com.example.dm.myapplication.utiltools.SystemUtils;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 
 /**
  * HomeNewsDetailActivity
@@ -19,7 +20,7 @@ import com.example.dm.myapplication.utiltools.SystemUtils;
  */
 public class HomeNewsDetailActivity extends Activity {
     private RelativeLayout mBackRout;
-    private ImageView mFavImv;
+    private LikeButton mFavImv;
     private WebView mWebView;
 
     private boolean isFavourite = false;
@@ -36,7 +37,7 @@ public class HomeNewsDetailActivity extends Activity {
 
     private void initView() {
         mBackRout = (RelativeLayout) findViewById(R.id.home_detail_back_rout);
-        mFavImv = (ImageView) findViewById(R.id.home_detail_title_right_imv);
+        mFavImv = (LikeButton) findViewById(R.id.home_detail_title_right_imv);
 
         mWebView = (WebView) findViewById(R.id.webview);
         setWebView(mWebView);
@@ -46,7 +47,8 @@ public class HomeNewsDetailActivity extends Activity {
         isFavourite = DailyNewsDB.getInstance(this).isFavourite(news);
 
         if (isFavourite) {
-            mFavImv.setImageResource(R.drawable.fav_active);
+//            mFavImv.setImageResource(R.drawable.fav_active);
+            mFavImv.setLiked(true);
         }
     }
 
@@ -58,20 +60,36 @@ public class HomeNewsDetailActivity extends Activity {
             }
         });
 
-        mFavImv.setOnClickListener(new View.OnClickListener() {
+//        mFavImv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!isFavourite) {
+//                    DailyNewsDB.getInstance(getApplicationContext()).saveFavourite(news);
+//                    mFavImv.setImageResource(R.drawable.fav_active);
+//                    isFavourite = true;
+//                } else {
+//                    DailyNewsDB.getInstance(getApplicationContext()).deleteFavourite(news);
+//                    mFavImv.setImageResource(R.drawable.fav_normal);
+//                    isFavourite = false;
+//                }
+//            }
+//        });
+
+        mFavImv.setOnLikeListener(new OnLikeListener() {
             @Override
-            public void onClick(View v) {
-                if (!isFavourite) {
-                    DailyNewsDB.getInstance(getApplicationContext()).saveFavourite(news);
-                    mFavImv.setImageResource(R.drawable.fav_active);
-                    isFavourite = true;
-                } else {
-                    DailyNewsDB.getInstance(getApplicationContext()).deleteFavourite(news);
-                    mFavImv.setImageResource(R.drawable.fav_normal);
-                    isFavourite = false;
-                }
+            public void liked(LikeButton likeButton) {
+                DailyNewsDB.getInstance(getApplicationContext()).saveFavourite(news);
+                mFavImv.setLiked(true);
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                DailyNewsDB.getInstance(getApplicationContext()).deleteFavourite(news);
+                mFavImv.setLiked(false);
             }
         });
+
+
     }
 
     private void setWebView(WebView mWebView) {
