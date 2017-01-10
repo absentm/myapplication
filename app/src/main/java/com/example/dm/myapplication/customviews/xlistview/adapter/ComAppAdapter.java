@@ -21,6 +21,7 @@ import com.example.dm.myapplication.beans.AppUser;
 import com.example.dm.myapplication.beans.ComUserPostInfo;
 import com.example.dm.myapplication.com.ComImagePagerActivity;
 import com.example.dm.myapplication.customviews.ninegridview.NineGridView;
+import com.example.dm.myapplication.customviews.xlistview.XListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -256,5 +257,23 @@ public class ComAppAdapter extends BaseAdapter {
 
         mList.add(0, comUserPostInfo);
         notifyDataSetChanged();
+    }
+
+    public void updataView(int position, XListView listView) {
+        int visibleFirstPosi = listView.getFirstVisiblePosition();
+        int visibleLastPosi = listView.getLastVisiblePosition();
+        if (position >= visibleFirstPosi && position <= visibleLastPosi) {
+            View view = listView.getChildAt(position - visibleFirstPosi);
+            ViewHolder holder = (ViewHolder) view.getTag();
+
+            String txt = holder.userLikeNumTv.getText().toString();
+//            txt = txt + "++;";
+//            holder.strText.setText(txt);
+//            strList.set(posi, txt);
+//        } else {
+//            String txt = strList.get(posi);
+//            txt = txt + "++;";
+//            strList.set(posi, txt);
+        }
     }
 }

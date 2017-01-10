@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.example.dm.myapplication.R;
 
+import cn.bmob.v3.update.BmobUpdateAgent;
+
 /**
  * 主页面内容
  * Created by dm on 16-1-19.
@@ -61,6 +63,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // 自动检测更新
+        BmobUpdateAgent.setUpdateOnlyWifi(false);
+        BmobUpdateAgent.update(this);
 
         fragmentManager = getSupportFragmentManager();
         initView(); // 初始化界面控件
