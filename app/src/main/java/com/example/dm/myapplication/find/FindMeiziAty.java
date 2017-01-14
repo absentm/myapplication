@@ -6,8 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -33,7 +33,7 @@ public class FindMeiziAty extends AppCompatActivity implements FindImageUrlLoade
 
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private StaggeredGridLayoutManager mLayoutManager;
+    private RecyclerView.LayoutManager mLayoutManager;
     private FindMeizhiImageAdapter mFindMeizhiImageAdapter;
     private FindImageUrlLoader imgUrlLoader;
 
@@ -66,7 +66,8 @@ public class FindMeiziAty extends AppCompatActivity implements FindImageUrlLoade
     private void initView() {
         titleImv = (ImageButton) findViewById(R.id.title_imv);
         fab = (FloatingActionButton) findViewById(R.id.find_fab);
-        mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        mLayoutManager = new LinearLayoutManager(FindMeiziAty.this,
+                LinearLayoutManager.VERTICAL, false);
         mRecyclerView = (RecyclerView) findViewById(R.id.find_recycler_view);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.find_SwipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(FindMeiziAty.this);
@@ -101,7 +102,7 @@ public class FindMeiziAty extends AppCompatActivity implements FindImageUrlLoade
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 //下拉加载更多
-                mLayoutManager.findLastVisibleItemPositions(lastPos);
+//                mLayoutManager.findLastVisibleItemPositions(lastPos);
                 if (lastPos[0] == imgUrlList.size() - 1 || lastPos[1] == imgUrlList.size() - 1 &&
                         newState == RecyclerView.SCROLL_STATE_IDLE) {
                     mSwipeRefreshLayout.setRefreshing(true);

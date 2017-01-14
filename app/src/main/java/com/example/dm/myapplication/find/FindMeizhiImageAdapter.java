@@ -41,7 +41,7 @@ public class FindMeizhiImageAdapter extends
 
     @Override
     public ImageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.find_image_item, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.find_image_item, parent, false);
         ImageViewHolder vh = new ImageViewHolder(view);
         //将创建的View注册点击事件
         view.setOnClickListener(this);
