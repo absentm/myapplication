@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +12,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 
+import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
+import com.aspsine.swipetoloadlayout.OnRefreshListener;
+import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.example.dm.myapplication.R;
 import com.example.dm.myapplication.find.FindMeizhiImageAdapter.OnRecyclerViewItemClickListener;
 
@@ -25,17 +27,19 @@ import java.util.List;
  * link2: http://www.voidcn.com/blog/u012842664/article/p-4910468.html
  * Created by dm on 16-9-2.
  */
-public class FindMeiziAty extends AppCompatActivity implements FindImageUrlLoader.Callback, SwipeRefreshLayout.OnRefreshListener {
+public class FindMeiziAty extends AppCompatActivity
+        implements FindImageUrlLoader.Callback, OnRefreshListener, OnLoadMoreListener {
     private static final String TAG = "FindMeiziAty";
     private static final int DEFAULT_IMG_COUNT = 10;    //默认每页加载10张图
     private ImageButton titleImv;
     private FloatingActionButton fab;
 
     private RecyclerView mRecyclerView;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView.LayoutManager mLayoutManager;
     private FindMeizhiImageAdapter mFindMeizhiImageAdapter;
     private FindImageUrlLoader imgUrlLoader;
+
+    private SwipeToLoadLayout mSwipeToLoadLayout;
 
     private List<String> imgUrlList = new ArrayList<>();
 
@@ -68,12 +72,7 @@ public class FindMeiziAty extends AppCompatActivity implements FindImageUrlLoade
         fab = (FloatingActionButton) findViewById(R.id.find_fab);
         mLayoutManager = new LinearLayoutManager(FindMeiziAty.this,
                 LinearLayoutManager.VERTICAL, false);
-        mRecyclerView = (RecyclerView) findViewById(R.id.find_recycler_view);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.find_SwipeRefreshLayout);
-        mSwipeRefreshLayout.setOnRefreshListener(FindMeiziAty.this);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,
-                R.color.colorPrimary,
-                R.color.teal);
+        mRecyclerView = (RecyclerView) findViewById(R.id.swipe_target);
     }
 
     private void eventsDeal() {
@@ -99,21 +98,8 @@ public class FindMeiziAty extends AppCompatActivity implements FindImageUrlLoade
         mRecyclerView.setAdapter(mFindMeizhiImageAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                //下拉加载更多
-//                mLayoutManager.findLastVisibleItemPositions(lastPos);
-                if (lastPos[0] == imgUrlList.size() - 1 || lastPos[1] == imgUrlList.size() - 1 &&
-                        newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    mSwipeRefreshLayout.setRefreshing(true);
-                    imgUrlLoader.loadImageUrl(nextPage);
-                }
-            }
-
-            @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 //上滑比并且按钮不可见 显示按钮
                 if (dy < 0 && fab.getVisibility() == View.GONE) {
                     fab.startAnimation(animationIn);
@@ -124,7 +110,6 @@ public class FindMeiziAty extends AppCompatActivity implements FindImageUrlLoade
                     fab.startAnimation(animationOut);
                     fab.setVisibility(View.GONE);
                 }
-
             }
         });
 
@@ -144,12 +129,6 @@ public class FindMeiziAty extends AppCompatActivity implements FindImageUrlLoade
         imgUrlLoader = new FindImageUrlLoader(FindMeiziAty.this, mImgCount, FindMeiziAty.this);
         imgUrlLoader.loadImageUrl(nextPage);
 
-        mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mSwipeRefreshLayout.setRefreshing(true);
-            }
-        });
     }
 
     @Override
@@ -161,7 +140,7 @@ public class FindMeiziAty extends AppCompatActivity implements FindImageUrlLoade
         mFindMeizhiImageAdapter.notifyDataSetChanged();
         nextPage++;
 
-        mSwipeRefreshLayout.setRefreshing(false);
+        mSwipeToLoadLayout.setRefreshing(false);
     }
 
     /**
@@ -172,5 +151,11 @@ public class FindMeiziAty extends AppCompatActivity implements FindImageUrlLoade
         nextPage = 1;//将页数重置为1
         imgUrlList.clear();//清空原来url数据
         imgUrlLoader.loadImageUrl(nextPage);//重置url数据
+    }
+
+    @Override
+    public void onLoadMore() {
+        mSwipeToLoadLayout.setRefreshing(true);
+        imgUrlLoader.loadImageUrl(nextPage);
     }
 }

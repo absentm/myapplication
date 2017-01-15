@@ -31,20 +31,31 @@
             android:textSize="16sp"/>
     </RelativeLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/find_SwipeRefreshLayout"
+    <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+        android:id="@+id/swipeToLoadLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="56dp">
 
+        <com.aspsine.swipetoloadlayoutdemo.RefreshHeaderView
+            android:id="@id/swipe_refresh_header"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="center"/>
+
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/find_recycler_view"
+            android:id="@id/swipe_target"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="#ffff0000"
             android:dividerHeight="1dp"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
+
+        <com.aspsine.swipetoloadlayoutdemo.LoadMoreFooterView
+            android:id="@id/swipe_load_more_footer"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="center"/>
+    </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/find_fab"
@@ -53,7 +64,7 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
         android:src="@drawable/ic_arrow_up_white_24dp"
-        app:layout_anchor="@id/find_recycler_view"
+        app:layout_anchor="@id/swipe_target"
         app:layout_anchorGravity="bottom|right|end"/>
 
 </android.support.design.widget.CoordinatorLayout>
